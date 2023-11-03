@@ -6,6 +6,8 @@ import router from './router'
 
 const app = createApp(App)
 
+// app.config.compilerOptions.isCustomElement = (tag) => tag.startsWith('my-')
+
 app.use(createPinia())
 app.use(router)
 
