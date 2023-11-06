@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+import { PageHome } from '@/pages/PageHome'
 import { PageLogin } from '@/pages/PageLogin'
 import { PageSignup } from '@/pages/PageSignup'
 import { PageSettings } from '@/pages/PageSettings'
@@ -14,48 +15,53 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/',
+      name: 'Home',
+      component: PageHome
+    },
+    {
       path: '/login',
-      name: 'login',
+      name: 'Login',
       component: PageLogin
     },
     {
       path: '/signup',
-      name: 'signup',
+      name: 'Signup',
       component: PageSignup
     },
     {
       path: '/main',
-      name: 'main',
+      name: 'Main',
       component: PageMain
     },
     {
       path: '/settings',
-      name: 'settings',
+      name: 'Settings',
       component: PageSettings
     },
     {
       path: '/addexpense',
-      name: 'addexpense',
+      name: 'AddExpense',
       component: PageAddExpense
     },
     {
       path: '/addincome',
-      name: 'addincome',
+      name: 'AddIncome',
       component: PageAddIncome
     },
     {
       path: '/addcheck',
-      name: 'addcheck',
+      name: 'AddCheck',
       component: PageAddCheck
     },
     {
       path: '/addcategory',
-      name: 'addcategory',
+      name: 'AddCategory',
       component: PageAddCategory
     },
     {
       path: '/:catchAll(.*)',
-      name: 'notfound',
+      name: 'NotFound',
       component: PageNotFound
     }
   ]

@@ -11,7 +11,7 @@ import { FormSignup } from '@/modules/forms/FormSignup'
       <h1 class="headline-medium secondary-text">Зарегистрироваться</h1>
       <FormSignup />
       <h2 class="body-large outline-text">
-        или <router-link class="surface-tint-text" to="/login">Войти</router-link>
+        или <router-link class="surface-tint-text" :to="{ name: 'Login' }">Войти</router-link>
       </h2>
     </TemplateSection>
   </TemplateMain>

@@ -9,7 +9,7 @@ import '@material/web/button/filled-tonal-button'
   <TemplateMain>
     <TemplateSection class="section-not-found">
       <h1 class="headline-medium secondary-text">Страница не найдена</h1>
-      <router-link to="main">
+      <router-link :to="{ name: 'Home' }">
         <md-filled-tonal-button> Вернуться к главной </md-filled-tonal-button>
       </router-link>
     </TemplateSection></TemplateMain
