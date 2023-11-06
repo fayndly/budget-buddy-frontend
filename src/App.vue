@@ -43,4 +43,11 @@ body {
   top: 16px;
   right: 16px;
 }
+
+#app {
+  display: flex;
+  flex-direction: column;
+
+  height: 100vh;
+}
 </style>

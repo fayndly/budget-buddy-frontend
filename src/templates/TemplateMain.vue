@@ -10,7 +10,9 @@
   flex-direction: column;
   align-items: center;
 
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  flex-grow: 1;
+  // min-height: 100vh;
+  overflow-y: scroll;
 }
 </style>

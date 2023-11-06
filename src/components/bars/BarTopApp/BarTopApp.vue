@@ -17,7 +17,7 @@ defineProps(['title'])
 <style lang="scss">
 .bar-top-app {
   width: 100%;
-  height: 64px;
+  min-height: 64px;
 
   display: flex;
   align-items: center;
