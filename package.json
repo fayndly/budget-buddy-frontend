@@ -13,8 +13,8 @@
     "deploy-gh-pages": "sh deploy-gh-pages.sh"
   },
   "dependencies": {
-    "@material/mwc-button": "^0.27.0",
     "@material/web": "^1.0.1",
+    "axios": "^1.6.0",
     "material-icons": "^1.13.12",
     "pinia": "^2.1.7",
     "sass": "^1.69.5",

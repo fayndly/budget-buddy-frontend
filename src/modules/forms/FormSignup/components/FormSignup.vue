@@ -1,21 +1,26 @@
 <script setup lang="ts">
-import InputPassword from '@/components/input/InputPassword.vue'
+import { ref } from 'vue'
 
-import '@material/web/textfield/outlined-text-field'
 import '@material/web/button/filled-button'
 
-import { propsInputName, propsInputEmail, propsInputPassword } from '../constants/Inputs'
+import InputName from './custom/InputName/InputName.vue'
+import InputEmail from '@/components/input/InputEmail/InputEmail.vue'
+import InputPassword from '@/components/input/InputPassword/InputPassword.vue'
 
-const submitForm = (data: any) => {
-  console.log(data)
+const nameField = ref('')
+const emailField = ref('')
+const passwordField = ref('')
+
+const submitForm = async () => {
+  console.log(nameField.value, emailField.value, passwordField.value)
 }
 </script>
 
 <template>
   <form class="form-signup" @submit.prevent="submitForm">
-    <md-outlined-text-field class="form-signup__input" v-bind="propsInputName" />
-    <md-outlined-text-field class="form-signup__input" v-bind="propsInputEmail" />
-    <InputPassword class="form-signup__input" />
+    <InputName v-model:value="nameField" class="form-signup__input" />
+    <InputEmail v-model:value="emailField" class="form-signup__input" />
+    <InputPassword v-model:value="passwordField" class="form-signup__input" />
     <md-filled-button type="submit">Подтвердить</md-filled-button>
   </form>
 </template>
