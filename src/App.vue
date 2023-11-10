@@ -1,32 +1,32 @@
 <script setup lang="ts">
-// import { ref } from 'vue'
-// import '@material/web/iconbutton/filled-icon-button'
+import { ref } from 'vue'
+import '@material/web/iconbutton/filled-icon-button'
 
-// import 'material-icons/iconfont/material-icons.css'
+import 'material-icons/iconfont/material-icons.css'
 
-// const schema = ref<'dark' | 'light'>('dark')
-// const schemas = {
-//   dark: './src/assets/styles/md3/theme.dark.css',
-//   light: './src/assets/styles/md3/theme.light.css'
-// }
-// const choseTheme = () => {
-//   const doc = document.getElementById('styles-theme')
+const schema = ref<'dark' | 'light'>('dark')
+const schemas = {
+  dark: './src/assets/styles/md3/theme.dark.css',
+  light: './src/assets/styles/md3/theme.light.css'
+}
+const choseTheme = () => {
+  const doc = document.getElementById('styles-theme')
 
-//   if (schema.value === 'dark') {
-//     schema.value = 'light'
-//   } else {
-//     schema.value = 'dark'
-//   }
+  if (schema.value === 'dark') {
+    schema.value = 'light'
+  } else {
+    schema.value = 'dark'
+  }
 
-//   doc?.setAttribute('href', schemas[schema.value])
-// }
+  doc?.setAttribute('href', schemas[schema.value])
+}
 </script>
 
 <template>
-  <!-- <md-filled-icon-button toggle class="button-theme" @click="choseTheme">
+  <md-filled-icon-button toggle class="button-theme" @click="choseTheme">
     <span class="material-icons-outlined">dark_mode</span>
     <span slot="selected" class="material-icons-outlined">light_mode</span>
-  </md-filled-icon-button> -->
+  </md-filled-icon-button>
   <router-view></router-view>
 </template>
 
@@ -48,6 +48,6 @@ body {
   display: flex;
   flex-direction: column;
 
-  height: 100vh;
+  height: 100svh;
 }
 </style>

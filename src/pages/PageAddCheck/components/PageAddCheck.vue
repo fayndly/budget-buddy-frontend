@@ -4,13 +4,20 @@ import TemplateSection from '@/templates/TemplateSection.vue'
 
 import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
 import BarNavigate from '@/components/bars/BarNavigate/BarNavigate.vue'
+
+import TitleHeader from '@/components/titles/TitleHeader.vue'
+
+import { FormAddCheck } from '@/modules/forms/FormAddCheck'
 </script>
 
 <template>
   <BarTopApp title="Добавление счёта" />
   <TemplateMain>
     <TemplateSection>
-      <h1>Page add check</h1>
+      <TitleHeader title="Счет" icon="add_card" />
+    </TemplateSection>
+    <TemplateSection>
+      <FormAddCheck />
     </TemplateSection>
   </TemplateMain>
   <BarNavigate />

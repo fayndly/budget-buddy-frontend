@@ -9,11 +9,11 @@
 <style lang="scss">
 .section {
   width: 100%;
-
   display: flex;
   justify-content: center;
   &__content {
-    max-width: 500px;
+    width: 100%;
+    // max-width: 500px;
   }
 }
 </style>

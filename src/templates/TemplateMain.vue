@@ -12,6 +12,8 @@
 
   width: 100%;
   flex-grow: 1;
+  padding: 16px;
+  gap: 8px;
   // min-height: 100vh;
   overflow-y: scroll;
 }
