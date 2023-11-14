@@ -1,17 +1,14 @@
 <script setup lang="ts">
-defineProps(['icon', 'inputId'])
+defineProps(['icon'])
 </script>
 
 <template>
-  <span class="input-with-icon">
-    <label
-      :for="inputId"
-      v-if="icon"
-      class="input-with-icon__icon material-icons-outlined outline-variant-text"
-      >{{ icon }}</label
-    >
+  <label class="input-with-icon">
+    <span v-if="icon" class="input-with-icon__icon material-icons-outlined outline-variant-text">{{
+      icon
+    }}</span>
     <slot name="input"></slot>
-  </span>
+  </label>
 </template>
 
 <style lang="scss">
