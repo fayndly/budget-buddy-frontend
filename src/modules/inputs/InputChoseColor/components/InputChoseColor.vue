@@ -12,7 +12,7 @@ const chosedColor = ref<IColor>()
 
 const colorManager = new GeneratorColors(colors, chosedColor, 9)
 
-const emit = defineEmits(['update:checkedValueNew'])
+const emit = defineEmits(['update:checkedValue'])
 
 colorManager.generateColors()
 colorManager.setDefaultColor()
@@ -24,7 +24,7 @@ const clickRegenerateButtonHandler = () => {
 }
 
 function updateValueHandler(): void {
-  emit('update:checkedValueNew', chosedColor.value)
+  emit('update:checkedValue', chosedColor.value)
 }
 </script>
 

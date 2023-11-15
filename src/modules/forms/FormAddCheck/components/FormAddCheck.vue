@@ -15,6 +15,7 @@ import InputList from '@/components/input/InputList/InputList.vue'
 
 import type { IColor } from '@/modules/inputs/InputChoseColor'
 import { InputChoseColor } from '@/modules/inputs/InputChoseColor'
+import InputCurrency from '@/components/input/InputCurrency/InputCurrency.vue'
 
 const currencies = [
   {
@@ -34,26 +35,18 @@ const currencyField = ref('123')
 const countField = ref(0)
 const colorField = ref<IColor>()
 
-const propsInputName = {
+const attributesInputName = {
   name: 'name',
   id: 'name',
   required: true,
   label: 'Имя счета',
-  type: 'text',
+  type: 'text'
   // maxLength: 320,
   // minLength: 3,
-  autocomplete: true
+  // autocomplete: true
 }
-const propsInputCount = {
-  name: 'count',
-  id: 'count',
-  required: true,
-  label: 'Первоначальная сумма',
-  type: 'number',
-  // prefixText: '₽',
-  suffixText: '.00'
-}
-const propsInputCurrency = {
+
+const attributesInputCurrency = {
   name: 'currency',
   id: 'currency',
   required: true,
@@ -61,7 +54,13 @@ const propsInputCurrency = {
 }
 
 const submitForm = async () => {
-  console.log(nameField.value, countField.value, currencyField.value, colorField.value?.value)
+  const dataFormToString = `
+name: ${nameField.value}
+count: ${countField.value}
+currency: ${currencyField.value}
+color: ${colorField.value?.value}
+  `
+  alert(dataFormToString)
 }
 </script>
 
@@ -69,12 +68,12 @@ const submitForm = async () => {
   <form class="form-add-check" @submit.prevent="submitForm">
     <InputWithIcon>
       <template #input>
-        <md-outlined-text-field v-bind="propsInputName" v-model="nameField" />
+        <md-outlined-text-field v-bind="attributesInputName" v-model="nameField" />
       </template>
     </InputWithIcon>
     <InputWithIcon icon="money">
       <template #input>
-        <md-outlined-select v-bind="propsInputCurrency" v-model="currencyField">
+        <md-outlined-select v-bind="attributesInputCurrency" v-model="currencyField">
           <md-select-option
             v-for="currency in currencies"
             :key="currency.id"
@@ -88,21 +87,17 @@ const submitForm = async () => {
     </InputWithIcon>
     <InputWithIcon icon="account_balance">
       <template #input>
-        <md-outlined-text-field
-          :prefix-text="currencies[0].symbol"
-          v-bind="propsInputCount"
-          v-model="countField"
-        />
+        <InputCurrency v-model:model-value="countField" prefix="₽" />
       </template>
     </InputWithIcon>
     <InputList header="Цвет">
       <template #content>
-        <InputChoseColor v-model:checkedValueNew="colorField" />
+        <InputChoseColor v-model:checked-value="colorField" />
       </template>
     </InputList>
     <div class="form-add-check__submit">
       <md-outlined-button type="button">Отмена</md-outlined-button>
-      <md-filled-button type="submit">Подтвердить</md-filled-button>
+      <md-filled-button type="submit">Добавить</md-filled-button>
     </div>
   </form>
 </template>
