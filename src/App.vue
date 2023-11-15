@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import '@material/web/iconbutton/filled-icon-button'
+import '@material/web/button/filled-tonal-button'
 
 import 'material-icons/iconfont/material-icons.css'
 
@@ -34,7 +35,7 @@ const choseTheme = () => {
 @import '@/assets/styles/index';
 
 body {
-  // background-color: var(--md-sys-color-background);
+  transition: background-color 0.2s ease-in-out;
   overflow: hidden;
 }
 

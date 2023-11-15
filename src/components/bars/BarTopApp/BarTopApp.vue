@@ -31,6 +31,8 @@ defineProps({
   padding-right: 16px;
   gap: 4px;
 
+  transition: background-color 0.2s ease-in-out;
+
   &--hide-back {
     padding-left: 16px;
   }

@@ -11,8 +11,10 @@ import '@material/web/select/outlined-select'
 import '@material/web/select/select-option'
 
 import InputWithIcon from '@/components/input/InputWithIcon/InputWithIcon.vue'
-import InputColor from '@/components/input/InputColor/InputColor.vue'
 import InputList from '@/components/input/InputList/InputList.vue'
+
+import type { IColor } from '@/modules/inputs/InputChoseColor'
+import { InputChoseColor } from '@/modules/inputs/InputChoseColor'
 
 const currencies = [
   {
@@ -27,21 +29,10 @@ const currencies = [
   }
 ]
 
-const footballClubs = ref([
-  { value: '#7366BD', id: 'c1' },
-  { value: '#D36E70', id: 'c2' },
-  { value: '#A5A5A5', id: 'c3' },
-  { value: '#A8E4A0', id: 'c4' },
-  { value: '#65000B', id: 'c5' },
-  { value: '#997A8D', id: 'c6' },
-  { value: '#FDDDE6', id: 'c7' },
-  { value: '#FC74FD', id: 'c8' }
-])
-
 const nameField = ref('')
 const currencyField = ref('123')
 const countField = ref(0)
-const colorField = ref('#7366BD')
+const colorField = ref<IColor>()
 
 const propsInputName = {
   name: 'name',
@@ -70,7 +61,7 @@ const propsInputCurrency = {
 }
 
 const submitForm = async () => {
-  console.log(nameField.value, countField.value, currencyField.value, colorField.value)
+  console.log(nameField.value, countField.value, currencyField.value, colorField.value?.value)
 }
 </script>
 
@@ -106,22 +97,7 @@ const submitForm = async () => {
     </InputWithIcon>
     <InputList header="Цвет">
       <template #content>
-        <ul class="form-add-check__list-colors">
-          <li v-for="club in footballClubs" :key="club.id" class="container">
-            <InputColor
-              :value="club.value"
-              :id="club.id"
-              name="club"
-              :checked="club.value === colorField"
-              v-model:checkedValue="colorField"
-            />
-          </li>
-          <li>
-            <md-filled-tonal-icon-button type="button">
-              <span class="material-icons-outlined">sync</span>
-            </md-filled-tonal-icon-button>
-          </li>
-        </ul>
+        <InputChoseColor v-model:checkedValueNew="colorField" />
       </template>
     </InputList>
     <div class="form-add-check__submit">
@@ -144,12 +120,6 @@ const submitForm = async () => {
   &__submit {
     display: flex;
     gap: 8px;
-  }
-
-  &__list-colors {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
   }
 }
 </style>
