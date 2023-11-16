@@ -16,7 +16,5 @@ defineProps(['header'])
   width: 100%;
   max-width: calc(100% - 42px - 16px);
   gap: 8px;
-  &__header {
-  }
 }
 </style>

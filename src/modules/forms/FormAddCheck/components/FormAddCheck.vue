@@ -1,23 +1,21 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-import '@material/web/button/filled-button'
-import '@material/web/button/outlined-button'
-import '@material/web/textfield/outlined-text-field'
-import '@material/web/iconbutton/filled-tonal-icon-button'
-import 'material-icons/iconfont/material-icons.css'
-
-import '@material/web/select/outlined-select'
-import '@material/web/select/select-option'
+import type { IColor } from '@/modules/inputs/InputChoseColor'
 
 import InputWithIcon from '@/components/input/InputWithIcon/InputWithIcon.vue'
 import InputList from '@/components/input/InputList/InputList.vue'
 
-import type { IColor } from '@/modules/inputs/InputChoseColor'
 import { InputChoseColor } from '@/modules/inputs/InputChoseColor'
+import InputCount from '@/components/input/InputCount/InputCount.vue'
 import InputCurrency from '@/components/input/InputCurrency/InputCurrency.vue'
+import InputName from './custom/InputName/InputName.vue'
 
-const currencies = [
+import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
+
+import type { ICurrency } from '@/utils/types/interfaces'
+
+const currencies: ICurrency[] = [
   {
     name: 'RUB',
     id: '123',
@@ -27,37 +25,24 @@ const currencies = [
     name: 'EUR',
     id: '234',
     symbol: '€'
+  },
+  {
+    name: 'USD',
+    id: '345',
+    symbol: '$'
   }
 ]
 
-const nameField = ref('')
-const currencyField = ref('123')
-const countField = ref(0)
+const nameField = ref<string>('')
+const currencyField = ref<ICurrency>()
+const countField = ref<number>(0)
 const colorField = ref<IColor>()
-
-const attributesInputName = {
-  name: 'name',
-  id: 'name',
-  required: true,
-  label: 'Имя счета',
-  type: 'text'
-  // maxLength: 320,
-  // minLength: 3,
-  // autocomplete: true
-}
-
-const attributesInputCurrency = {
-  name: 'currency',
-  id: 'currency',
-  required: true,
-  label: 'Валюта'
-}
 
 const submitForm = async () => {
   const dataFormToString = `
 name: ${nameField.value}
 count: ${countField.value}
-currency: ${currencyField.value}
+currency: ${currencyField.value?.id}
 color: ${colorField.value?.value}
   `
   alert(dataFormToString)
@@ -68,26 +53,21 @@ color: ${colorField.value?.value}
   <form class="form-add-check" @submit.prevent="submitForm">
     <InputWithIcon>
       <template #input>
-        <md-outlined-text-field v-bind="attributesInputName" v-model="nameField" />
+        <InputName v-model:model-value="nameField" />
       </template>
     </InputWithIcon>
     <InputWithIcon icon="money">
       <template #input>
-        <md-outlined-select v-bind="attributesInputCurrency" v-model="currencyField">
-          <md-select-option
-            v-for="currency in currencies"
-            :key="currency.id"
-            :selected="currency.id === currencyField"
-            :value="currency.id"
-          >
-            <div slot="headline">{{ currency.name }}</div>
-          </md-select-option>
-        </md-outlined-select>
+        <InputCurrency
+          v-model:checked-value="currencyField"
+          :currencies="currencies"
+          :defaultValue="currencies[0]"
+        />
       </template>
     </InputWithIcon>
     <InputWithIcon icon="account_balance">
       <template #input>
-        <InputCurrency v-model:model-value="countField" prefix="₽" />
+        <InputCount v-model:model-value="countField" :prefix="currencyField?.symbol" />
       </template>
     </InputWithIcon>
     <InputList header="Цвет">
@@ -95,14 +75,11 @@ color: ${colorField.value?.value}
         <InputChoseColor v-model:checked-value="colorField" />
       </template>
     </InputList>
-    <div class="form-add-check__submit">
-      <md-outlined-button type="button">Отмена</md-outlined-button>
-      <md-filled-button type="submit">Добавить</md-filled-button>
-    </div>
+    <SubmitFormButtons />
   </form>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .form-add-check {
   display: flex;
   flex-direction: column;
@@ -111,10 +88,5 @@ color: ${colorField.value?.value}
 
   gap: 16px;
   margin-top: 32px;
-
-  &__submit {
-    display: flex;
-    gap: 8px;
-  }
 }
 </style>

@@ -1,9 +1,6 @@
-export const attributesInputCount = {
-  name: 'count',
-  id: 'count',
+export const attributesInputCurrency = {
+  name: 'currency',
+  id: 'currency',
   required: true,
-  label: 'Первоначальная сумма',
-  type: 'number',
-  // prefixText: '₽',
-  suffixText: '.00'
+  label: 'Валюта'
 }
