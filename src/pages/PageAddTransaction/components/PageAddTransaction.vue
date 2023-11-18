@@ -6,10 +6,10 @@ import BarNavigate from '@/components/bars/BarNavigate/BarNavigate.vue'
 </script>
 
 <template>
-  <BarTopApp title="Добавление дохода" />
+  <BarTopApp title="Добавление расхода" />
   <TemplateMain>
     <TemplateSection>
-      <h1>Page add income</h1>
+      <h1>Page add transaction</h1>
     </TemplateSection>
   </TemplateMain>
   <BarNavigate />
