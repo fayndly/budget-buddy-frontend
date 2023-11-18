@@ -11,13 +11,12 @@ function updateValueHandler(): void {
   emit('update:checkedValue', chosedIcon.value)
 }
 
-const defaultIcon: IIcon = {
-  iconName: 'нет',
-  id: 'icon0',
-  value: null
-}
-
 const mocksIcons: IIcon[] = [
+  {
+    iconName: 'нет',
+    id: 'icon0',
+    value: null
+  },
   {
     iconName: 'home',
     id: 'icon1',
@@ -66,9 +65,9 @@ const mocksIcons: IIcon[] = [
 ]
 
 const icons = ref<IIcon[]>([])
-const chosedIcon = ref<IIcon>()
+const chosedIcon = ref<IIcon | null>()
 
-chosedIcon.value = defaultIcon
+chosedIcon.value = mocksIcons[0]
 updateValueHandler()
 
 icons.value.push(...mocksIcons)
@@ -76,24 +75,12 @@ icons.value.push(...mocksIcons)
 
 <template>
   <ul class="list-icons">
-    <li>
-      <RadioIcon
-        :id="defaultIcon.id"
-        :value="defaultIcon.value"
-        :iconName="defaultIcon.iconName"
-        :hasText="true"
-        name="icon"
-        v-model:checkedV-value="chosedIcon"
-        :checked="defaultIcon.id === chosedIcon?.id"
-        @input="updateValueHandler"
-      />
-    </li>
     <li v-for="icon in icons" :key="icon.id">
       <RadioIcon
         :id="icon.id"
         :value="icon.value"
         :iconName="icon.iconName"
-        :hasText="false"
+        :hasText="false || icon.id === 'icon0'"
         name="icon"
         v-model:checked-value="chosedIcon"
         :checked="icon.id === chosedIcon?.id"

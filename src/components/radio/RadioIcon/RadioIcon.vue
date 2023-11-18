@@ -7,10 +7,12 @@ const emit = defineEmits(['update:checkedValue'])
 function updateValueHandler(event: Event): void {
   const eventTarget = event.target as HTMLInputElement
 
+  console.log(eventTarget)
+
   emit('update:checkedValue', {
     iconName: eventTarget.getAttribute('iconName'),
     id: eventTarget.id,
-    value: eventTarget.value
+    value: eventTarget.getAttribute('value')
   })
 }
 </script>

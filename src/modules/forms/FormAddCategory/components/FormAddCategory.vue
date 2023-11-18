@@ -27,7 +27,7 @@ const submitForm = async () => {
 name: ${nameField.value}
 type: ${typeField.value}
 color: ${colorField.value?.value}
-icon: ${iconField.value?.iconName}
+icon: ${iconField.value?.value}
   `
   alert(dataFormToString)
 }
