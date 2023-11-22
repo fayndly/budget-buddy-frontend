@@ -5,5 +5,6 @@ export const attributesInputCount = {
   label: 'Первоначальная сумма',
   type: 'number',
   // prefixText: '₽',
-  suffixText: '.00'
+  // suffixText: '.00',
+  step: '0.01'
 }

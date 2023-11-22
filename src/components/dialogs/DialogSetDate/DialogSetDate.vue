@@ -1,0 +1,53 @@
+<script setup lang="ts">
+import '@material/web/button/text-button'
+import '@material/web/dialog/dialog'
+import { ref, type Ref } from 'vue'
+
+export interface IPropsDialogSetDate {
+  headline: string
+  isOpen: boolean
+}
+const setDefaultDate = (dateNowWrapper: Ref<undefined | string>, dateDefault: Date): void => {
+  const stringDefaultDate = `${defaultDate.getFullYear()}-${
+    dateDefault.getMonth() + 1
+  }-${dateDefault.getDate()}`
+
+  dateNowWrapper.value = stringDefaultDate
+}
+
+const defaultDate: Date = new Date(Date.now())
+const dateField = ref<string>()
+setDefaultDate(dateField, defaultDate)
+
+defineProps<IPropsDialogSetDate>()
+
+const emits = defineEmits(['submitDate', 'closeModal'])
+
+const submitHandler = (): void => {
+  emits('submitDate', new Date(dateField.value || defaultDate))
+  closeModal()
+}
+
+const closeModal = () => {
+  emits('closeModal')
+}
+</script>
+
+<template>
+  <teleport to="body">
+    <md-dialog type="alert" :open="isOpen" @cancel="closeModal">
+      <div slot="headline">{{ headline }}</div>
+      <form slot="content" id="form-date" method="dialog">
+        <input type="date" name="input-date" id="input-date" v-model="dateField" required />
+      </form>
+      <div slot="actions">
+        <md-text-button form="form-date" type="button" @click="closeModal">Отмена</md-text-button>
+        <md-text-button form="form-date" type="submit" @click="submitHandler"
+          >Добавить</md-text-button
+        >
+      </div>
+    </md-dialog>
+  </teleport>
+</template>
+
+<style lang="scss"></style>

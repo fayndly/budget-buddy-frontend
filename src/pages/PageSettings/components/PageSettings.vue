@@ -12,12 +12,6 @@ import '@material/web/dialog/dialog'
   <TemplateMain>
     <TemplateSection class="TemplateSectionSettings">
       <h1>Page settings</h1>
-      <Teleport to="body">
-        <md-dialog open class="TemplateSectionSettings__dialog">
-          <div slot="headline">Title</div>
-          <div slot="content">Dialog content</div>
-        </md-dialog>
-      </Teleport>
     </TemplateSection>
   </TemplateMain>
   <BarNavigate />

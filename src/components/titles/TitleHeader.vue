@@ -1,12 +1,19 @@
 <script setup lang="ts">
 import 'material-icons/iconfont/material-icons.css'
-defineProps(['title', 'icon'])
+defineProps(['title', 'icon', 'color'])
 </script>
 
 <template>
   <div class="title-header">
-    <span class="title-header__icon material-icons-outlined outline-variant-text">{{ icon }}</span>
-    <h1 class="title-header__text display-medium secondary-text outline-variant-text">
+    <span
+      class="title-header__icon material-icons-outlined outline-variant-text"
+      :style="`color: ${color};`"
+      >{{ icon }}</span
+    >
+    <h1
+      class="title-header__text display-medium secondary-text outline-variant-text"
+      :style="`color: ${color};`"
+    >
       {{ title }}
     </h1>
   </div>
