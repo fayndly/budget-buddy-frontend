@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-import type { IPropsRadioCategory } from './types/props'
+import type { IPropsRadioDate } from './types/props'
 
-const props = defineProps<IPropsRadioCategory>()
-
-console.log(props.date)
+const props = defineProps<IPropsRadioDate>()
 
 const emit = defineEmits(['update:checkedValue'])
 function updateValueHandler(): void {

@@ -26,7 +26,6 @@ export class InputChoseDateController {
 
   generateDates(): void {
     const today: Date = new Date(Date.now())
-    console.log(today)
 
     const yesterday: Date = new Date()
     yesterday.setDate(yesterday.getDate() - 1)

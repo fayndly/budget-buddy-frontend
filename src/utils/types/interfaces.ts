@@ -9,3 +9,15 @@ export interface IDate {
   text: string
   id: string
 }
+
+export interface ICategory {
+  id: string
+  shortDesc: string
+  icon?: string
+  color: string
+}
+
+export interface ICheck {
+  name: string
+  id: string
+}

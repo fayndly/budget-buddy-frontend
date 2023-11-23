@@ -1,61 +1,46 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 import RadioCategory from '@/components/radio/RadioCategory/RadioCategory.vue'
+import ButtonShowMore from './custom/ButtonShowMore/ButtonShowMore.vue'
+import ButtonAddCategory from './custom/ButtonAddCategory/ButtonAddCategory.vue'
 
-interface ICategory {
-  id: string
-  shortDesc: string
-  icon?: string
-  color: string
-}
+import type { ICategory } from '@/utils/types/interfaces'
 
-const categories = ref<ICategory[]>([
-  {
-    id: 'category1',
-    shortDesc: 'Транспорт',
-    icon: 'directions_car',
-    color: '#FF4F4F'
-  },
-  {
-    id: 'category2',
-    shortDesc: 'Интернет',
-    color: '#5D4FFF',
-    icon: 'language'
-  },
-  {
-    id: 'category4',
-    shortDesc: 'Ресторан',
-    color: '#4FB5FF'
-  },
-  {
-    id: 'category5',
-    shortDesc: 'Походы в туалет',
-    color: '#FFC34F'
-  }
-])
-const chosedCategory = ref<ICategory>()
-
+defineProps<{ categories: ICategory[] }>()
 const emit = defineEmits(['update:checkedValue'])
 
-function updateValueHandler(): void {
+const chosedCategory = ref<ICategory>()
+
+watch(chosedCategory, () => {
   emit('update:checkedValue', chosedCategory.value)
+})
+
+const isShowMoreCategories = ref<boolean>(false)
+
+const buttonShowMoreHandler = () => {
+  isShowMoreCategories.value = !isShowMoreCategories.value
 }
 </script>
 
 <template>
-  <ul class="list-categories">
+  <ul class="list-categories" :class="{ 'hide-elements': !isShowMoreCategories }">
     <li v-for="category in categories" :key="category.id">
       <RadioCategory
         :id="category.id"
-        :value="category.shortDesc"
-        v-model:checkedValue="chosedCategory"
+        :value="category"
         name="category"
-        :checked="category.id === chosedCategory?.id"
         :icon="category.icon"
         :color="category.color"
-        @input="updateValueHandler"
+        :shortDesc="category.shortDesc"
+        v-model:checkedValue="chosedCategory"
       />
+    </li>
+    <li>
+      <ButtonShowMore @click="buttonShowMoreHandler" />
+    </li>
+    <li>
+      <ButtonAddCategory @click="$router.push({ name: 'AddCategory' })" />
     </li>
   </ul>
 </template>
@@ -66,5 +51,13 @@ function updateValueHandler(): void {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+}
+
+.hide-elements {
+  li {
+    &:nth-child(n + 5):not(:nth-last-child(-n + 2)) {
+      display: none;
+    }
+  }
 }
 </style>

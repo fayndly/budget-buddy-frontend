@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
 import '@material/web/textfield/outlined-text-field'
 
 import type { ITypeTransaction } from '@/utils/types/types'
 
 import InputWithIcon from '@/components/input/InputWithIcon/InputWithIcon.vue'
+import InputList from '@/components/input/InputList/InputList.vue'
 
 import InputCurrency from '@/components/input/InputCurrency/InputCurrency.vue'
 import InputShortDescription from './custom/InputShortDescription/InputShortDescription.vue'
@@ -13,34 +14,83 @@ import InputTypeTransaction from '@/components/input/InputTypeTransaction/InputT
 import InputCount from '@/components/input/InputCount/InputCount.vue'
 import { InputChoseCategory } from '@/modules/inputs/InputChoseCategory'
 import { InputChoseDate } from '@/modules/inputs/InputChoseDate'
-import InputList from '@/components/input/InputList/InputList.vue'
 import SelectCheck from '@/components/selects/SelectCheck/SelectCheck.vue'
 
 import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
 
-import type { ICurrency } from '@/utils/types/interfaces'
+import type { ICurrency, ICategory, ICheck } from '@/utils/types/interfaces'
 
-const currencies: ICurrency[] = [
-  {
-    name: 'RUB',
-    id: '123',
-    symbol: '₽'
-  },
-  {
-    name: 'EUR',
-    id: '234',
-    symbol: '€'
-  },
-  {
-    name: 'USD',
-    id: '345',
-    symbol: '$'
-  }
-]
-
-interface ICategory {
-  id: string
+const getCategories = async (): Promise<ICategory[]> => {
+  return [
+    {
+      id: 'category1',
+      shortDesc: 'Транспорт',
+      icon: 'directions_car',
+      color: '#FF4F4F'
+    },
+    {
+      id: 'category2',
+      shortDesc: 'Интернет',
+      color: '#5D4FFF',
+      icon: 'language'
+    },
+    {
+      id: 'category4',
+      shortDesc: 'Ресторан',
+      color: '#4FB5FF'
+    },
+    {
+      id: 'category5',
+      shortDesc: 'Походы в туалет',
+      color: '#FFC34F'
+    },
+    {
+      id: 'category6',
+      shortDesc: 'Клубы',
+      color: 'rgb(56, 223, 220)'
+    },
+    {
+      id: 'category7',
+      shortDesc: 'Рыбалка',
+      color: 'rgb(35, 53, 143)'
+    }
+  ]
 }
+const getCurrencies = async (): Promise<ICurrency[]> => {
+  return [
+    {
+      name: 'RUB',
+      id: '123',
+      symbol: '₽'
+    },
+    {
+      name: 'EUR',
+      id: '234',
+      symbol: '€'
+    },
+    {
+      name: 'USD',
+      id: '345',
+      symbol: '$'
+    }
+  ]
+}
+const getChecks = async (): Promise<ICheck[]> => {
+  return [
+    {
+      name: 'Сбер',
+      id: 'check1'
+    },
+    {
+      name: 'Тинькофф',
+      id: 'check2'
+    }
+  ]
+}
+
+const currencies = ref<ICurrency[]>([])
+const categories = ref<ICategory[]>([])
+const checks = ref<ICheck[]>([])
 
 const shortDescriptionField = ref<string>('')
 const typeField = ref<ITypeTransaction>()
@@ -52,22 +102,6 @@ const dateField = ref<Date>()
 const fullDescriptionField = ref<string>('')
 
 const defaultType = ref<ITypeTransaction>('expense')
-
-interface ICheck {
-  name: string
-  id: string
-}
-
-const checks: ICheck[] = [
-  {
-    name: 'Сбер',
-    id: 'check1'
-  },
-  {
-    name: 'Тинькофф',
-    id: 'check2'
-  }
-]
 
 const submitForm = async () => {
   const dataFormToString = `
@@ -82,6 +116,12 @@ full description: ${fullDescriptionField.value}
   `
   alert(dataFormToString)
 }
+
+onMounted(async () => {
+  categories.value.push(...(await getCategories()))
+  currencies.value.push(...(await getCurrencies()))
+  checks.value.push(...(await getChecks()))
+})
 </script>
 
 <template>
@@ -121,7 +161,7 @@ full description: ${fullDescriptionField.value}
     </InputWithIcon>
     <InputList header="Категория">
       <template #content>
-        <InputChoseCategory v-model:checked-value="categoryField" />
+        <InputChoseCategory v-model:checked-value="categoryField" :categories="categories" />
       </template>
     </InputList>
     <InputList header="Дата">

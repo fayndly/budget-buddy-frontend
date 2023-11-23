@@ -1,30 +1,34 @@
 <script setup lang="ts">
-import '@material/web/radio/radio'
+import { computed } from 'vue'
 
-export interface IRadioCategory {
-  name: string
-  id: string
-  value: string
-  checked: boolean
-  icon: string | undefined
-  color: string
-}
+import type { IPropsRadioCategory } from './types/props'
 
-const props = defineProps<IRadioCategory>()
+const props = defineProps<IPropsRadioCategory>()
 
 const emit = defineEmits(['update:checkedValue'])
-function updateValueHandler(event: Event): void {
-  const eventTarget = event.target as HTMLInputElement
-  emit('update:checkedValue', { value: eventTarget.value, id: eventTarget.id })
+function updateValueHandler(): void {
+  emit('update:checkedValue', props.value)
 }
+
+const isChecked = computed(() => {
+  return props.checkedValue?.id === props.value?.id
+})
 </script>
 
 <template>
   <label class="radio-category">
-    <input class="radio-category__input" type="radio" v-bind="props" @input="updateValueHandler" />
+    <input
+      class="radio-category__input"
+      type="radio"
+      :name="name"
+      :value="value"
+      :id="id"
+      :checked="isChecked"
+      @change="updateValueHandler"
+    />
     <span class="radio-category__fake-input" :style="`background-color: ${color}`">
       <span v-if="icon" class="radio-category__icon material-icons-outlined">{{ icon }}</span>
-      <span class="radio-category__text label-large">{{ value }}</span>
+      <span class="radio-category__text label-large">{{ shortDesc }}</span>
     </span>
   </label>
 </template>
