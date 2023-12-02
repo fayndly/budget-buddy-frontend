@@ -9,7 +9,7 @@ import type { IPropsInputChoseCategory } from '../types/props'
 import type { ICategory } from '@/utils/types/interfaces'
 
 defineProps<IPropsInputChoseCategory>()
-const emit = defineEmits(['update:checkedValue'])
+const emit = defineEmits(['update:checkedValue', 'clickButtonAddCategory'])
 
 const chosedCategory = ref<ICategory>()
 
@@ -22,6 +22,10 @@ const moreCategoriesIsShow = ref<boolean>(false)
 const toogleShowMore = () => {
   moreCategoriesIsShow.value = !moreCategoriesIsShow.value
 }
+const clickButtonAddCategoryHandler = () => {
+  emit('clickButtonAddCategory')
+}
+// $router.push({ name: 'AddCategory', query: { type: 'income' } })
 </script>
 
 <template>
@@ -41,7 +45,7 @@ const toogleShowMore = () => {
       <ButtonShowMore @click="toogleShowMore" />
     </li>
     <li>
-      <ButtonAddCategory @click="$router.push({ name: 'AddCategory' })" />
+      <ButtonAddCategory @click="clickButtonAddCategoryHandler" />
     </li>
   </ul>
 </template>

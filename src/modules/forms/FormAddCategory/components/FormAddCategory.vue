@@ -10,17 +10,21 @@ import InputList from '@/components/input/InputList/InputList.vue'
 
 import { InputChoseColor } from '@/modules/inputs/InputChoseColor'
 import { InputChoseIcon } from '@/modules/inputs/InputChoseIcon'
-import InputName from './custom/InputName/InputName.vue'
+import InputNameCategory from '@/components/inputs/text/InputNameCategory/InputNameCategory.vue'
 import InputSelectTypeTransaction from '@/components/inputs/select/InputSelectTypeTransaction/InputSelectTypeTransaction.vue'
 
 import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
+
+import { useQueryHandler } from '../helpers/useQueryHandler'
+import { useRoute } from 'vue-router'
 
 const nameField = ref<string>('')
 const typeField = ref<ITypeTransaction | null>(null)
 const colorField = ref<IColor>()
 const iconField = ref<IIcon>()
 
-typeField.value = 'expense'
+const route = useRoute()
+useQueryHandler(route, typeField)
 
 const submitForm = async () => {
   const dataFormToString = `
@@ -37,7 +41,7 @@ icon: ${iconField.value?.value}
   <form class="form-add-category" @submit.prevent="submitForm">
     <InputWithIcon>
       <template #input>
-        <InputName v-model:model-value="nameField" />
+        <InputNameCategory v-model:model-value="nameField" />
       </template>
     </InputWithIcon>
     <InputWithIcon>

@@ -43,7 +43,6 @@ const router = createRouter({
       path: '/addtransaction',
       name: 'AddTransaction',
       component: PageAddTransaction
-      // props: (route) => ({ query: route.query.q })
     },
     {
       path: '/addcheck',

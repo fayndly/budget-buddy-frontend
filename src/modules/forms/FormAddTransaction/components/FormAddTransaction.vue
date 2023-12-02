@@ -19,7 +19,7 @@ import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormB
 import type { ICurrency, ICategory, ICheck, IDate } from '@/utils/types/interfaces'
 import type { ITypeTransaction } from '@/utils/types/types'
 
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const getCategories = async (): Promise<ICategory[]> => {
   return [
@@ -133,6 +133,11 @@ onMounted(async () => {
 
   currencyField.value = currencies.value[0]
 })
+const router = useRouter()
+
+const clickButtonAddCategoryHandler = () => {
+  router.push({ name: 'AddCategory', query: { type: typeField.value } })
+}
 </script>
 
 <template>
@@ -168,7 +173,11 @@ onMounted(async () => {
     </InputWithIcon>
     <InputList header="Категория">
       <template #content>
-        <InputChoseCategory v-model:checked-value="categoryField" :categories="categories" />
+        <InputChoseCategory
+          v-model:checked-value="categoryField"
+          :categories="categories"
+          @clickButtonAddCategory="clickButtonAddCategoryHandler"
+        />
       </template>
     </InputList>
     <InputList header="Дата">
