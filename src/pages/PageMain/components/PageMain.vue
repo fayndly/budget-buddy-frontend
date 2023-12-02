@@ -11,14 +11,9 @@ import '@material/web/fab/fab'
     <TemplateSection>
       <h1>Page main</h1>
     </TemplateSection>
-    <md-fab
-      variant="primary"
-      class="fab-add-transaction"
-      aria-label="add"
-      @click="$router.push({ name: 'AddTransaction', query: { type: 'expense', check: 'check1' } })"
-    >
-      <span class="material-icons-outlined" slot="icon">add</span>
-    </md-fab>
+    <TemplateSection>
+      <router-view></router-view>
+    </TemplateSection>
   </TemplateMain>
   <BarNavigate />
 </template>
