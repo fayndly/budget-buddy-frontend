@@ -11,16 +11,16 @@ import InputList from '@/components/input/InputList/InputList.vue'
 import { InputChoseColor } from '@/modules/inputs/InputChoseColor'
 import { InputChoseIcon } from '@/modules/inputs/InputChoseIcon'
 import InputName from './custom/InputName/InputName.vue'
-import InputTypeTransaction from '@/components/input/InputTypeTransaction/InputTypeTransaction.vue'
+import InputSelectTypeTransaction from '@/components/inputs/select/InputSelectTypeTransaction/InputSelectTypeTransaction.vue'
 
 import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
 
 const nameField = ref<string>('')
-const typeField = ref<ITypeTransaction>()
+const typeField = ref<ITypeTransaction | null>(null)
 const colorField = ref<IColor>()
 const iconField = ref<IIcon>()
 
-const defaultType = ref<ITypeTransaction>('expense')
+typeField.value = 'expense'
 
 const submitForm = async () => {
   const dataFormToString = `
@@ -42,7 +42,7 @@ icon: ${iconField.value?.value}
     </InputWithIcon>
     <InputWithIcon>
       <template #input>
-        <InputTypeTransaction v-model:checked-value="typeField" :defaultValue="defaultType" />
+        <InputSelectTypeTransaction v-model:selected-value="typeField" />
       </template>
     </InputWithIcon>
     <InputList header="Цвет">

@@ -7,3 +7,7 @@ export interface IPropsInput<T> {
 export interface IPropsRadio<T> extends IPropsInput<T> {
   checkedValue: T
 }
+
+export interface IPropsSelect<T> {
+  selectedValue: T
+}

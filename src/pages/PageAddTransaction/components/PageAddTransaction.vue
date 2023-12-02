@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 
 import type { ITypeTransaction } from '@/utils/types/types'
+import type { INamePageRu } from '@/utils/types/interfaces'
 
 import TemplateMain from '@/templates/TemplateMain.vue'
 import TemplateSection from '@/templates/TemplateSection.vue'
@@ -13,15 +14,14 @@ import TitleHeader from '@/components/titles/TitleHeader.vue'
 
 import { FormAddTransaction } from '@/modules/forms/FormAddTransaction/'
 
-interface INamePageRu {
-  expense: string
-  income: string
-}
-
 const namePage = ref<ITypeTransaction>('expense')
 const namePageRu: INamePageRu = {
   expense: 'расхода',
   income: 'дохода'
+}
+
+const updateTypeHandler = (newValue: ITypeTransaction) => {
+  namePage.value = newValue
 }
 </script>
 
@@ -43,7 +43,7 @@ const namePageRu: INamePageRu = {
       />
     </TemplateSection>
     <TemplateSection>
-      <FormAddTransaction />
+      <FormAddTransaction @updateType="updateTypeHandler" />
     </TemplateSection>
   </TemplateMain>
   <BarNavigate />

@@ -1,24 +1,25 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-
-import '@material/web/textfield/outlined-text-field'
-
-import type { ITypeTransaction } from '@/utils/types/types'
+import { ref, onMounted, watch } from 'vue'
 
 import InputWithIcon from '@/components/input/InputWithIcon/InputWithIcon.vue'
 import InputList from '@/components/input/InputList/InputList.vue'
 
-import InputCurrency from '@/components/input/InputCurrency/InputCurrency.vue'
-import InputShortDescription from './custom/InputShortDescription/InputShortDescription.vue'
-import InputTypeTransaction from '@/components/input/InputTypeTransaction/InputTypeTransaction.vue'
-import InputCount from '@/components/input/InputCount/InputCount.vue'
 import { InputChoseCategory } from '@/modules/inputs/InputChoseCategory'
 import { InputChoseDate } from '@/modules/inputs/InputChoseDate'
-import SelectCheck from '@/components/selects/SelectCheck/SelectCheck.vue'
+
+import InputFullDescription from '@/components/inputs/text/InputFullDescription/InputFullDescription.vue'
+import InputShortDescription from '@/components/inputs/text/InputShortDescription/InputShortDescription.vue'
+import InputSelectTypeTransaction from '@/components/inputs/select/InputSelectTypeTransaction/InputSelectTypeTransaction.vue'
+import InputSelectCurrency from '@/components/inputs/select/InputSelectCurrency/InputSelectCurrency.vue'
+import InputSelectCheck from '@/components/inputs/select/InputSelectCheck/InputSelectCheck.vue'
+import InputCount from '@/components/inputs/text/InputCount/InputCount.vue'
 
 import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
 
-import type { ICurrency, ICategory, ICheck } from '@/utils/types/interfaces'
+import type { ICurrency, ICategory, ICheck, IDate } from '@/utils/types/interfaces'
+import type { ITypeTransaction } from '@/utils/types/types'
+
+import { useRoute } from 'vue-router'
 
 const getCategories = async (): Promise<ICategory[]> => {
   return [
@@ -93,34 +94,44 @@ const categories = ref<ICategory[]>([])
 const checks = ref<ICheck[]>([])
 
 const shortDescriptionField = ref<string>('')
-const typeField = ref<ITypeTransaction>()
-const currencyField = ref<ICurrency>()
+const typeField = ref<ITypeTransaction | null>(null)
+const currencyField = ref<ICurrency | null>(null)
 const countField = ref<number>(0)
-const checkField = ref<number>(0)
+const checkField = ref<string | null>(null)
 const categoryField = ref<ICategory>()
-const dateField = ref<Date>()
+const dateField = ref<IDate>()
 const fullDescriptionField = ref<string>('')
 
-const defaultType = ref<ITypeTransaction>('expense')
+const emits = defineEmits(['updateType'])
+watch(typeField, () => {
+  emits('updateType', typeField.value)
+})
 
 const submitForm = async () => {
   const dataFormToString = `
 short description: ${shortDescriptionField.value}
 type: ${typeField.value}
-currency: ${currencyField.value?.id}
+currency id: ${currencyField.value?.id}
 count: ${countField.value}
-check: ${checkField.value}
-category: ${categoryField.value}
-date: ${dateField.value}
+check id: ${checkField.value}
+category id: ${categoryField.value?.id}
+date: ${dateField.value?.date}
 full description: ${fullDescriptionField.value}
   `
   alert(dataFormToString)
 }
 
+import { useQueryHandler } from '../helpers/useQueryHandler'
+
+const route = useRoute()
+useQueryHandler(route, typeField, checkField)
+
 onMounted(async () => {
   categories.value.push(...(await getCategories()))
   currencies.value.push(...(await getCurrencies()))
   checks.value.push(...(await getChecks()))
+
+  currencyField.value = currencies.value[0]
 })
 </script>
 
@@ -131,32 +142,28 @@ onMounted(async () => {
         <InputShortDescription v-model:model-value="shortDescriptionField" />
       </template>
     </InputWithIcon>
-    <InputWithIcon>
+    <InputWithIcon icon="swap_vert">
       <template #input>
-        <InputTypeTransaction v-model:checked-value="typeField" :defaultValue="defaultType" />
+        <InputSelectTypeTransaction v-model:selected-value="typeField" />
       </template>
     </InputWithIcon>
-    <InputWithIcon>
+    <InputWithIcon icon="attach_money">
       <template #input>
-        <InputCurrency
-          v-model:checked-value="currencyField"
-          :currencies="currencies"
-          :defaultValue="currencies[0]"
+        <InputSelectCurrency v-model:selected-value="currencyField" :currencies="currencies" />
+      </template>
+    </InputWithIcon>
+    <InputWithIcon icon="price_change">
+      <template #input>
+        <InputCount
+          label="Сумма"
+          v-model:model-value="countField"
+          :prefix="currencyField?.symbol"
         />
       </template>
     </InputWithIcon>
-    <InputWithIcon>
+    <InputWithIcon icon="account_balance">
       <template #input>
-        <InputCount v-model:model-value="countField" :prefix="currencyField?.symbol" />
-      </template>
-    </InputWithIcon>
-    <InputWithIcon>
-      <template #input>
-        <SelectCheck
-          v-model:checked-value="checkField"
-          :checks="checks"
-          :defaultCheck="checks[0]"
-        />
+        <InputSelectCheck v-model:selected-value="checkField" :checks="checks" />
       </template>
     </InputWithIcon>
     <InputList header="Категория">
@@ -169,14 +176,9 @@ onMounted(async () => {
         <InputChoseDate v-model:checkedValue="dateField" />
       </template>
     </InputList>
-    <InputWithIcon>
+    <InputWithIcon icon="description">
       <template #input>
-        <md-outlined-text-field
-          class="textarea"
-          type="textarea"
-          label="Подробное описание..."
-          v-model="fullDescriptionField"
-        />
+        <InputFullDescription v-model:model-value="fullDescriptionField" />
       </template>
     </InputWithIcon>
     <SubmitFormButtons />
@@ -192,9 +194,5 @@ onMounted(async () => {
 
   gap: 16px;
   margin-top: 32px;
-}
-
-.textarea {
-  min-height: 100px;
 }
 </style>

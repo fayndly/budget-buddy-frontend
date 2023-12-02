@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { ref, type Ref } from 'vue'
+
 import '@material/web/button/text-button'
 import '@material/web/dialog/dialog'
-import { ref, type Ref } from 'vue'
 
 export interface IPropsDialogSetDate {
   headline: string
@@ -50,4 +51,8 @@ const closeModal = () => {
   </teleport>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+md-dialog {
+  margin: auto;
+}
+</style>

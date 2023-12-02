@@ -67,7 +67,11 @@ color: ${colorField.value?.value}
     </InputWithIcon>
     <InputWithIcon icon="account_balance">
       <template #input>
-        <InputCount v-model:model-value="countField" :prefix="currencyField?.symbol" />
+        <InputCount
+          label="Первоначальная сумма"
+          v-model:model-value="countField"
+          :prefix="currencyField?.symbol"
+        />
       </template>
     </InputWithIcon>
     <InputList header="Цвет">

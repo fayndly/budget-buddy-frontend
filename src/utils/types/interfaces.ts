@@ -21,3 +21,8 @@ export interface ICheck {
   name: string
   id: string
 }
+
+export interface INamePageRu {
+  expense: string
+  income: string
+}

@@ -1,17 +1,15 @@
 <script setup lang="ts">
 import '@material/web/textfield/outlined-text-field'
 
-import { attributesInputCount } from './constants/attributes'
+import { attributesInputShortDescription } from './constants/attributes'
 
-defineProps(['modelValue', 'prefix', 'label'])
+defineProps(['modelValue'])
 defineEmits(['update:modelValue'])
 </script>
 
 <template>
   <md-outlined-text-field
-    v-bind="attributesInputCount"
-    :label="label"
-    :prefix-text="prefix"
+    v-bind="attributesInputShortDescription"
     :value="modelValue"
     @input="$emit('update:modelValue', $event.target.value)"
   />

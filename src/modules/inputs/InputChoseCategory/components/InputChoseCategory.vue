@@ -5,9 +5,10 @@ import RadioCategory from '@/components/radio/RadioCategory/RadioCategory.vue'
 import ButtonShowMore from './custom/ButtonShowMore/ButtonShowMore.vue'
 import ButtonAddCategory from './custom/ButtonAddCategory/ButtonAddCategory.vue'
 
+import type { IPropsInputChoseCategory } from '../types/props'
 import type { ICategory } from '@/utils/types/interfaces'
 
-defineProps<{ categories: ICategory[] }>()
+defineProps<IPropsInputChoseCategory>()
 const emit = defineEmits(['update:checkedValue'])
 
 const chosedCategory = ref<ICategory>()
@@ -16,15 +17,15 @@ watch(chosedCategory, () => {
   emit('update:checkedValue', chosedCategory.value)
 })
 
-const isShowMoreCategories = ref<boolean>(false)
+const moreCategoriesIsShow = ref<boolean>(false)
 
-const buttonShowMoreHandler = () => {
-  isShowMoreCategories.value = !isShowMoreCategories.value
+const toogleShowMore = () => {
+  moreCategoriesIsShow.value = !moreCategoriesIsShow.value
 }
 </script>
 
 <template>
-  <ul class="list-categories" :class="{ 'hide-elements': !isShowMoreCategories }">
+  <ul class="list-categories" :class="{ 'hide-elements': !moreCategoriesIsShow }">
     <li v-for="category in categories" :key="category.id">
       <RadioCategory
         :id="category.id"
@@ -37,7 +38,7 @@ const buttonShowMoreHandler = () => {
       />
     </li>
     <li>
-      <ButtonShowMore @click="buttonShowMoreHandler" />
+      <ButtonShowMore @click="toogleShowMore" />
     </li>
     <li>
       <ButtonAddCategory @click="$router.push({ name: 'AddCategory' })" />

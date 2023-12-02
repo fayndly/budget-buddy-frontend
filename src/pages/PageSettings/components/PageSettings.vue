@@ -17,15 +17,4 @@ import '@material/web/dialog/dialog'
   <BarNavigate />
 </template>
 
-<style lang="scss">
-md-dialog {
-  margin-top: calc(50svh - 20%);
-  margin-left: calc(50vw - 35%);
-
-  dialog {
-    padding: 20px;
-  }
-  &:host {
-  }
-}
-</style>
+<style lang="scss"></style>
