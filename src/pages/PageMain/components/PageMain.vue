@@ -6,6 +6,7 @@ import TemplateSection from '@/templates/TemplateSection.vue'
 import BarNavigate from '@/components/bars/BarNavigate/BarNavigate.vue'
 
 import BarCheck from '@/components/bars/BarCheck/BarCheck.vue'
+import TabsTypeTransactions from '@/components/tabs/TabsTypeTransactions/TabsTypeTransactions.vue'
 
 import type { ICheck } from '@/utils/types/interfaces'
 
@@ -27,20 +28,16 @@ const getChecks = async (): Promise<ICheck[]> => {
 const checks = ref<ICheck[]>([])
 const chosedCheck = ref<ICheck | null>(null)
 
-import { useRoute } from 'vue-router'
-const route = useRoute()
-
 onMounted(async () => {
   checks.value.push(...(await getChecks()))
 
   chosedCheck.value = checks.value[1]
-
-  console.log(route.params.checkId)
 })
 </script>
 
 <template>
   <BarCheck :checks="checks" :chosedCheck="chosedCheck" />
+  <TabsTypeTransactions />
   <TemplateMain class="main-main">
     <TemplateSection>
       <router-view></router-view>
