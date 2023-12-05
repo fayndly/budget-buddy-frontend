@@ -4,7 +4,7 @@ import TemplateSection from '@/templates/TemplateSection.vue'
 
 import '@material/web/button/filled-tonal-button'
 
-const pages = ['Signup', 'Login', 'Settings', 'AddTransaction', 'AddCheck', 'AddCategory']
+const pages = ['Signup', 'Login', 'Settings', 'AddTransaction', 'AddCheck', 'AddCategory', 'Main']
 </script>
 
 <template>

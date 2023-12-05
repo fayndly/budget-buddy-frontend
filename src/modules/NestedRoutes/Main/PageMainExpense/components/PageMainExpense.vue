@@ -13,4 +13,10 @@
   </div>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.fab-add-transaction {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+}
+</style>

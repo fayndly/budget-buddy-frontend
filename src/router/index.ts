@@ -32,18 +32,20 @@ const router = createRouter({
       component: PageSignup
     },
     {
-      path: '/main',
+      path: '/main/:checkId?',
       redirect: '/main/expense',
       name: 'Main',
       component: PageMain,
       children: [
         {
           path: 'expense',
-          component: PageMainExpense
+          component: PageMainExpense,
+          name: 'MainExpense'
         },
         {
           path: 'income',
-          component: PageMainIncome
+          component: PageMainIncome,
+          name: 'MainIncome'
         }
       ]
     },
