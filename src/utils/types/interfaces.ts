@@ -26,3 +26,10 @@ export interface INamePageRu {
   expense: string
   income: string
 }
+
+export interface IDataTransactions {
+  count: number
+  color: string
+  strokeDasharray?: number
+  strokeDashoffset?: number
+}
