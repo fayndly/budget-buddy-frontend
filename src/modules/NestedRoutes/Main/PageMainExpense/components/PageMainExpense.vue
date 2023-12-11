@@ -1,48 +1,11 @@
 <script setup lang="ts">
-import GraphDiogram from '@/components/graphs/GraphDiogram/GraphDiogram.vue'
+import '@material/web/button/text-button'
 
-const transactionsData = [
-  {
-    count: 12345,
-    color: '#FF4F4F',
-    strokeDasharray: 0,
-    strokeDashoffset: 0
-  },
-  {
-    count: 345,
-    color: '#5D4FFF',
-    strokeDasharray: 0,
-    strokeDashoffset: 0
-  },
-  {
-    count: 4253,
-    color: '#4FB5FF',
-    strokeDasharray: 0,
-    strokeDashoffset: 0
-  },
-  {
-    count: 6253,
-    color: '#FFC34F',
-    strokeDasharray: 0,
-    strokeDashoffset: 0
-  },
-  {
-    count: 9876,
-    color: '#AAAAAA',
-    strokeDasharray: 0,
-    strokeDashoffset: 0
-  },
-  {
-    count: 4567,
-    color: '#FFF',
-    strokeDasharray: 0,
-    strokeDashoffset: 0
-  }
-]
+import { TransactionsVisualInfo } from '@/modules/TransactionsVisualInfo'
 </script>
 
 <template>
-  <GraphDiogram :data="transactionsData" />
+  <TransactionsVisualInfo />
   <md-fab
     variant="primary"
     class="fab-add-transaction"

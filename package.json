@@ -15,12 +15,10 @@
   "dependencies": {
     "@material/web": "^1.0.1",
     "axios": "^1.6.1",
-    "chart.js": "^3.9.1",
     "material-icons": "^1.13.12",
     "pinia": "^2.1.7",
     "sass": "^1.69.5",
     "vue": "^3.3.4",
-    "vue-chart-3": "^3.1.8",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
