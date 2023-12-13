@@ -2,10 +2,12 @@
 import '@material/web/button/text-button'
 
 import { TransactionsVisualInfo } from '@/modules/TransactionsVisualInfo'
+import { TransactionsList } from '@/modules/TransactionsList'
 </script>
 
 <template>
   <TransactionsVisualInfo />
+  <TransactionsList />
   <md-fab
     variant="primary"
     class="fab-add-transaction"
@@ -18,8 +20,8 @@ import { TransactionsVisualInfo } from '@/modules/TransactionsVisualInfo'
 
 <style lang="scss">
 .fab-add-transaction {
-  position: absolute;
-  bottom: 16px;
+  position: fixed;
+  bottom: calc(16px + 80px);
   right: 16px;
 }
 </style>

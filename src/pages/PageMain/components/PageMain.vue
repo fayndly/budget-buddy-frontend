@@ -39,7 +39,7 @@ onMounted(async () => {
   <BarCheck :checks="checks" :chosedCheck="chosedCheck" />
   <TabsTypeTransactions />
   <TemplateMain class="main-main">
-    <TemplateSection>
+    <TemplateSection class="main-template-section">
       <router-view></router-view>
     </TemplateSection>
   </TemplateMain>
@@ -49,5 +49,14 @@ onMounted(async () => {
 <style lang="scss">
 .main-main {
   position: relative;
+  height: 100px;
+}
+
+.main-template-section {
+  .section__content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
 }
 </style>
