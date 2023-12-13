@@ -117,6 +117,6 @@ const tyransactions = [
   padding-inline-start: 0px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 </style>

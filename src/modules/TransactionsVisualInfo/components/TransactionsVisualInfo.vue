@@ -8,6 +8,7 @@ import ArrowLeftBig from '@/ui/icons/ArrowLeftBig.vue'
 
 import GraphDiogram from '@/components/graphs/GraphDiogram/GraphDiogram.vue'
 import DialogSetRangeDate from '@/components/dialogs/DialogSetRangeDate/DialogSetRangeDate.vue'
+import CardCategory from '@/components/cards/CardCategory/CardCategory.vue'
 
 import { months, getRangeDateFromMonth } from '../helpers/index'
 
@@ -78,6 +79,35 @@ const clickButtonSwapHandler = (side: 'left' | 'right') => {
   }
   chosedMonth.value = new Date(chosedMonthFormatDate.setMonth(newMonth)).toISOString()
 }
+
+const categpries = [
+  {
+    color: '#FF4F4F',
+    name: 'Транспорт',
+    icon: 'directions_car',
+    count: 12345,
+    cyrrancy: '₽'
+  },
+  {
+    color: '#5D4FFF',
+    name: 'Интернет',
+    icon: 'language',
+    count: 345,
+    cyrrancy: '₽'
+  },
+  {
+    color: '#4FB5FF',
+    name: 'Взятка',
+    count: 4253,
+    cyrrancy: '₽'
+  },
+  {
+    color: '#FFC34F',
+    name: 'Походы в туалет',
+    count: 6253,
+    cyrrancy: '₽'
+  }
+]
 </script>
 
 <template>
@@ -97,6 +127,17 @@ const clickButtonSwapHandler = (side: 'left' | 'right') => {
         <ArrowRightBig />
       </md-icon-button>
     </div>
+    <ul class="categpries-list">
+      <li v-for="(categpry, index) in categpries" :key="index">
+        <CardCategory
+          :count="categpry.count"
+          :name="categpry.name"
+          :color="categpry.color"
+          :cyrrancy="categpry.cyrrancy"
+          :icon="categpry.icon"
+        />
+      </li>
+    </ul>
   </div>
   <DialogSetRangeDate
     headline="Выберите месяц"
@@ -131,5 +172,14 @@ const clickButtonSwapHandler = (side: 'left' | 'right') => {
   }
   &__right {
   }
+}
+
+.categpries-list {
+  padding-top: 8px;
+
+  padding-inline-start: 0px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 </style>
