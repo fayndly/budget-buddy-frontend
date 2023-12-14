@@ -13,6 +13,9 @@ import { PageMain } from '@/pages/PageMain'
 import { PageMainExpense } from '@/modules/NestedRoutes/Main/PageMainExpense'
 import { PageMainIncome } from '@/modules/NestedRoutes/Main/PageMainIncome'
 
+import { PageCategories } from '@/pages/PageCategories'
+import { PageChecks } from '@/pages/PageChecks'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -68,6 +71,16 @@ const router = createRouter({
       path: '/addcategory',
       name: 'AddCategory',
       component: PageAddCategory
+    },
+    {
+      path: '/categories',
+      name: 'Categories',
+      component: PageCategories
+    },
+    {
+      path: '/checks',
+      name: 'Checks',
+      component: PageChecks
     },
     {
       path: '/:catchAll(.*)',
