@@ -16,10 +16,12 @@ import '@material/web/list/list-item'
         <md-list-item interactive type="button" @click="$router.push({ name: 'Checks' })">
           Счета
           <span slot="start" class="material-icons-outlined">account_balance</span>
+          <span class="material-icons-outlined" slot="end"> chevron_right </span>
         </md-list-item>
         <md-list-item interactive type="button" @click="$router.push({ name: 'Categories' })">
           Категории
           <span slot="start" class="material-icons-outlined">category</span>
+          <span class="material-icons-outlined" slot="end"> chevron_right </span>
         </md-list-item>
         <md-divider></md-divider>
         <md-list-item interactive type="button" @click="$router.push({ name: 'Login' })">
