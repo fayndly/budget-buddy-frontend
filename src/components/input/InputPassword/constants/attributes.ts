@@ -1,4 +1,4 @@
-export const propsInputPassword = {
+export const attributesInputPassword = {
   name: 'password',
   id: 'password',
   required: true,

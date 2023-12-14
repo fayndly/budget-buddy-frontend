@@ -4,7 +4,7 @@ import { ref } from 'vue'
 import '@material/web/textfield/outlined-text-field'
 import '@material/web/iconbutton/icon-button'
 
-import { propsInputPassword } from './constants/PropsInput'
+import { attributesInputPassword } from './constants/attributes'
 
 const isPasswordShow = ref(false)
 
@@ -14,7 +14,7 @@ defineEmits(['update:value'])
 
 <template>
   <md-outlined-text-field
-    v-bind="propsInputPassword"
+    v-bind="attributesInputPassword"
     :type="isPasswordShow ? 'text' : 'password'"
     :value="value"
     @input="$emit('update:value', $event.target.value)"
@@ -23,7 +23,7 @@ defineEmits(['update:value'])
       type="button"
       id="button-hide"
       @click="isPasswordShow = !isPasswordShow"
-      toggle
+      :selected="isPasswordShow"
       slot="trailing-icon"
     >
       <span class="material-icons-outlined">visibility</span>
