@@ -14,6 +14,9 @@ import { PageMainExpense } from '@/modules/NestedRoutes/Main/PageMainExpense'
 import { PageMainIncome } from '@/modules/NestedRoutes/Main/PageMainIncome'
 
 import { PageCategories } from '@/pages/PageCategories'
+import { PageCategoriesExpense } from '@/modules/NestedRoutes/Categories/PageCategoriesExpense'
+import { PageCategoriesIncome } from '@/modules/NestedRoutes/Categories/PageCategoriesIncome'
+
 import { PageChecks } from '@/pages/PageChecks'
 
 const router = createRouter({
@@ -75,7 +78,20 @@ const router = createRouter({
     {
       path: '/categories',
       name: 'Categories',
-      component: PageCategories
+      component: PageCategories,
+      redirect: '/categories/expense',
+      children: [
+        {
+          path: 'expense',
+          component: PageCategoriesExpense,
+          name: 'CategoriesExpense'
+        },
+        {
+          path: 'income',
+          component: PageCategoriesIncome,
+          name: 'CategoriesIncome'
+        }
+      ]
     },
     {
       path: '/checks',
