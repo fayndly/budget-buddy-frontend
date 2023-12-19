@@ -4,19 +4,27 @@ import TemplateSection from '@/templates/TemplateSection.vue'
 
 import '@material/web/button/filled-tonal-button'
 
-const pages = ['Signup', 'Login', 'Settings', 'AddTransaction', 'AddCheck', 'AddCategory', 'Main']
+const pages = [
+  'AuthSignup',
+  'AuthLogin',
+  'Settings',
+  'TransactionsAdd',
+  'ChecksAdd',
+  'CategoriesAdd',
+  'Main'
+]
 </script>
 
 <template>
   <TemplateMain>
     <TemplateSection class="section-signup">
       <h1 class="headline-medium secondary-text">Page home</h1>
-      <router-link v-for="page in pages" :key="page" :to="{ name: page }">
-        <md-filled-tonal-button>{{ page }}</md-filled-tonal-button>
-      </router-link>
-      <router-link to="/notFound">
-        <md-filled-tonal-button>NotFound</md-filled-tonal-button>
-      </router-link>
+      <md-filled-tonal-button
+        v-for="page in pages"
+        :key="page"
+        @click="$router.push({ name: page })"
+        >{{ page }}</md-filled-tonal-button
+      >
     </TemplateSection></TemplateMain
   >
 </template>

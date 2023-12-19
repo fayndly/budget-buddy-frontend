@@ -27,15 +27,13 @@ const tabs = [
 </script>
 
 <template>
-  <md-tabs
+  <md-tabs class="tabs-type-transactions"
     ><md-primary-tab
       v-for="tab in tabs"
       :key="tab.name"
       :active="$route.name === tab.routeName"
-      @click="$router.push(tab.routeTo)"
+      @click="$router.replace(tab.routeTo)"
       >{{ tab.name }}</md-primary-tab
     ></md-tabs
   >
 </template>
-
-<style lang="scss"></style>

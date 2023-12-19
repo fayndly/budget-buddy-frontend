@@ -40,9 +40,7 @@ const categories = ref([
       <div slot="supporting-text">
         {{ category.type }}
       </div>
-      <span class="material-icons-outlined list-categories__item-icon-end" slot="end">
-        chevron_right
-      </span>
+      <span class="material-icons-outlined list-categories__item-icon-end" slot="end"> edit </span>
       <span
         class="material-icons-outlined list-categories__item-icon-start"
         slot="start"
@@ -50,12 +48,6 @@ const categories = ref([
       >
         {{ category.icon }}
       </span>
-    </md-list-item>
-    <md-divider></md-divider>
-    <md-list-item type="button" class="list-categories__item-add">
-      <div slot="headline" class="list-categories__item-add-wrapper">
-        <span class="material-icons-outlined"> add </span>
-      </div>
     </md-list-item>
   </md-list>
 </template>

@@ -4,6 +4,7 @@ import '@material/web/iconbutton/filled-icon-button'
 import '@material/web/button/filled-tonal-button'
 
 import 'material-icons/iconfont/material-icons.css'
+import AppLayout from '@/layouts/AppLayout.vue'
 
 // const schema = ref<'dark' | 'light'>('dark')
 // const schemas = {
@@ -28,7 +29,9 @@ import 'material-icons/iconfont/material-icons.css'
     <span class="material-icons-outlined">dark_mode</span>
     <span slot="selected" class="material-icons-outlined">light_mode</span>
   </md-filled-icon-button> -->
-  <router-view></router-view>
+  <AppLayout>
+    <router-view />
+  </AppLayout>
 </template>
 
 <style lang="scss">

@@ -6,27 +6,23 @@ import 'material-icons/iconfont/material-icons.css'
 import { useRoute } from 'vue-router'
 const route = useRoute()
 const pageMainIsActive = computed(() => {
-  return ['Main', 'MainExpense', 'MainIncome'].includes(route.name || ' ')
+  return ['Main', 'MainExpense', 'MainIncome'].includes((route.name as string) || ' ')
 })
 const pageSettingsIsActive = computed(() => {
-  return ['Settings'].includes(route.name || ' ')
+  return ['Settings'].includes((route.name as string) || ' ')
 })
 </script>
 
 <template>
-  <nav class="navbar surface">
-    <router-link :to="{ name: 'Main' }">
-      <md-icon-button :selected="pageMainIsActive">
-        <span class="material-icons-outlined">home</span>
-        <span class="material-icons-outlined inverse-primary-text" slot="selected">home</span>
-      </md-icon-button>
-    </router-link>
-    <router-link :to="{ name: 'Settings' }">
-      <md-icon-button :selected="pageSettingsIsActive">
-        <span class="material-icons-outlined">settings</span>
-        <span class="material-icons-outlined inverse-primary-text" slot="selected">settings</span>
-      </md-icon-button>
-    </router-link>
+  <nav class="navbar surface-container">
+    <md-icon-button :selected="pageMainIsActive" @click="$router.push({ name: 'Main' })">
+      <span class="material-icons-outlined">home</span>
+      <span class="material-icons-outlined inverse-primary-text" slot="selected">home</span>
+    </md-icon-button>
+    <md-icon-button :selected="pageSettingsIsActive" @click="$router.push({ name: 'Settings' })">
+      <span class="material-icons-outlined">settings</span>
+      <span class="material-icons-outlined inverse-primary-text" slot="selected">settings</span>
+    </md-icon-button>
   </nav>
 </template>
 

@@ -2,7 +2,6 @@
 import TemplateMain from '@/templates/TemplateMain.vue'
 import TemplateSection from '@/templates/TemplateSection.vue'
 import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
-import BarNavigate from '@/components/bars/BarNavigate/BarNavigate.vue'
 
 import '@material/web/list/list'
 import '@material/web/list/list-item'
@@ -10,7 +9,7 @@ import '@material/web/list/list-item'
 
 <template>
   <BarTopApp :showButtonBack="false" title="Настройки" />
-  <TemplateMain>
+  <TemplateMain class="main-settings">
     <TemplateSection class="TemplateSectionSettings">
       <md-list>
         <md-list-item interactive type="button" @click="$router.push({ name: 'Checks' })">
@@ -24,14 +23,17 @@ import '@material/web/list/list-item'
           <span class="material-icons-outlined" slot="end"> chevron_right </span>
         </md-list-item>
         <md-divider></md-divider>
-        <md-list-item interactive type="button" @click="$router.push({ name: 'Login' })">
+        <md-list-item interactive type="button" @click="$router.push({ name: 'AuthLogin' })">
           Выход
           <span slot="start" class="material-icons-outlined"> logout </span>
         </md-list-item>
       </md-list>
     </TemplateSection>
   </TemplateMain>
-  <BarNavigate />
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.main-settings {
+  padding: 0px;
+}
+</style>

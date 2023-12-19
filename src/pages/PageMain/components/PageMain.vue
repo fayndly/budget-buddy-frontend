@@ -3,14 +3,11 @@ import { ref, onMounted } from 'vue'
 
 import TemplateMain from '@/templates/TemplateMain.vue'
 import TemplateSection from '@/templates/TemplateSection.vue'
-import BarNavigate from '@/components/bars/BarNavigate/BarNavigate.vue'
 
 import BarCheck from '@/components/bars/BarCheck/BarCheck.vue'
 import TabsTypeTransactions from '@/components/tabs/TabsTypeTransactions/TabsTypeTransactions.vue'
 
 import type { ICheck } from '@/utils/types/interfaces'
-
-import '@material/web/fab/fab'
 
 const getChecks = async (): Promise<ICheck[]> => {
   return [
@@ -43,7 +40,6 @@ onMounted(async () => {
       <router-view></router-view>
     </TemplateSection>
   </TemplateMain>
-  <BarNavigate />
 </template>
 
 <style lang="scss">

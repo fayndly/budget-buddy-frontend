@@ -8,12 +8,14 @@ import '@material/web/menu/menu-item'
 const props = defineProps(['chosedCheck', 'checks'])
 
 onMounted(() => {
-  const anchorEl = document.body.querySelector('#usage-anchor')
-  const menuEl = document.body.querySelector('#usage-menu')
+  const anchorEl: Element | null = document.body.querySelector('#usage-anchor')
+  const menuEl: Element | null = document.body.querySelector('#usage-menu')
 
-  anchorEl.addEventListener('click', () => {
-    menuEl.open = !menuEl.open
-  })
+  if (anchorEl && menuEl) {
+    anchorEl.addEventListener('click', () => {
+      menuEl.open = !menuEl.open
+    })
+  }
 })
 
 const isButtonSelected = ref(false)
@@ -57,7 +59,7 @@ const clickMenuButtonHandler = (check: ICheck) => {
         >
           <div slot="headline">{{ check.name }}</div>
         </md-menu-item>
-        <md-menu-item @click="$router.push({ name: 'AddCheck' })">
+        <md-menu-item @click="$router.push({ name: 'ChecksAdd' })">
           <div slot="headline" class="add-check">
             <span class="material-icons-outlined">add</span>
           </div>
