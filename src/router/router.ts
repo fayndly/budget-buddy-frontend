@@ -59,16 +59,16 @@ const routesTransactions = [
   // },
 ]
 
-// import { PageCheck } from '@/pages/checks/PageCheck'
+import { PageCheck } from '@/pages/checks/PageCheck'
 import { PageChecks } from '@/pages/checks/PageChecks'
 import { PageCheckAdd } from '@/pages/checks/PageCheckAdd'
 // import { PageCheckUpdate } from '@/pages/checks/PageCheckUpdate'
 const routesChecks = [
-  // {
-  //   path: '/checks/:checkId',
-  //   name: RouteNamesEnum.check,
-  //   component: PageCheck
-  // },
+  {
+    path: '/checks/:checkId',
+    name: RouteNamesEnum.check,
+    component: PageCheck
+  },
   {
     path: '/checks',
     name: RouteNamesEnum.checks,
