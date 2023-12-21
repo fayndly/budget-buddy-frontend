@@ -41,6 +41,7 @@ const translateType = {
 }
 
 const categoryInfo = ref<TFormatArrayItems | null>(null)
+const categoryData = ref<ICategoryData | null>(null)
 
 const getFormatArrayItems = (categoryData: ICategoryData): TFormatArrayItems => {
   return [
@@ -75,12 +76,19 @@ const getReadableTime = (time: string | undefined): string => {
 }
 
 onMounted(async () => {
-  categoryInfo.value = getFormatArrayItems(await getCategoryData())
+  categoryData.value = await getCategoryData()
+  categoryInfo.value = getFormatArrayItems(categoryData.value)
 })
 </script>
 
 <template>
-  <BarTopApp title="Категория" />
+  <BarTopApp
+    title="Категория"
+    :showButtonEdit="true"
+    @clickButtonEdit="
+      $router.push({ name: 'CategoriesUpdate', params: { categoryId: categoryData?._id } })
+    "
+  />
   <TemplateMain>
     <TemplateSection>
       <ul class="category-info">

@@ -36,12 +36,13 @@ const checks = ref([
           v-for="check in checks"
           :key="check.id"
           class="list-checks__item"
+          @click="$router.push({ name: 'Check', params: { checkId: '123' } })"
         >
           <div slot="headline">{{ check.name }}</div>
           <div slot="supporting-text">
             {{ check.count.toLocaleString('ru-RU') }}{{ check.currancy }}
           </div>
-          <span class="material-icons-outlined" slot="end"> edit </span>
+          <span class="material-icons-outlined" slot="end"> chevron_right </span>
         </md-list-item>
       </md-list>
     </TemplateSection>

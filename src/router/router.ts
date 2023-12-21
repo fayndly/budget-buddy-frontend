@@ -35,7 +35,7 @@ const routesMain = [
 import { PageTransaction } from '@/pages/transactions/PageTransaction'
 import { PageTransactions } from '@/pages/transactions/PageTransactions'
 import { PageTransactionAdd } from '@/pages/transactions/PageTransactionAdd'
-// import { PageTransactionUpdate } from '@/pages/transactions/PageTransactionUpdate'
+import { PageTransactionUpdate } from '@/pages/transactions/PageTransactionUpdate'
 const routesTransactions = [
   {
     path: '/transactions/:transactionId',
@@ -51,18 +51,18 @@ const routesTransactions = [
     path: '/transactions/add',
     name: RouteNamesEnum.transactionsAdd,
     component: PageTransactionAdd
+  },
+  {
+    path: '/transactions/update/:transactionId',
+    name: RouteNamesEnum.transactionsUpdate,
+    component: PageTransactionUpdate
   }
-  // {
-  //   path: '/transactions/update/:transactionId',
-  //   name: RouteNamesEnum.transactionsUpdate,
-  //   component: PageTransactionUpdate
-  // },
 ]
 
 import { PageCheck } from '@/pages/checks/PageCheck'
 import { PageChecks } from '@/pages/checks/PageChecks'
 import { PageCheckAdd } from '@/pages/checks/PageCheckAdd'
-// import { PageCheckUpdate } from '@/pages/checks/PageCheckUpdate'
+import { PageCheckUpdate } from '@/pages/checks/PageCheckUpdate'
 const routesChecks = [
   {
     path: '/checks/:checkId',
@@ -78,18 +78,18 @@ const routesChecks = [
     path: '/checks/add',
     name: RouteNamesEnum.checksAdd,
     component: PageCheckAdd
+  },
+  {
+    path: '/checks/update/:checkId',
+    name: RouteNamesEnum.checksUpdate,
+    component: PageCheckUpdate
   }
-  // {
-  //   path: '/checks/update/:checkId',
-  //   name: RouteNamesEnum.checksUpdate,
-  //   component: PageCheckUpdate
-  // },
 ]
 
 import { PageCategories } from '@/pages/categories/PageCategories'
 import { PageCategory } from '@/pages/categories/PageCategory'
 import { PageCategoryAdd } from '@/pages/categories/PageCategoryAdd'
-// import { PageCategoryUpdate } from '@/pages/categories/PageCategoryUpdate'
+import { PageCategoryUpdate } from '@/pages/categories/PageCategoryUpdate'
 import { PageCategoriesExpense } from '@/modules/NestedRoutes/Categories/PageCategoriesExpense'
 import { PageCategoriesIncome } from '@/modules/NestedRoutes/Categories/PageCategoriesIncome'
 const routesCategories = [
@@ -120,12 +120,12 @@ const routesCategories = [
     path: '/categories/add',
     name: RouteNamesEnum.categoriesAdd,
     component: PageCategoryAdd
+  },
+  {
+    path: '/categories/update/:categoryId',
+    name: RouteNamesEnum.categoriesUpdate,
+    component: PageCategoryUpdate
   }
-  // {
-  //   path: '/categories/update/:categoryId',
-  //   name: RouteNamesEnum.categoriesAdd,
-  //   component: PageCategoryUpdate
-  // },
 ]
 
 import { PageAuthLogin } from '@/pages/auths/PageAuthLogin'

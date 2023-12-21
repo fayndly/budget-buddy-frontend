@@ -49,6 +49,7 @@ const getCheckData = async (): Promise<ICheckData> => {
 }
 
 const checkInfo = ref<TFormatArrayItems | null>(null)
+const checkData = ref<ICheckData | null>(null)
 
 const getFormatArrayItems = (checkData: ICheckData): TFormatArrayItems => {
   return [
@@ -93,12 +94,17 @@ const getReadableAmount = (
 }
 
 onMounted(async () => {
-  checkInfo.value = getFormatArrayItems(await getCheckData())
+  checkData.value = await getCheckData()
+  checkInfo.value = getFormatArrayItems(checkData.value)
 })
 </script>
 
 <template>
-  <BarTopApp title="Счет" />
+  <BarTopApp
+    title="Счет"
+    :showButtonEdit="true"
+    @clickButtonEdit="$router.push({ name: 'ChecksUpdate', params: { checkId: checkData?._id } })"
+  />
   <TemplateMain>
     <TemplateSection>
       <ul class="check-info">

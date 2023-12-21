@@ -139,7 +139,7 @@ onMounted(async () => {
     title="Транзакция"
     :showButtonEdit="true"
     @clickButtonEdit="
-      $router.push({ name: 'TransactionUpdate', params: { transactionId: transactionData?._id } })
+      $router.push({ name: 'TransactionsUpdate', params: { transactionId: transactionData?._id } })
     "
   />
   <TemplateMain>

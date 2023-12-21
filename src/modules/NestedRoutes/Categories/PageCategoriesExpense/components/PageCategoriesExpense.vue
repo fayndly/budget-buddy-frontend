@@ -35,12 +35,15 @@ const categories = ref([
       v-for="category in categories"
       :key="category.id"
       class="list-categories__item"
+      @click="$router.push({ name: 'Category', params: { categoryId: '123' } })"
     >
       <div slot="headline">{{ category.name }}</div>
       <div slot="supporting-text">
         {{ category.type }}
       </div>
-      <span class="material-icons-outlined list-categories__item-icon-end" slot="end"> edit </span>
+      <span class="material-icons-outlined list-categories__item-icon-end" slot="end">
+        chevron_right
+      </span>
       <span
         class="material-icons-outlined list-categories__item-icon-start"
         slot="start"
