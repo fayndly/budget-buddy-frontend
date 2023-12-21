@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import type { IPropsCardTransaction } from './types/props'
 
+import '@material/web/ripple/ripple'
+
 defineProps<IPropsCardTransaction>()
 </script>
 
 <template>
-  <div class="card-transaction">
+  <div
+    class="card-transaction container"
+    @click="$router.push({ name: 'Transaction', params: { transactionId: '123' } })"
+  >
+    <md-ripple></md-ripple>
     <div class="card-transaction__category-visual" :style="`background-color: ${color};`">
       <span v-if="icon" class="material-icons-outlined card-transaction__category-visual-icon">{{
         icon
@@ -29,6 +35,10 @@ defineProps<IPropsCardTransaction>()
 </template>
 
 <style lang="scss" scoped>
+.container {
+  position: relative;
+  border-radius: 20px;
+}
 .card-transaction {
   display: flex;
   align-items: center;
@@ -37,7 +47,7 @@ defineProps<IPropsCardTransaction>()
 
   &__category-visual {
     padding: 16px 8px;
-    border-radius: 50px;
+    border-radius: 20px;
   }
   &__category-visual-icon {
     display: block;
@@ -57,6 +67,7 @@ defineProps<IPropsCardTransaction>()
     display: flex;
     align-items: end;
     justify-content: space-between;
+    padding-right: 8px;
   }
   &__info-short-description {
     color: white;

@@ -32,21 +32,21 @@ const routesMain = [
   }
 ]
 
-// import { PageTransaction } from '@/pages/transactions/PageTransaction'
-// import { PageTransactions } from '@/pages/transactions/PageTransactions'
+import { PageTransaction } from '@/pages/transactions/PageTransaction'
+import { PageTransactions } from '@/pages/transactions/PageTransactions'
 import { PageTransactionAdd } from '@/pages/transactions/PageTransactionAdd'
 // import { PageTransactionUpdate } from '@/pages/transactions/PageTransactionUpdate'
 const routesTransactions = [
-  // {
-  //   path: '/transactions/:transactionId',
-  //   name: RouteNamesEnum.transaction,
-  //   component: PageTransaction
-  // },
-  // {
-  //   path: '/transactions',
-  //   name: RouteNamesEnum.transactions,
-  //   component: PageTransactions
-  // },
+  {
+    path: '/transactions/:transactionId',
+    name: RouteNamesEnum.transaction,
+    component: PageTransaction
+  },
+  {
+    path: '/transactions',
+    name: RouteNamesEnum.transactions,
+    component: PageTransactions
+  },
   {
     path: '/transactions/add',
     name: RouteNamesEnum.transactionsAdd,
