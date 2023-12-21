@@ -87,17 +87,17 @@ const routesChecks = [
 ]
 
 import { PageCategories } from '@/pages/categories/PageCategories'
-// import { PageCategory } from '@/pages/categories/PageCategory'
+import { PageCategory } from '@/pages/categories/PageCategory'
 import { PageCategoryAdd } from '@/pages/categories/PageCategoryAdd'
 // import { PageCategoryUpdate } from '@/pages/categories/PageCategoryUpdate'
 import { PageCategoriesExpense } from '@/modules/NestedRoutes/Categories/PageCategoriesExpense'
 import { PageCategoriesIncome } from '@/modules/NestedRoutes/Categories/PageCategoriesIncome'
 const routesCategories = [
-  // {
-  //   path: '/categories/:categoryId',
-  //   name: RouteNamesEnum.category,
-  //   component: PageCategory
-  // },
+  {
+    path: '/categories/:categoryId',
+    name: RouteNamesEnum.category,
+    component: PageCategory
+  },
   {
     path: '/categories',
     name: RouteNamesEnum.categories,
