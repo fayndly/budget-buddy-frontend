@@ -2,20 +2,35 @@
 import '@material/web/iconbutton/icon-button'
 import 'material-icons/iconfont/material-icons.css'
 
-defineProps({
-  title: String,
-  showButtonBack: {
-    default: true
-  }
+interface IPropsBarTopApp {
+  title: string
+  showButtonBack?: boolean
+  showButtonDelete?: boolean
+  showButtonEdit?: boolean
+}
+const emits = defineEmits(['clickButtonDelete', 'clickButtonEdit'])
+
+withDefaults(defineProps<IPropsBarTopApp>(), {
+  showButtonBack: true,
+  showButtonDelete: false,
+  showButtonEdit: false
 })
 </script>
 
 <template>
   <div class="bar-top-app surface" :class="{ 'bar-top-app--hide-back': !showButtonBack }">
-    <md-icon-button v-if="showButtonBack" @click="$router.go(-1)">
-      <span class="material-icons-outlined">arrow_back</span>
+    <div class="bar-top-app__left">
+      <md-icon-button v-if="showButtonBack" @click="$router.go(-1)">
+        <span class="material-icons-outlined">arrow_back</span>
+      </md-icon-button>
+      <h2 class="title-large on-surface-text">{{ title }}</h2>
+    </div>
+    <md-icon-button v-if="showButtonDelete" @click="emits('clickButtonDelete')">
+      <span class="material-icons-outlined">delete</span>
     </md-icon-button>
-    <h2 class="title-large on-surface-text">{{ title }}</h2>
+    <md-icon-button v-if="showButtonEdit" @click="emits('clickButtonEdit')">
+      <span class="material-icons-outlined">edit</span>
+    </md-icon-button>
   </div>
 </template>
 
@@ -26,6 +41,7 @@ defineProps({
 
   display: flex;
   align-items: center;
+  justify-content: space-between;
 
   padding: 4px;
   padding-right: 16px;
@@ -35,6 +51,11 @@ defineProps({
 
   &--hide-back {
     padding-left: 16px;
+  }
+
+  &__left {
+    display: flex;
+    align-items: center;
   }
 }
 </style>

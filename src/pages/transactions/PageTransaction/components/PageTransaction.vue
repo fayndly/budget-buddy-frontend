@@ -75,6 +75,7 @@ const getTransactionData = async (): Promise<ITransactionData> => {
 }
 
 const transactionInfo = ref<TFormatArrayItems | null>(null)
+const transactionData = ref<ITransactionData | null>(null)
 
 const getFormatArrayItems = (transactionData: ITransactionData): TFormatArrayItems => {
   return [
@@ -128,12 +129,19 @@ const getReadableAmount = (
 }
 
 onMounted(async () => {
-  transactionInfo.value = getFormatArrayItems(await getTransactionData())
+  transactionData.value = await getTransactionData()
+  transactionInfo.value = getFormatArrayItems(transactionData.value)
 })
 </script>
 
 <template>
-  <BarTopApp title="Транзакция" />
+  <BarTopApp
+    title="Транзакция"
+    :showButtonEdit="true"
+    @clickButtonEdit="
+      $router.push({ name: 'TransactionUpdate', params: { transactionId: transactionData?._id } })
+    "
+  />
   <TemplateMain>
     <TemplateSection>
       <ul class="transaction-info">
