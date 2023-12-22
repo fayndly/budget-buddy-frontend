@@ -17,10 +17,10 @@ watch(chosedCategory, () => {
   emit('update:checkedValue', chosedCategory.value)
 })
 
-const moreCategoriesIsShow = ref<boolean>(false)
+const isMoreCategoriesShow = ref<boolean>(false)
 
 const toogleShowMore = () => {
-  moreCategoriesIsShow.value = !moreCategoriesIsShow.value
+  isMoreCategoriesShow.value = !isMoreCategoriesShow.value
 }
 const clickButtonAddCategoryHandler = () => {
   emit('clickButtonAddCategory')
@@ -29,7 +29,7 @@ const clickButtonAddCategoryHandler = () => {
 </script>
 
 <template>
-  <ul class="list-categories" :class="{ 'hide-elements': !moreCategoriesIsShow }">
+  <ul class="list-categories" :class="{ 'hide-elements': !isMoreCategoriesShow }">
     <li v-for="category in categories" :key="category.id">
       <RadioCategory
         :id="category.id"

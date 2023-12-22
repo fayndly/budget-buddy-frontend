@@ -22,7 +22,7 @@ export class GeneratorColors {
   }
 
   generateColors(): void {
-    for (let i = 0; i < this.numberColors; i++) {
+    while (this.wrapperColors.value.length < this.numberColors) {
       this.addColor(this.generateRandomColor())
     }
   }
@@ -30,7 +30,6 @@ export class GeneratorColors {
   regenerateColors(): void {
     this.clearWrapperColors()
     this.generateColors()
-    this.setDefaultColor()
   }
 
   setDefaultColor(): void {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch, computed } from 'vue'
 
 import InputColor from '@/components/radio/RadioColor/RadioColor.vue'
 import ButtonRegenerateColors from './custom/ButtonRegenerateColors/ButtonRegenerateColors.vue'
@@ -13,18 +13,34 @@ const chosedColor = ref<IColor>()
 const colorManager = new GeneratorColors(colors, chosedColor, 9)
 
 const emit = defineEmits(['update:checkedValue'])
+const props = defineProps(['defaultColor'])
+
+const getDefaultColor = computed(() => props.defaultColor)
+
+watch(getDefaultColor, () => {
+  if (props.defaultColor) {
+    colorManager.clearWrapperColors()
+    colorManager.addColor(props.defaultColor)
+    colorManager.generateColors()
+    colorManager.setDefaultColor()
+
+    updateValueHandler()
+  }
+})
 
 colorManager.generateColors()
 colorManager.setDefaultColor()
 updateValueHandler()
 
 const clickRegenerateButtonHandler = () => {
-  updateValueHandler()
   colorManager.regenerateColors()
+  colorManager.setDefaultColor()
+  updateValueHandler()
 }
 
 function updateValueHandler(): void {
   emit('update:checkedValue', chosedColor.value)
+  console.log(chosedColor.value)
 }
 </script>
 
