@@ -2,6 +2,8 @@
 import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
 import TemplateMain from '@/templates/TemplateMain.vue'
 import TemplateSection from '@/templates/TemplateSection.vue'
+import TitleHeader from '@/components/titles/TitleHeader.vue'
+import { FormCheckUpdate } from '@/modules/forms/FormCheckUpdate'
 </script>
 
 <template>
@@ -12,7 +14,10 @@ import TemplateSection from '@/templates/TemplateSection.vue'
   />
   <TemplateMain>
     <TemplateSection>
-      <h1>page edit check</h1>
+      <TitleHeader title="Счет" icon="edit" />
+    </TemplateSection>
+    <TemplateSection>
+      <FormCheckUpdate />
     </TemplateSection>
   </TemplateMain>
 </template>
