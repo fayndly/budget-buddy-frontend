@@ -2,6 +2,9 @@
 import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
 import TemplateMain from '@/templates/TemplateMain.vue'
 import TemplateSection from '@/templates/TemplateSection.vue'
+import TitleHeader from '@/components/titles/TitleHeader.vue'
+
+import { FormTransactionUpdate } from '@/modules/forms/FormTransactionUpdate'
 </script>
 
 <template>
@@ -12,7 +15,10 @@ import TemplateSection from '@/templates/TemplateSection.vue'
   />
   <TemplateMain>
     <TemplateSection>
-      <h1>page edit transaction</h1>
+      <TitleHeader title="Транзакция" icon="edit" />
+    </TemplateSection>
+    <TemplateSection>
+      <FormTransactionUpdate />
     </TemplateSection>
   </TemplateMain>
 </template>
