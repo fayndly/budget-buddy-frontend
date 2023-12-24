@@ -1,9 +1,9 @@
 export const attributesInputPassword = {
   name: 'password',
   id: 'password',
-  required: true,
+  // required: true,
   label: 'Пароль',
   // maxLength: 128 ,
-  minLength: 8,
+  minLength: 6,
   autocomplete: true
 }

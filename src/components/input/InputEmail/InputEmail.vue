@@ -3,7 +3,7 @@ import '@material/web/textfield/outlined-text-field'
 
 import { propsInputEmail } from './constants/PropsInput'
 
-defineProps(['value'])
+defineProps(['value', 'hasErrors', 'errors'])
 defineEmits(['update:value'])
 </script>
 

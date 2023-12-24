@@ -1,10 +1,8 @@
-export const propsInputEmail = {
+export const staticAttributesInputEmail = {
   name: 'email',
   id: 'email',
-  // required: true,
+  required: true,
   label: 'Почта',
   type: 'email',
-  // maxLength: 320,
-  minLength: 5,
   autocomplete: true
 }

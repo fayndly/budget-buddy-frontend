@@ -1,11 +1,42 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted } from 'vue'
 import '@material/web/iconbutton/filled-icon-button'
 import '@material/web/button/filled-tonal-button'
 
 import 'material-icons/iconfont/material-icons.css'
 import AppLayout from '@/layouts/AppLayout.vue'
 
+// import { apiManager } from '@/utils/API/index'
+
+// onMounted(async () => {
+//   // await apiManager
+//   //   .postAuthSignup({ userName: 'fayndly', email: 'fayndly1@gmail.com', password: '1234567' })
+//   //   .then((response: any) => {
+//   //     console.log(response)
+//   //   })
+//   //   .catch((error: any) => {
+//   //     console.log(error.response.data)
+//   //   })
+//   await apiManager
+//     .postAuthLogin({ email: 'fayndly1@gmail.com', password: '1234567' })
+//     .then((response) => {
+//       console.log(response)
+//       const token = response.data.token
+//       localStorage.setItem('token', token)
+//       console.log(localStorage.getItem('token'))
+//     })
+//     .catch((error: any) => {
+//       console.log(error)
+//     })
+//   await apiManager
+//     .getAuthCheck()
+//     .then((response) => {
+//       console.log(response)
+//     })
+//     .catch((error: any) => {
+//       console.log(error.response.data)
+//     })
+// })
 // const schema = ref<'dark' | 'light'>('dark')
 // const schemas = {
 //   dark: './src/assets/styles/md3/theme.dark.css',
