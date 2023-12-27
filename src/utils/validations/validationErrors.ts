@@ -9,7 +9,7 @@ export class ValidationErrors {
   }
 
   isInputHasErrors(inputName: string) {
-    return Boolean(this.validation.value[inputName].$errors.length)
+    return this.validation.value[inputName].$error
   }
   getInputErrors(inputName: string): string[] {
     return this.validation.value[inputName].$errors.map((val: any) => {

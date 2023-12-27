@@ -4,6 +4,6 @@ export interface IResponsePostAuthLogin {
 }
 
 export interface IResponsePostAuthSignup {
-  email: string
-  userName: string
+  success: boolean
+  token: string
 }

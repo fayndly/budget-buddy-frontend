@@ -13,24 +13,20 @@ import useVuelidate from '@vuelidate/core'
 import { ValidationErrors } from '@/utils/validations/validationErrors'
 import { rules } from '../helpers/useValidateForm'
 
-import { usePostAuthLogin, postErrorText } from '../services/useSubmitForm'
+import { usePostAuthLogin, postErrorText, serverValidateErrors } from '../services/useSubmitForm'
 
 const formData = reactive<IFormFields>({
   email: '',
   password: ''
 })
 
-const validation = useVuelidate(rules, formData)
+const validation = useVuelidate(rules, formData, { $externalResults: serverValidateErrors })
 const validationErrorsManager = new ValidationErrors(validation)
 
 const submitForm = async () => {
-  const result = await validation.value.$validate()
-  if (result) {
-    postErrorText.value = null
-    console.log(await usePostAuthLogin(formData.email, formData.password))
-  } else {
-    postErrorText.value = 'Не удалось войти'
-  }
+  validation.value.$clearExternalResults()
+  if (!(await validation.value.$validate())) return
+  await usePostAuthLogin(formData.email, formData.password)
 }
 </script>
 

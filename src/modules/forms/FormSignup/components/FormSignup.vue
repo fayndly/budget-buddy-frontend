@@ -1,41 +1,61 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive } from 'vue'
 
 import '@material/web/button/filled-button'
 
-import { apiManager } from '@/utils/API/index'
+import { InputEmail } from '@/components/inputs/text/InputEmail'
+import { InputPassword } from '@/components/inputs/text/InputPassword'
+import { InputUserName } from '@/components/inputs/text/InputUserName'
+import TitleFormError from '@/components/titles/TitleFormError.vue'
 
-import InputName from './custom/InputName/InputName.vue'
-import InputEmail from '@/components/input/InputEmail/InputEmail.vue'
-import InputPassword from '@/components/input/InputPassword/InputPassword.vue'
+import type { IFormFields } from '../types/formFields.types'
 
-const nameField = ref('')
-const emailField = ref('')
-const passwordField = ref('')
+import useVuelidate from '@vuelidate/core'
+import { ValidationErrors } from '@/utils/validations/validationErrors'
+import { rules } from '../helpers/useRulesForm'
+
+import { usePostAuthSignup, postErrorText } from '../services/useSubmitForm'
+
+const formData = reactive<IFormFields>({
+  userName: '',
+  email: '',
+  password: ''
+})
+
+const validation = useVuelidate(rules, formData)
+const validationErrorsManager = new ValidationErrors(validation)
 
 const submitForm = async () => {
-  console.log(nameField.value, emailField.value, passwordField.value)
-  await apiManager
-    .postAuthSignup({
-      userName: nameField.value,
-      email: emailField.value,
-      password: passwordField.value
-    })
-    .then((response: any) => {
-      console.log(response)
-    })
-    .catch((error: any) => {
-      console.log(error.response.data)
-    })
+  const result = await validation.value.$validate()
+  if (result) {
+    postErrorText.value = null
+    console.log(await usePostAuthSignup(formData.userName, formData.email, formData.password))
+  }
 }
 </script>
 
 <template>
-  <form class="form-auth" @submit.prevent="submitForm">
-    <InputName v-model:value="nameField" class="form-auth__input" />
-    <InputEmail v-model:value="emailField" class="form-auth__input" />
-    <InputPassword v-model:value="passwordField" class="form-auth__input" />
-    <md-filled-button type="submit">Подтвердить</md-filled-button>
+  <TitleFormError v-if="postErrorText" :error="postErrorText" />
+  <form class="form-auth" @submit.prevent="submitForm" novalidate>
+    <InputUserName
+      class="form-auth__input"
+      v-model:modelValue="formData.userName"
+      :hasError="validationErrorsManager.isInputHasErrors('userName')"
+      :errors="validationErrorsManager.getInputErrors('userName')"
+    />
+    <InputEmail
+      class="form-auth__input"
+      v-model:modelValue="formData.email"
+      :hasError="validationErrorsManager.isInputHasErrors('email')"
+      :errors="validationErrorsManager.getInputErrors('email')"
+    />
+    <InputPassword
+      class="form-auth__input"
+      v-model:modelValue="formData.password"
+      :hasError="validationErrorsManager.isInputHasErrors('password')"
+      :errors="validationErrorsManager.getInputErrors('password')"
+    />
+    <md-filled-button>Зарегистрироваться</md-filled-button>
   </form>
 </template>
 
@@ -53,3 +73,4 @@ const submitForm = async () => {
 //   }
 // }
 </style>
+../helpers/useRulesForm
