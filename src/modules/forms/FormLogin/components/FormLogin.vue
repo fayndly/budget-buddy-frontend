@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 
-import '@material/web/button/filled-button'
-
 import { InputEmail } from '@/components/inputs/text/InputEmail'
 import { InputPassword } from '@/components/inputs/text/InputPassword'
 import TitleFormError from '@/components/titles/TitleFormError.vue'
+import { ButtonSubmitAuth } from '@/components/buttons/ButtonSubmitAuth'
 
 import type { IFormFields } from '../types/formFields.types'
 
@@ -13,7 +12,12 @@ import useVuelidate from '@vuelidate/core'
 import { ValidationErrors } from '@/utils/validations/validationErrors'
 import { rules } from '../helpers/useValidateForm'
 
-import { usePostAuthLogin, postErrorText, serverValidateErrors } from '../services/useSubmitForm'
+import {
+  usePostAuthLogin,
+  postErrorText,
+  serverValidateErrors,
+  isButtonSubmitAuthLoading
+} from '../services/useSubmitForm'
 
 const formData = reactive<IFormFields>({
   email: '',
@@ -45,7 +49,7 @@ const submitForm = async () => {
       :hasError="validationErrorsManager.isInputHasErrors('password')"
       :errors="validationErrorsManager.getInputErrors('password')"
     />
-    <md-filled-button>Войти</md-filled-button>
+    <ButtonSubmitAuth text="Вход" :isLoading="isButtonSubmitAuthLoading" />
   </form>
 </template>
 
