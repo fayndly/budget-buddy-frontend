@@ -21,7 +21,7 @@ const isProgressShow = ref<boolean>(false)
       v-else
       @click="isProgressShow = !isProgressShow"
     >
-      Войти
+      {{ text }}
     </md-filled-button>
   </div>
 </template>

@@ -13,7 +13,7 @@ export const serverValidateErrors = reactive({})
 
 export const usePostAuthLogin = async (email: string, password: string): Promise<void> => {
   isButtonSubmitAuthLoading.value = true
-  return await apiManager
+  await apiManager
     .postAuthLogin({ email, password })
     .then((response) => {
       postErrorText.value = null
@@ -32,6 +32,7 @@ export const usePostAuthLogin = async (email: string, password: string): Promise
           Object.assign(serverValidateErrors, getFormatValidateErrorsServer(error.response.data))
         }
       }
+      alert(error)
 
       console.log('Ошибка сервера: ', error.response)
     })

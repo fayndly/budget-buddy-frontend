@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 
-import '@material/web/button/filled-button'
-
 import { InputEmail } from '@/components/inputs/text/InputEmail'
 import { InputPassword } from '@/components/inputs/text/InputPassword'
 import { InputUserName } from '@/components/inputs/text/InputUserName'
 import TitleFormError from '@/components/titles/TitleFormError.vue'
+import { ButtonSubmitAuth } from '@/components/buttons/ButtonSubmitAuth'
 
 import type { IFormFields } from '../types/formFields.types'
 
@@ -14,7 +13,12 @@ import useVuelidate from '@vuelidate/core'
 import { ValidationErrors } from '@/utils/validations/validationErrors'
 import { rules } from '../helpers/useRulesForm'
 
-import { usePostAuthSignup, postErrorText } from '../services/useSubmitForm'
+import {
+  usePostAuthSignup,
+  postErrorText,
+  serverValidateErrors,
+  isButtonSubmitAuthLoading
+} from '../services/useSubmitForm'
 
 const formData = reactive<IFormFields>({
   userName: '',
@@ -22,15 +26,13 @@ const formData = reactive<IFormFields>({
   password: ''
 })
 
-const validation = useVuelidate(rules, formData)
+const validation = useVuelidate(rules, formData, { $externalResults: serverValidateErrors })
 const validationErrorsManager = new ValidationErrors(validation)
 
 const submitForm = async () => {
-  const result = await validation.value.$validate()
-  if (result) {
-    postErrorText.value = null
-    console.log(await usePostAuthSignup(formData.userName, formData.email, formData.password))
-  }
+  validation.value.$clearExternalResults()
+  if (!(await validation.value.$validate())) return
+  await usePostAuthSignup(formData.userName, formData.email, formData.password)
 }
 </script>
 
@@ -55,7 +57,7 @@ const submitForm = async () => {
       :hasError="validationErrorsManager.isInputHasErrors('password')"
       :errors="validationErrorsManager.getInputErrors('password')"
     />
-    <md-filled-button>Зарегистрироваться</md-filled-button>
+    <ButtonSubmitAuth text="Зарегистрироваться" :isLoading="isButtonSubmitAuthLoading" />
   </form>
 </template>
 
@@ -73,4 +75,3 @@ const submitForm = async () => {
 //   }
 // }
 </style>
-../helpers/useRulesForm
