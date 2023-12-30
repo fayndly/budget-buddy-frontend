@@ -3,7 +3,7 @@ import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
 import TemplateMain from '@/templates/TemplateMain.vue'
 import TemplateSection from '@/templates/TemplateSection.vue'
 import TitleHeader from '@/components/titles/TitleHeader.vue'
-import { FormCheckUpdate } from '@/modules/forms/FormCheckUpdate'
+import { FormCheckUpdate } from '@/modules/forms/check/FormCheckUpdate'
 </script>
 
 <template>

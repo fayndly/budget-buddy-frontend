@@ -1,14 +1,10 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-
-import type { IColor } from '@/modules/inputs/InputChoseColor'
+import { ref, onMounted } from 'vue'
 
 import InputWithIcon from '@/components/input/InputWithIcon/InputWithIcon.vue'
-import InputList from '@/components/input/InputList/InputList.vue'
 
-import { InputChoseColor } from '@/modules/inputs/InputChoseColor'
-import InputCount from '@/components/input/InputCount/InputCount.vue'
-import InputCurrency from '@/components/input/InputCurrency/InputCurrency.vue'
+import { InputCount } from '@/components/inputs/text/InputCount'
+import { InputSelectCurrency } from '@/components/inputs/select/InputSelectCurrency'
 import InputName from './custom/InputName/InputName.vue'
 
 import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
@@ -32,21 +28,71 @@ const currencies: ICurrency[] = [
     symbol: '$'
   }
 ]
+interface ICheckData {
+  transactions: {
+    expense: string[]
+    income: string[]
+  }
+  _id: string
+  user: string
+  name: string
+  amount: number
+  currency: {
+    id: string
+    name: string
+    symbol: string
+  }
+  createdAt: string
+  updatedAt: string
+  __v: number
+}
+
+const checkData = ref<ICheckData | null>(null)
+
+const getCheckData = async (): Promise<ICheckData> => {
+  return {
+    transactions: {
+      expense: ['653fe533ab8e6a94a540065b', '658429b3de78d0a1e535ecbe'],
+      income: []
+    },
+    _id: '653fe517ab8e6a94a540064e',
+    user: '65393051366139b39ce5eced',
+    name: 'сбер',
+    amount: -24000,
+    currency: {
+      id: '123',
+      name: 'RUB',
+      symbol: '₽'
+    },
+    createdAt: '2023-10-30T17:17:11.217Z',
+    updatedAt: '2023-12-21T12:04:03.853Z',
+    __v: 9
+  }
+}
 
 const nameField = ref<string>('')
 const currencyField = ref<ICurrency>()
 const countField = ref<number>(0)
-const colorField = ref<IColor>()
 
 const submitForm = async () => {
   const dataFormToString = `
 name: ${nameField.value}
 count: ${countField.value}
 currency: ${currencyField.value?.id}
-color: ${colorField.value?.value}
   `
   alert(dataFormToString)
 }
+
+const substituteValuesToForm = (data: ICheckData) => {
+  nameField.value = data.name
+  currencyField.value = data.currency
+  countField.value = data.amount
+}
+
+onMounted(async () => {
+  checkData.value = await getCheckData()
+  substituteValuesToForm(checkData.value)
+})
 </script>
 
 <template>
@@ -58,7 +104,7 @@ color: ${colorField.value?.value}
     </InputWithIcon>
     <InputWithIcon icon="money">
       <template #input>
-        <InputCurrency
+        <InputSelectCurrency
           v-model:checked-value="currencyField"
           :currencies="currencies"
           :defaultValue="currencies[0]"
@@ -74,11 +120,6 @@ color: ${colorField.value?.value}
         />
       </template>
     </InputWithIcon>
-    <InputList header="Цвет">
-      <template #content>
-        <InputChoseColor v-model:checked-value="colorField" />
-      </template>
-    </InputList>
     <SubmitFormButtons />
   </form>
 </template>

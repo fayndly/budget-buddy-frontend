@@ -1,4 +1,4 @@
-export const attributesInputCurrency = {
+export const attributesInputSelectCurrency = {
   name: 'currency',
   id: 'currency',
   required: true,

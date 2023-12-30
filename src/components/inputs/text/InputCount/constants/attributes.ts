@@ -1,10 +1,7 @@
-export const attributesInputCount = {
+export const staticAttributesInputCount = {
   name: 'count',
   id: 'count',
   required: true,
-  // label: 'Первоначальная сумма',
   type: 'number',
-  // prefixText: '₽',
-  // suffixText: '.00',
   step: '0.01'
 }

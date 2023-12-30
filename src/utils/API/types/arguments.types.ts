@@ -12,5 +12,5 @@ export interface IArgumentsPostAuthSignup {
 export interface IArgumentsPostChecksAdd {
   name: string
   amount: number
-  currency: string
+  currency: string | null
 }

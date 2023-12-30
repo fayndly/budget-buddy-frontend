@@ -1,7 +1,8 @@
 export interface ICurrency {
-  name: string
   id: string
+  name: string
   symbol: string
+  designation: string
 }
 
 export interface IDate {

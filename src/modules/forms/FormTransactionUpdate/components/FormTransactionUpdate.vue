@@ -10,9 +10,9 @@ import { InputChoseDate } from '@/modules/inputs/InputChoseDate'
 import InputFullDescription from '@/components/inputs/text/InputFullDescription/InputFullDescription.vue'
 import InputShortDescription from '@/components/inputs/text/InputShortDescription/InputShortDescription.vue'
 import InputSelectTypeTransaction from '@/components/inputs/select/InputSelectTypeTransaction/InputSelectTypeTransaction.vue'
-import InputSelectCurrency from '@/components/inputs/select/InputSelectCurrency/InputSelectCurrency.vue'
+import { InputSelectCurrency } from '@/components/inputs/select/InputSelectCurrency'
 import InputSelectCheck from '@/components/inputs/select/InputSelectCheck/InputSelectCheck.vue'
-import InputCount from '@/components/inputs/text/InputCount/InputCount.vue'
+import { InputCount } from '@/components/inputs/text/InputCount'
 
 import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
 

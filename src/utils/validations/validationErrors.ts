@@ -8,7 +8,7 @@ export class ValidationErrors {
     this.validation = validation
   }
 
-  isInputHasErrors(inputName: string) {
+  isInputHasErrors(inputName: string): boolean {
     return this.validation.value[inputName].$error
   }
   getInputErrors(inputName: string): string[] {

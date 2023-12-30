@@ -6,7 +6,7 @@ import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
 
 import TitleHeader from '@/components/titles/TitleHeader.vue'
 
-import { FormAddCheck } from '@/modules/forms/FormAddCheck'
+import { FormCheckAdd } from '@/modules/forms/check/FormCheckAdd'
 </script>
 
 <template>
@@ -16,7 +16,7 @@ import { FormAddCheck } from '@/modules/forms/FormAddCheck'
       <TitleHeader title="Счет" icon="add_card" />
     </TemplateSection>
     <TemplateSection>
-      <FormAddCheck />
+      <FormCheckAdd />
     </TemplateSection>
   </TemplateMain>
 </template>
