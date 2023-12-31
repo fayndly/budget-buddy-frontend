@@ -9,8 +9,14 @@ export interface IArgumentsPostAuthSignup {
   password: string
 }
 
+export interface IArgumentsGetCheck {
+  id: string
+}
+
 export interface IArgumentsPostChecksAdd {
   name: string
   amount: number
   currency: string | null
 }
+
+export interface IArgumentsPatchChecksUpdate extends IArgumentsPostChecksAdd {}

@@ -4,12 +4,17 @@ import type { AxiosInstance, AxiosResponse } from 'axios'
 import type {
   IArgumentsPostAuthLogin,
   IArgumentsPostAuthSignup,
-  IArgumentsPostChecksAdd
+  IArgumentsGetCheck,
+  IArgumentsPostChecksAdd,
+  IArgumentsPatchChecksUpdate
 } from './types/arguments.types'
 import type {
   IResponsePostAuthLogin,
   IResponsePostAuthSignup,
-  IResponsePostCheckAdd
+  IResponseGetCheck,
+  IResponseGetChecks,
+  IResponsePostCheckAdd,
+  IResponsePatchCheckUpdate
 } from './types/responses.types'
 
 class Api {
@@ -35,10 +40,24 @@ class Api {
     return await this.instance.get('/auth/check')
   }
 
+  async getCheck(params: IArgumentsGetCheck): Promise<AxiosResponse<IResponseGetCheck, any>> {
+    return await this.instance.get('/checks', { params })
+  }
+
+  async getChecks(): Promise<AxiosResponse<IResponseGetChecks, any>> {
+    return await this.instance.get('/checks')
+  }
+
   async postCheckAdd(
     params: IArgumentsPostChecksAdd
   ): Promise<AxiosResponse<IResponsePostCheckAdd, any>> {
     return await this.instance.post('/checks', params)
+  }
+
+  async patchCheckUpdate(
+    params: IArgumentsPatchChecksUpdate
+  ): Promise<AxiosResponse<IResponsePatchCheckUpdate, any>> {
+    return await this.instance.patch('/checks', params)
   }
 }
 
