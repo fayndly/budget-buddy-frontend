@@ -1,7 +1,8 @@
 export interface IPropsInputCount {
-  modelValue: string
+  modelValue: number
   hasError: boolean
   errors: string[]
-  prefix?: string
+  prefixText?: string
+  suffixText?: string
   label?: string
 }

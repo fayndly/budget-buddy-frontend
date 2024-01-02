@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, onMounted, ref } from 'vue'
 
 import InputWithIcon from '@/components/input/InputWithIcon/InputWithIcon.vue'
 
@@ -22,24 +22,25 @@ import {
   serverValidateErrors,
   isButtonSubmitAuthLoading
 } from '../services/useSubmitForm'
+import { useGetCurrencies } from '../services/useGetCurrencies'
 
-const currencies: ICurrency[] = [
-  {
-    name: 'RUB',
-    id: '123',
-    symbol: '₽'
-  },
-  {
-    name: 'EUR',
-    id: '234',
-    symbol: '€'
-  },
-  {
-    name: 'USD',
-    id: '345',
-    symbol: '$'
-  }
-]
+const currencies = ref([
+  // {
+  //   name: 'RUB',
+  //   id: '123',
+  //   symbol: '₽'
+  // },
+  // {
+  //   name: 'EUR',
+  //   id: '234',
+  //   symbol: '€'
+  // },
+  // {
+  //   name: 'USD',
+  //   id: '345',
+  //   symbol: '$'
+  // }
+])
 
 const formData = reactive<IFormFields>({
   name: '',
@@ -55,6 +56,14 @@ const submitForm = async () => {
   if (!(await validation.value.$validate())) return
   await usePostCheckAdd(formData.name, formData.currency, formData.count)
 }
+
+onMounted(async () => {
+  currencies.value = await useGetCurrencies()
+  currencies.value.forEach((val) => {
+    val.id = val._id
+    delete val._id
+  })
+})
 </script>
 
 <template>
@@ -83,7 +92,7 @@ const submitForm = async () => {
         <InputCount
           label="Первоначальная сумма"
           v-model:modelValue="formData.count"
-          prefix="P"
+          suffixText="P"
           :hasError="validationErrorsManager.isInputHasErrors('count')"
           :errors="validationErrorsManager.getInputErrors('count')"
         />

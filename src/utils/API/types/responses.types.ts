@@ -17,6 +17,13 @@ export interface IResponsePostAuthSignup {
   token: string
 }
 
+export type IResponseGetCurrencies = {
+  _id: mongoObjectId
+  name: string
+  symbol: string
+  designation: string
+}[]
+
 export interface IResponseGetCheck extends IServerResponse {
   transactions: {
     expense: mongoObjectId[]

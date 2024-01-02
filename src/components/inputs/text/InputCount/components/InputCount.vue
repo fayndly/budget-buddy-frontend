@@ -12,9 +12,10 @@ defineEmits(['update:modelValue'])
   <md-outlined-text-field
     v-bind="staticAttributesInputCount"
     :label="label"
-    :prefix-text="prefix"
+    :prefix-text="prefixText"
+    :suffix-text="suffixText"
     :value="modelValue"
-    @input="$emit('update:modelValue', $event.target.value)"
+    @input="$emit('update:modelValue', Number($event.target.value))"
     :error="hasError"
     :error-text="errors[0]"
   />

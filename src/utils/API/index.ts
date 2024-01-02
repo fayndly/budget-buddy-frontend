@@ -11,6 +11,7 @@ import type {
 import type {
   IResponsePostAuthLogin,
   IResponsePostAuthSignup,
+  IResponseGetCurrencies,
   IResponseGetCheck,
   IResponseGetChecks,
   IResponsePostCheckAdd,
@@ -38,6 +39,10 @@ class Api {
 
   async getAuthCheck(): Promise<AxiosResponse<any, any>> {
     return await this.instance.get('/auth/check')
+  }
+
+  async getCurrencies(): Promise<AxiosResponse<IResponseGetCurrencies, any>> {
+    return await this.instance.get('/currencies')
   }
 
   async getCheck(params: IArgumentsGetCheck): Promise<AxiosResponse<IResponseGetCheck, any>> {
