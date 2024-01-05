@@ -24,23 +24,7 @@ import {
 } from '../services/useSubmitForm'
 import { useGetCurrencies } from '../services/useGetCurrencies'
 
-const currencies = ref([
-  // {
-  //   name: 'RUB',
-  //   id: '123',
-  //   symbol: '₽'
-  // },
-  // {
-  //   name: 'EUR',
-  //   id: '234',
-  //   symbol: '€'
-  // },
-  // {
-  //   name: 'USD',
-  //   id: '345',
-  //   symbol: '$'
-  // }
-])
+const currencies = ref([])
 
 const formData = reactive<IFormFields>({
   name: '',
@@ -62,6 +46,7 @@ onMounted(async () => {
   currencies.value.forEach((val) => {
     val.id = val._id
     delete val._id
+    delete val.__v
   })
 })
 </script>
