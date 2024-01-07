@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { reactive, onMounted, ref } from 'vue'
+import { reactive, onMounted, computed } from 'vue'
 
 import InputWithIcon from '@/components/input/InputWithIcon/InputWithIcon.vue'
 
 import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
-
-import type { ICurrency } from '@/utils/types/interfaces'
 //
 import { InputName } from '@/components/inputs/text/InputName'
 import { InputCount } from '@/components/inputs/text/InputCount'
@@ -16,15 +14,16 @@ import useVuelidate from '@vuelidate/core'
 import { ValidationErrors } from '@/utils/validations/validationErrors'
 import { rules } from '../helpers/useValidateForm'
 
+import { getById } from '@/utils/helpers/getById'
+
 import {
   usePostCheckAdd,
-  postErrorText,
-  serverValidateErrors,
-  isButtonSubmitAuthLoading
+  // postErrorText,
+  serverValidateErrors
+  // isButtonSubmitAuthLoading
 } from '../services/useSubmitForm'
-import { useGetCurrencies } from '../services/useGetCurrencies'
-
-const currencies = ref([])
+import { useGetCurrencies, currencies } from '../services/useGetCurrencies'
+import type { ICurrency } from '@/utils/types/data/data.types'
 
 const formData = reactive<IFormFields>({
   name: '',
@@ -35,6 +34,13 @@ const formData = reactive<IFormFields>({
 const validation = useVuelidate(rules, formData, { $externalResults: serverValidateErrors })
 const validationErrorsManager = new ValidationErrors(validation)
 
+const getActiveCurrency = computed(() => {
+  if (formData.currency) {
+    return getById<ICurrency>(currencies, formData.currency)
+  }
+  return null
+})
+
 const submitForm = async () => {
   validation.value.$clearExternalResults()
   if (!(await validation.value.$validate())) return
@@ -42,12 +48,7 @@ const submitForm = async () => {
 }
 
 onMounted(async () => {
-  currencies.value = await useGetCurrencies()
-  currencies.value.forEach((val) => {
-    val.id = val._id
-    delete val._id
-    delete val.__v
-  })
+  await useGetCurrencies()
 })
 </script>
 
@@ -77,7 +78,7 @@ onMounted(async () => {
         <InputCount
           label="Первоначальная сумма"
           v-model:modelValue="formData.count"
-          suffixText="P"
+          :suffixText="getActiveCurrency?.symbol"
           :hasError="validationErrorsManager.isInputHasErrors('count')"
           :errors="validationErrorsManager.getInputErrors('count')"
         />

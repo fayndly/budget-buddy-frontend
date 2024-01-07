@@ -13,7 +13,7 @@ export interface IDate {
 
 export interface ICategory {
   id: string
-  shortDesc: string
+  name: string
   icon?: string
   color: string
 }

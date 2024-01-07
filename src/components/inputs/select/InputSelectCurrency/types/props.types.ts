@@ -1,9 +1,5 @@
-import type { ICurrency } from '@/utils/types/interfaces'
-// import type { IPropsSelect } from '@/utils/types/props/inputs'
+import type { ICurrency } from '@/utils/types/data/data.types'
 
-// export interface IPropsInputSelectCurrency extends IPropsSelect<ICurrency | null> {
-//   currencies: ICurrency[]
-// }
 export interface IPropsInputSelectCurrency {
   selectedValue: string | null
   values: ICurrency[]
