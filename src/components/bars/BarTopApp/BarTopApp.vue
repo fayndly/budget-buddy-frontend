@@ -1,19 +1,22 @@
 <script setup lang="ts">
 import '@material/web/iconbutton/icon-button'
 import 'material-icons/iconfont/material-icons.css'
+import '@material/web/progress/linear-progress'
 
 interface IPropsBarTopApp {
   title: string
   showButtonBack?: boolean
   showButtonDelete?: boolean
   showButtonEdit?: boolean
+  showProgress?: boolean
 }
 const emits = defineEmits(['clickButtonDelete', 'clickButtonEdit'])
 
 withDefaults(defineProps<IPropsBarTopApp>(), {
   showButtonBack: true,
   showButtonDelete: false,
-  showButtonEdit: false
+  showButtonEdit: false,
+  showProgress: false
 })
 </script>
 
@@ -32,9 +35,15 @@ withDefaults(defineProps<IPropsBarTopApp>(), {
       <span class="material-icons-outlined">edit</span>
     </md-icon-button>
   </div>
+  <md-linear-progress indeterminate class="progress" v-if="showProgress"></md-linear-progress>
 </template>
 
 <style lang="scss">
+.progress {
+  width: 100%;
+  position: fixed;
+  top: 64px;
+}
 .bar-top-app {
   width: 100%;
   min-height: 64px;

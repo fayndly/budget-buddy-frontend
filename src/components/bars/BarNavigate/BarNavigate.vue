@@ -35,6 +35,8 @@ const pageSettingsIsActive = computed(() => {
   align-items: center;
   justify-content: space-around;
 
+  z-index: 5;
+
   transition: background-color 0.2s ease-in-out;
 }
 </style>

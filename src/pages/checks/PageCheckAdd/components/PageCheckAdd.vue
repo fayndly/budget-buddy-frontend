@@ -6,11 +6,11 @@ import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
 
 import TitleHeader from '@/components/titles/TitleHeader.vue'
 
-import { FormCheckAdd } from '@/modules/forms/check/FormCheckAdd'
+import { FormCheckAdd, isLoading } from '@/modules/forms/check/FormCheckAdd'
 </script>
 
 <template>
-  <BarTopApp title="Добавление счёта" />
+  <BarTopApp title="Добавление счёта" :showProgress="isLoading" />
   <TemplateMain>
     <TemplateSection>
       <TitleHeader title="Счет" icon="add_card" />

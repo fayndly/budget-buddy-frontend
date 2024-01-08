@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { reactive, onMounted, computed } from 'vue'
+import { reactive, onMounted, computed, ref, watch } from 'vue'
 
 import InputWithIcon from '@/components/input/InputWithIcon/InputWithIcon.vue'
 
 import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
 //
+import BarSnackbar from '@/components/bars/BarSnackbar/BarSnackbar.vue'
+
 import { InputName } from '@/components/inputs/text/InputName'
 import { InputCount } from '@/components/inputs/text/InputCount'
 import { InputSelectCurrency } from '@/components/inputs/select/InputSelectCurrency'
@@ -16,12 +18,7 @@ import { rules } from '../helpers/useValidateForm'
 
 import { getById } from '@/utils/helpers/getById'
 
-import {
-  usePostCheckAdd,
-  // postErrorText,
-  serverValidateErrors
-  // isButtonSubmitAuthLoading
-} from '../services/useSubmitForm'
+import { usePostCheckAdd, postErrorText, serverValidateErrors } from '../services/useSubmitForm'
 import { useGetCurrencies, currencies } from '../services/useGetCurrencies'
 import type { ICurrency } from '@/utils/types/data/data.types'
 
@@ -47,12 +44,24 @@ const submitForm = async () => {
   await usePostCheckAdd(formData.name, formData.currency, formData.count)
 }
 
+const isSnackbarOpen = ref<boolean>(false)
+watch(postErrorText, () => {
+  if (postErrorText.value) isSnackbarOpen.value = true
+})
+
 onMounted(async () => {
   await useGetCurrencies()
 })
 </script>
 
 <template>
+  <Teleport to="#app">
+    <BarSnackbar
+      :title="postErrorText"
+      :isOpen="isSnackbarOpen"
+      @clickButtonClose="isSnackbarOpen = false"
+    />
+  </Teleport>
   <form class="form-add-check" @submit.prevent="submitForm" novalidate>
     <InputWithIcon>
       <template #input>

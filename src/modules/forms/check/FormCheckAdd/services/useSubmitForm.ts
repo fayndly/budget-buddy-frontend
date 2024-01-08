@@ -6,7 +6,7 @@ import type { TErrorServer } from '@/utils/types/errors'
 
 import { getFormatValidateErrorsServer } from '@/utils/validations/validationFormat'
 
-export const isButtonSubmitAuthLoading = ref<boolean>(false)
+export const isLoading = ref<boolean>(false)
 
 export const postErrorText = ref<null | string>(null)
 export const serverValidateErrors = reactive({})
@@ -16,7 +16,8 @@ export const usePostCheckAdd = async (
   currency: string | null,
   amount: number
 ): Promise<void> => {
-  isButtonSubmitAuthLoading.value = true
+  isLoading.value = true
+  postErrorText.value = null
   await apiManager
     .postCheckAdd({ name, currency, amount })
     .then((response) => {
@@ -35,11 +36,9 @@ export const usePostCheckAdd = async (
           Object.assign(serverValidateErrors, getFormatValidateErrorsServer(error.response.data))
         }
       }
-      alert(error)
-
       console.log('Ошибка сервера: ', error.response)
     })
     .finally(() => {
-      isButtonSubmitAuthLoading.value = false
+      isLoading.value = false
     })
 }
