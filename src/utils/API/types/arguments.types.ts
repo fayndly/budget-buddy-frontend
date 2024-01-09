@@ -30,7 +30,7 @@ export interface IArgumentsPostCategoryAdd {
   name: string
   type: TTypeTransaction
   color: string
-  icon: string
+  icon?: string | null
 }
 export interface IArgumentsPatchCategoryUpdate extends IArgumentsPostCategoryAdd {}
 

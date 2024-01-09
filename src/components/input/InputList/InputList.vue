@@ -1,10 +1,19 @@
 <script setup lang="ts">
-defineProps(['header'])
+interface IPropsInputList {
+  header: string
+  errrors: string[]
+}
+defineProps<IPropsInputList>()
 </script>
 
 <template>
   <div class="wrapper-list-inputs">
-    <h3 class="wrapper-list-inputs__header outline-variant-text title-large">{{ header }}</h3>
+    <div class="wrapper-list-inputs__title">
+      <h3 class="wrapper-list-inputs__header outline-variant-text title-large">{{ header }}</h3>
+      <span class="wrapper-list-inputs__errror title-small error-text" v-if="errrors.length">{{
+        errrors[0]
+      }}</span>
+    </div>
     <slot name="content"></slot>
   </div>
 </template>
@@ -16,5 +25,11 @@ defineProps(['header'])
   width: 100%;
   max-width: calc(100% - 42px - 16px);
   gap: 8px;
+
+  &__title {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
 }
 </style>

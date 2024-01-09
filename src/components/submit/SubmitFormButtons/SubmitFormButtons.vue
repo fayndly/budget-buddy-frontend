@@ -6,7 +6,7 @@ import '@material/web/button/outlined-button'
 <template>
   <div class="submit-buttons">
     <md-outlined-button type="button">Отмена</md-outlined-button>
-    <md-filled-button type="submit" disabled>
+    <md-filled-button type="submit">
       Добавить
       <div slot="icon" style="width: 24px; height: 24px">
         <span class="material-icons-outlined">add</span>

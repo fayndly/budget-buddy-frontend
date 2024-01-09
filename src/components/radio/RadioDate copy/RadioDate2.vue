@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 const props = defineProps(['value', 'id', 'name', 'date', 'header', 'data'])
-const emits = defineEmits(['update:checkedValue'])
+const emits = defineEmits(['update:modelValue'])
 
 const newvalue = ref({
   date: '12-12-1212',
@@ -11,7 +11,7 @@ const newvalue = ref({
 
 function handleClick(): void {
   console.log(newvalue.value)
-  emits('update:checkedValue', newvalue.value)
+  emits('update:modelValue', newvalue.value)
 }
 </script>
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue'
 
-import InputColor from '@/components/radio/RadioColor/RadioColor.vue'
+import InputRadioColor from '@/components/inputs/radio/InputRadioColor/InputRadioColor.vue'
 import ButtonRegenerateColors from './custom/ButtonRegenerateColors/ButtonRegenerateColors.vue'
 
 import type { IColor } from '../types/index'
@@ -12,7 +12,7 @@ const chosedColor = ref<IColor>()
 
 const colorManager = new GeneratorColors(colors, chosedColor, 9)
 
-const emit = defineEmits(['update:checkedValue'])
+const emit = defineEmits(['update:modelValue'])
 const props = defineProps(['defaultColor'])
 
 const getDefaultColor = computed(() => props.defaultColor)
@@ -39,15 +39,14 @@ const clickRegenerateButtonHandler = () => {
 }
 
 function updateValueHandler(): void {
-  emit('update:checkedValue', chosedColor.value)
-  console.log(chosedColor.value)
+  emit('update:modelValue', chosedColor.value)
 }
 </script>
 
 <template>
   <ul class="list-colors">
     <li v-for="color in colors" :key="color.id">
-      <InputColor
+      <InputRadioColor
         :id="color.id"
         :value="color.value"
         v-model:checkedValue="chosedColor"

@@ -1,88 +1,52 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue'
 
 import type { IIcon } from '../types/index'
 
-import RadioIcon from '@/components/radio/RadioIcon/RadioIcon.vue'
+import InputRadioIcon from '@/components/inputs/radio/InputRadioIcon/InputRadioIcon.vue'
 
-const emit = defineEmits(['update:checkedValue'])
+import { GeneratorIcons } from '../helpers/generatorIcons'
 
-function updateValueHandler(): void {
-  emit('update:checkedValue', chosedIcon.value)
-}
-
-const mocksIcons: IIcon[] = [
-  {
-    iconName: 'нет',
-    id: 'icon0',
-    value: null
-  },
-  {
-    iconName: 'home',
-    id: 'icon1',
-    value: 'home'
-  },
-  {
-    iconName: 'apartment',
-    id: 'icon2',
-    value: 'apartment'
-  },
-  {
-    iconName: 'shopping_bag',
-    id: 'icon3',
-    value: 'shopping_bag'
-  },
-  {
-    iconName: 'directions_car',
-    id: 'icon4',
-    value: 'directions_car'
-  },
-  {
-    iconName: 'construction',
-    id: 'icon5',
-    value: 'construction'
-  },
-  {
-    iconName: 'train',
-    id: 'icon6',
-    value: 'train'
-  },
-  {
-    iconName: 'local_taxi',
-    id: 'icon7',
-    value: 'local_taxi'
-  },
-  {
-    iconName: 'storefront',
-    id: 'icon8',
-    value: 'storefront'
-  },
-  {
-    iconName: 'phone_iphone',
-    id: 'icon9',
-    value: 'phone_iphone'
-  }
-]
+const emit = defineEmits(['update:modelValue'])
+const props = defineProps(['defaultIcon'])
 
 const icons = ref<IIcon[]>([])
-const chosedIcon = ref<IIcon | null>()
+const chosedIcon = ref<IIcon | null>(null)
 
-chosedIcon.value = mocksIcons[0]
+const iconManager = new GeneratorIcons(icons, chosedIcon, 9)
+
+const getDefaultIcon = computed(() => props.defaultIcon)
+
+watch(getDefaultIcon, () => {
+  if (props.defaultIcon) {
+    iconManager.clearWrapperIcons()
+    iconManager.addIcon(props.defaultIcon, props.defaultIcon)
+    iconManager.generateIcons()
+    iconManager.setDefaultIcon()
+
+    updateValueHandler()
+  }
+})
+
+iconManager.generateIcons()
+iconManager.setDefaultIcon()
 updateValueHandler()
 
-icons.value.push(...mocksIcons)
+function updateValueHandler(): void {
+  emit('update:modelValue', chosedIcon.value)
+}
 </script>
 
 <template>
   <ul class="list-icons">
     <li v-for="icon in icons" :key="icon.id">
-      <RadioIcon
+      <InputRadioIcon
         :id="icon.id"
         :value="icon.value"
         :iconName="icon.iconName"
-        :hasText="false || icon.id === 'icon0'"
+        :hasText="false || icon.id === 'icon_1'"
         name="icon"
-        v-model:checked-value="chosedIcon"
+        v-model:modelValue="chosedIcon"
         :checked="icon.id === chosedIcon?.id"
         @input="updateValueHandler"
       />

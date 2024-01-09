@@ -16,9 +16,9 @@ defineOptions({
 const dates = ref<IDate[]>([])
 const dateField = ref<IDate>()
 
-const emit = defineEmits(['update:checkedValue'])
+const emit = defineEmits(['update:modelValue'])
 watch(dateField, () => {
-  emit('update:checkedValue', dateField.value)
+  emit('update:modelValue', dateField.value)
 })
 
 const inputChoseDateManager = new InputChoseDateController(dateField, dates)

@@ -6,17 +6,17 @@ import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
 
 import TitleHeader from '@/components/titles/TitleHeader.vue'
 
-import { FormAddCategory } from '@/modules/forms/FormAddCategory'
+import { FormCategoryAdd, isLoading } from '@/modules/forms/category/FormCategoryAdd'
 </script>
 
 <template>
-  <BarTopApp title="Добавление категории" />
+  <BarTopApp title="Добавление категории" :showProgress="isLoading" />
   <TemplateMain>
     <TemplateSection>
       <TitleHeader title="Категория" icon="category" />
     </TemplateSection>
     <TemplateSection>
-      <FormAddCategory />
+      <FormCategoryAdd />
     </TemplateSection>
   </TemplateMain>
 </template>

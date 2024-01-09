@@ -5,9 +5,9 @@ import type { IPropsRadioDate } from './types/props'
 
 const props = defineProps<IPropsRadioDate>()
 
-const emit = defineEmits(['update:checkedValue'])
+const emit = defineEmits(['update:modelValue'])
 function updateValueHandler(): void {
-  emit('update:checkedValue', props.value)
+  emit('update:modelValue', props.value)
 }
 
 const isChecked = computed(() => {

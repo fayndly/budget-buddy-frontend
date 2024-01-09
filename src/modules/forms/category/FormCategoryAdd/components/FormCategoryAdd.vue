@@ -1,57 +1,51 @@
 <script setup lang="ts">
-import { reactive, onMounted, computed, ref, watch } from 'vue'
+import { reactive, ref, watch } from 'vue'
 
-import InputWithIcon from '@/components/input/InputWithIcon/InputWithIcon.vue'
-
-import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
-//
 import BarSnackbar from '@/components/bars/BarSnackbar/BarSnackbar.vue'
 
+import InputWithIcon from '@/components/input/InputWithIcon/InputWithIcon.vue'
+import InputList from '@/components/input/InputList/InputList.vue'
+
 import { InputName } from '@/components/inputs/text/InputName'
-import { InputCount } from '@/components/inputs/text/InputCount'
-import { InputSelectCurrency } from '@/components/inputs/select/InputSelectCurrency'
+import { InputSelectType } from '@/components/inputs/select/InputSelectType'
+import { InputChoseColor } from '@/modules/inputs/InputChoseColor'
+import { InputChoseIcon } from '@/modules/inputs/InputChoseIcon'
+import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
+
+import type { IFormFields } from '../types/formFields.types'
 
 import useVuelidate from '@vuelidate/core'
 import { ValidationErrors } from '@/utils/validations/validationErrors'
 import { rules } from '../helpers/useValidateForm'
 
-import type { IFormFields } from '../types/formFields.types'
-
-import { getById } from '@/utils/helpers/getById'
-
 import { usePostCheckAdd, postErrorText, serverValidateErrors } from '../services/useSubmitForm'
-import { useGetCurrencies, currencies } from '../services/useGetCurrencies'
-import type { ICurrency } from '@/utils/types/data/data.types'
+
+import { useQueryHandler } from '../helpers/useQueryHandler'
+import { useRoute } from 'vue-router'
 
 const formData = reactive<IFormFields>({
   name: '',
-  currency: null,
-  count: 0
+  type: null,
+  color: null,
+  icon: null
 })
 
 const validation = useVuelidate(rules, formData, { $externalResults: serverValidateErrors })
 const validationErrorsManager = new ValidationErrors(validation)
 
-const getActiveCurrency = computed(() => {
-  if (formData.currency) {
-    return getById<ICurrency>(currencies, formData.currency)
-  }
-  return null
-})
+const route = useRoute()
+useQueryHandler(route, formData)
 
 const submitForm = async () => {
   validation.value.$clearExternalResults()
   if (!(await validation.value.$validate())) return
-  await usePostCheckAdd(formData.name, formData.currency, formData.count)
+  if (formData.name && formData.type && formData.color)
+    await usePostCheckAdd(formData.name, formData.type, formData.color.value, formData.icon?.value)
 }
 
 const isSnackbarOpen = ref<boolean>(false)
 watch(postErrorText, () => {
   if (postErrorText.value) isSnackbarOpen.value = true
-})
-
-onMounted(async () => {
-  await useGetCurrencies()
 })
 </script>
 
@@ -63,7 +57,7 @@ onMounted(async () => {
       @clickButtonClose="isSnackbarOpen = false"
     />
   </Teleport>
-  <form class="form-add-check" @submit.prevent="submitForm" novalidate>
+  <form class="form-add-category" @submit.prevent="submitForm" novalidate>
     <InputWithIcon>
       <template #input>
         <InputName
@@ -73,33 +67,31 @@ onMounted(async () => {
         />
       </template>
     </InputWithIcon>
-    <InputWithIcon icon="money">
+    <InputWithIcon>
       <template #input>
-        <InputSelectCurrency
-          v-model:selectedValue="formData.currency"
-          :values="currencies"
-          :hasError="validationErrorsManager.isInputHasErrors('currency')"
-          :errors="validationErrorsManager.getInputErrors('currency')"
+        <InputSelectType
+          v-model:modelValue="formData.type"
+          :hasError="validationErrorsManager.isInputHasErrors('type')"
+          :errors="validationErrorsManager.getInputErrors('type')"
         />
       </template>
     </InputWithIcon>
-    <InputWithIcon icon="account_balance">
-      <template #input>
-        <InputCount
-          label="Первоначальная сумма"
-          v-model:modelValue="formData.count"
-          :suffixText="getActiveCurrency?.symbol"
-          :hasError="validationErrorsManager.isInputHasErrors('count')"
-          :errors="validationErrorsManager.getInputErrors('count')"
-        />
+    <InputList header="Цвет" :errrors="validationErrorsManager.getInputErrors('color')">
+      <template #content>
+        <InputChoseColor v-model:modelValue="formData.color" />
       </template>
-    </InputWithIcon>
+    </InputList>
+    <InputList header="Иконка" :errrors="validationErrorsManager.getInputErrors('icon')">
+      <template #content>
+        <InputChoseIcon v-model:modelValue="formData.icon" />
+      </template>
+    </InputList>
     <SubmitFormButtons />
   </form>
 </template>
 
 <style lang="scss" scoped>
-.form-add-check {
+.form-add-category {
   display: flex;
   flex-direction: column;
   align-items: end;
