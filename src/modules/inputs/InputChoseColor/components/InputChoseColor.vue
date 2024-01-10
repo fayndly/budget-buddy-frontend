@@ -3,17 +3,22 @@ import { ref, watch, computed } from 'vue'
 
 import InputRadioColor from '@/components/inputs/radio/InputRadioColor/InputRadioColor.vue'
 import ButtonRegenerateColors from './custom/ButtonRegenerateColors/ButtonRegenerateColors.vue'
+import ButtonAddColor from './custom/ButtonAddColor/ButtonAddColor.vue'
+import DialogSetColor from '@/components/dialogs/DialogSetColor/DialogSetColor.vue'
 
 import type { IColor } from '../types/index'
+import type { IPropsInputChoseColor } from '../types/props.types'
 import { GeneratorColors } from '../helpers/generatorColors'
+
+const props = defineProps<IPropsInputChoseColor>()
+const emit = defineEmits(['update:modelValue'])
 
 const colors = ref<IColor[]>([])
 const chosedColor = ref<IColor>()
 
-const colorManager = new GeneratorColors(colors, chosedColor, 9)
-
-const emit = defineEmits(['update:modelValue'])
-const props = defineProps(['defaultColor'])
+const updateValueHandler = (): void => {
+  emit('update:modelValue', chosedColor.value)
+}
 
 const getDefaultColor = computed(() => props.defaultColor)
 
@@ -28,6 +33,8 @@ watch(getDefaultColor, () => {
   }
 })
 
+const colorManager = new GeneratorColors(colors, chosedColor, 9)
+
 colorManager.generateColors()
 colorManager.setDefaultColor()
 updateValueHandler()
@@ -38,8 +45,16 @@ const clickRegenerateButtonHandler = () => {
   updateValueHandler()
 }
 
-function updateValueHandler(): void {
-  emit('update:modelValue', chosedColor.value)
+const clickButtonAddHandler = () => {
+  modalSetColorIsOpen.value = true
+}
+
+const modalSetColorIsOpen = ref<boolean>(false)
+const closeModalHandler = () => {
+  modalSetColorIsOpen.value = false
+}
+const submitColorHandler = (color: string) => {
+  colorManager.addColor(color)
 }
 </script>
 
@@ -47,18 +62,27 @@ function updateValueHandler(): void {
   <ul class="list-colors">
     <li v-for="color in colors" :key="color.id">
       <InputRadioColor
+        name="color"
         :id="color.id"
         :value="color.value"
-        v-model:checkedValue="chosedColor"
-        name="color"
+        v-model:modelValue="chosedColor"
         :checked="color.id === chosedColor?.id"
         @input="updateValueHandler"
       />
     </li>
     <li>
-      <ButtonRegenerateColors @clickRegenerateButton="clickRegenerateButtonHandler" />
+      <ButtonRegenerateColors @clickButton="clickRegenerateButtonHandler" />
+    </li>
+    <li>
+      <ButtonAddColor @clickButton="clickButtonAddHandler" />
     </li>
   </ul>
+  <DialogSetColor
+    headline="Выберите цвет"
+    :isOpen="modalSetColorIsOpen"
+    @submitColor="submitColorHandler"
+    @closeModal="closeModalHandler"
+  />
 </template>
 
 <style lang="scss">

@@ -5,6 +5,6 @@ defineEmits(['clickButton'])
 
 <template>
   <md-filled-tonal-icon-button type="button" @click="$emit('clickButton')">
-    <span class="material-icons-outlined">sync</span>
+    <span class="material-icons-outlined">add</span>
   </md-filled-tonal-icon-button>
 </template>

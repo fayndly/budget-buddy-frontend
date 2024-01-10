@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import '@material/web/radio/radio'
-
 import type { IRadioColor } from './types/props.types'
 
 const props = defineProps<IRadioColor>()
@@ -17,7 +15,10 @@ function updateValueHandler(): void {
       class="radio-color__input"
       type="radio"
       required
-      v-bind="props"
+      :checked="props.checked"
+      :id="props.id"
+      :value="props.value"
+      :name="props.name"
       @input="updateValueHandler"
     />
     <span class="radio-color__fake-input" :style="{ 'background-color': value }"></span>
