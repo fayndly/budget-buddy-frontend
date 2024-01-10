@@ -3,6 +3,7 @@ export interface IRadioIcon {
   id: string
   value: string | null
   checked: boolean
-  hasText: boolean
+  hasText?: boolean
   iconName: string
+  modelValue: any
 }

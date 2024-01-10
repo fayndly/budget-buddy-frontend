@@ -15,7 +15,15 @@ const updateValueHandler = (): void => {
 
 <template>
   <label class="radio-icon">
-    <input class="radio-icon__input" type="radio" v-bind="props" @input="updateValueHandler" />
+    <input
+      class="radio-icon__input"
+      type="radio"
+      :name="props.name"
+      :id="props.id"
+      :value="props.value"
+      :checked="props.checked"
+      @input="updateValueHandler"
+    />
     <span
       v-if="!hasText"
       class="radio-icon__fake-input radio-icon__fake-input-icon material-icons-outlined on-background-text"

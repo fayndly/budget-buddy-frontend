@@ -14,7 +14,7 @@ const props = defineProps<IPropsInputChoseColor>()
 const emit = defineEmits(['update:modelValue'])
 
 const colors = ref<IColor[]>([])
-const chosedColor = ref<IColor>()
+const chosedColor = ref<IColor | null>(null)
 
 const updateValueHandler = (): void => {
   emit('update:modelValue', chosedColor.value)

@@ -4,11 +4,15 @@ import { ref, computed, watch } from 'vue'
 import type { IIcon } from '../types/index'
 
 import InputRadioIcon from '@/components/inputs/radio/InputRadioIcon/InputRadioIcon.vue'
+import ButtonAddIcon from './custom/ButtonAddIcon/ButtonAddIcon.vue'
+import DialogSetIcon from '@/components/dialogs/DialogSetIcon/DialogSetIcon.vue'
 
 import { GeneratorIcons } from '../helpers/generatorIcons'
 
+import type { IPropsInputChoseIcon } from '../types/props.types'
+
 const emit = defineEmits(['update:modelValue'])
-const props = defineProps(['defaultIcon'])
+const props = defineProps<IPropsInputChoseIcon>()
 
 const icons = ref<IIcon[]>([])
 const chosedIcon = ref<IIcon | null>(null)
@@ -35,6 +39,18 @@ updateValueHandler()
 function updateValueHandler(): void {
   emit('update:modelValue', chosedIcon.value)
 }
+
+const clickButtonAddHandler = () => {
+  modalSetIconIsOpen.value = true
+}
+
+const modalSetIconIsOpen = ref<boolean>(false)
+const closeModalHandler = () => {
+  modalSetIconIsOpen.value = false
+}
+const submitIconHandler = (icon: string) => {
+  iconManager.addIcon(icon, icon)
+}
 </script>
 
 <template>
@@ -44,17 +60,26 @@ function updateValueHandler(): void {
         :id="icon.id"
         :value="icon.value"
         :iconName="icon.iconName"
-        :hasText="false || icon.id === 'icon_1'"
+        :hasText="icon.value === null"
         name="icon"
         v-model:modelValue="chosedIcon"
         :checked="icon.id === chosedIcon?.id"
         @input="updateValueHandler"
       />
     </li>
+    <li>
+      <ButtonAddIcon @clickButton="clickButtonAddHandler" />
+    </li>
   </ul>
+  <DialogSetIcon
+    headline="Выберите иконку"
+    :isOpen="modalSetIconIsOpen"
+    @submitColor="submitIconHandler"
+    @closeModal="closeModalHandler"
+  />
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .list-icons {
   padding: 0;
   display: flex;

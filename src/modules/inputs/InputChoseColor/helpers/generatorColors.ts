@@ -4,14 +4,10 @@ import type { IColor } from '../types/index'
 
 export class GeneratorColors {
   private wrapperColors: Ref<IColor[]>
-  private colorChosed: Ref<IColor | undefined>
+  private colorChosed: Ref<IColor | null>
   private numberColors: number
 
-  constructor(
-    wrapperColors: Ref<IColor[]>,
-    colorChosed: Ref<IColor | undefined>,
-    numberColors: number
-  ) {
+  constructor(wrapperColors: Ref<IColor[]>, colorChosed: Ref<IColor | null>, numberColors: number) {
     this.wrapperColors = wrapperColors
     this.colorChosed = colorChosed
     this.numberColors = numberColors
