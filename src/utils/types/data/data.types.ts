@@ -58,3 +58,14 @@ export interface IDate {
   text: string
   id: string
 }
+
+export interface IColor {
+  value: string
+  id: string
+}
+
+export interface IIcon {
+  value: string | null
+  iconName: string
+  id: string
+}

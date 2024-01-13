@@ -7,16 +7,16 @@ import InputList from '@/components/input/InputList/InputList.vue'
 import { InputChoseCategory } from '@/modules/inputs/InputChoseCategory'
 import { InputChoseDate } from '@/modules/inputs/InputChoseDate'
 
-import InputFullDescription from '@/components/inputs/text/InputFullDescription/InputFullDescription.vue'
-import InputShortDescription from '@/components/inputs/text/InputShortDescription/InputShortDescription.vue'
-import InputSelectTypeTransaction from '@/components/inputs/select/InputSelectTypeTransaction/InputSelectTypeTransaction.vue'
+import { InputName } from '@/components/inputs/text/InputName'
+import { InputDescription } from '@/components/inputs/text/InputDescription'
+import { InputSelectType } from '@/components/inputs/select/InputSelectType'
 import { InputSelectCurrency } from '@/components/inputs/select/InputSelectCurrency'
 import { InputSelectCheck } from '@/components/inputs/select/InputSelectCheck'
 import { InputCount } from '@/components/inputs/text/InputCount'
 
 import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
 
-import type { ICurrency, ICategory, ICheck, IDate } from '@/utils/types/interfaces'
+import type { ICurrency, ICategory, ICheck, IDate } from '@/utils/types/data/data.types'
 import type { ITypeTransaction } from '@/utils/types/types'
 
 import { useRoute, useRouter } from 'vue-router'
@@ -25,34 +25,34 @@ const getCategories = async (): Promise<ICategory[]> => {
   return [
     {
       id: 'category1',
-      shortDesc: 'Транспорт',
+      name: 'Транспорт',
       icon: 'directions_car',
       color: '#FF4F4F'
     },
     {
       id: 'category2',
-      shortDesc: 'Интернет',
+      name: 'Интернет',
       color: '#5D4FFF',
       icon: 'language'
     },
     {
       id: 'category4',
-      shortDesc: 'Ресторан',
+      name: 'Ресторан',
       color: '#4FB5FF'
     },
     {
       id: 'category5',
-      shortDesc: 'Походы в туалет',
+      name: 'Походы в туалет',
       color: '#FFC34F'
     },
     {
       id: 'category6',
-      shortDesc: 'Клубы',
+      name: 'Клубы',
       color: 'rgb(56, 223, 220)'
     },
     {
       id: 'category7',
-      shortDesc: 'Рыбалка',
+      name: 'Рыбалка',
       color: 'rgb(35, 53, 143)'
     }
   ]
@@ -207,17 +207,17 @@ const clickButtonAddCategoryHandler = () => {
   <form class="form-add-transaction" @submit.prevent="submitForm">
     <InputWithIcon>
       <template #input>
-        <InputShortDescription v-model:model-value="shortDescriptionField" />
+        <InputName v-model:model-value="shortDescriptionField" />
       </template>
     </InputWithIcon>
     <InputWithIcon icon="swap_vert">
       <template #input>
-        <InputSelectTypeTransaction v-model:selected-value="typeField" />
+        <InputSelectType v-model:selected-value="typeField" />
       </template>
     </InputWithIcon>
     <InputWithIcon icon="attach_money">
       <template #input>
-        <InputSelectCurrency v-model:selected-value="currencyField" :currencies="currencies" />
+        <InputSelectCurrency v-model:selected-value="currencyField" :values="currencies" />
       </template>
     </InputWithIcon>
     <InputWithIcon icon="price_change">
@@ -250,7 +250,7 @@ const clickButtonAddCategoryHandler = () => {
     </InputList>
     <InputWithIcon icon="description">
       <template #input>
-        <InputFullDescription v-model:model-value="fullDescriptionField" />
+        <InputDescription v-model:model-value="fullDescriptionField" />
       </template>
     </InputWithIcon>
     <SubmitFormButtons />

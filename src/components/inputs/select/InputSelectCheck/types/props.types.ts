@@ -1,8 +1,4 @@
-import type { ICheck } from '@/utils/types/interfaces'
+import type { ICheck, TMongoObjectId } from '@/utils/types/data/data.types'
+import type { IPropsInputSelect } from '@/utils/types/inputs/props.types'
 
-export interface IPropsInputSelectCheck {
-  modelValue: string | null
-  values: ICheck[]
-  errors: string[]
-  hasError: boolean
-}
+export interface IPropsInputSelectCheck extends IPropsInputSelect<TMongoObjectId, ICheck> {}

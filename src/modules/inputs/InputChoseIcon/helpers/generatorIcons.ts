@@ -2,7 +2,7 @@ import type { Ref } from 'vue'
 
 import { materialIcons } from '@/assets/mocks/MaterialIcons'
 
-import type { IIcon } from '../types/index'
+import type { IIcon } from '@/utils/types/data/data.types'
 
 function getRandomInt(min: number, max: number): number {
   min = Math.ceil(min)

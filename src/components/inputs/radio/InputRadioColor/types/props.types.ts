@@ -1,9 +1,4 @@
-import type { IColor } from '@/modules/inputs/InputChoseColor'
+import type { IColor } from '@/utils/types/data/data.types'
+import type { IPropsInputRadio } from '@/utils/types/inputs/props.types'
 
-export interface IPropsRadioColor {
-  name: string
-  id: string
-  value: string
-  checked: boolean
-  modelValue: IColor | null
-}
+export interface IPropsRadioColor extends IPropsInputRadio<IColor> {}

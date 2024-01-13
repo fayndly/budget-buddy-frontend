@@ -1,7 +1,7 @@
 import type { Ref } from 'vue'
-import type { IDate } from '@/utils/types/interfaces'
+import type { IDate } from '@/utils/types/data/data.types'
 
-export class InputChoseDateController {
+export class DateController {
   private dateChosedWrapper: Ref<IDate | null>
   private datesWrapper: Ref<IDate[]>
 

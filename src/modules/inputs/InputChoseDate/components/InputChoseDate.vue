@@ -1,36 +1,34 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 
-import type { IDate } from '@/utils/types/interfaces'
+import type { IDate } from '@/utils/types/data/data.types'
+import type { IPropsInputChoseDate } from '../types/props.types'
 
-import { InputChoseDateController } from '../helpers/InputChoseDateController'
+import { DateController } from '../helpers/dateController'
 
 import InputRadioDate from '@/components/inputs/radio/InputRadioDate/InputRadioDate.vue'
 import DialogSetDate from '@/components/dialogs/DialogSetDate/DialogSetDate.vue'
 import ButtonAddCustomDate from './custom/ButtonAddCustomDate/ButtonAddCustomDate.vue'
 
-defineOptions({
-  inheritAttrs: false
-})
-
 const dates = ref<IDate[]>([])
 const dateField = ref<IDate | null>(null)
 
+const props = defineProps<IPropsInputChoseDate>()
 const emit = defineEmits(['update:modelValue'])
 watch(dateField, () => {
   emit('update:modelValue', dateField.value?.date)
 })
 
-const inputChoseDateManager = new InputChoseDateController(dateField, dates)
-inputChoseDateManager.generateDates()
-inputChoseDateManager.setDefaultValue()
+const dateManager = new DateController(dateField, dates)
+dateManager.generateDates()
+dateManager.setDefaultValue()
 
 const ButtonAddCustomDateHandler = () => {
   modalSetDateIsOpen.value = true
 }
 
 const submitDateHandler = (date: Date) => {
-  inputChoseDateManager.addValue({
+  dateManager.addValue({
     date: date,
     text: date.getFullYear().toString(),
     id: date.toString()

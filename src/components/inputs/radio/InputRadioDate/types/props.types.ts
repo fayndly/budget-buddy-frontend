@@ -1,12 +1,7 @@
-import type { IDate } from '@/utils/types/interfaces'
-import type { IPropsRadio } from '@/utils/types/props/inputs'
+import type { IDate } from '@/utils/types/data/data.types'
+import type { IPropsInputRadio } from '@/utils/types/inputs/props.types'
 
-export interface IPropsRadioDate {
-  name: string
-  id: string
-  value: string
-  checked: boolean
-  modelValue: IDate | null
+export interface IPropsRadioDate extends IPropsInputRadio<IDate> {
   date: Date
   header: string
 }

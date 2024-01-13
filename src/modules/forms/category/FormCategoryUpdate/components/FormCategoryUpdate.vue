@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 
 import type { IColor } from '@/modules/inputs/InputChoseColor'
 import type { ITypeTransaction } from '@/utils/types/types'
-import type { IIcon } from '@/modules/inputs/InputChoseIcon'
+import type { IIcon } from '@/utils/types/data/data.types'
 
 import InputWithIcon from '@/components/input/InputWithIcon/InputWithIcon.vue'
 import InputList from '@/components/input/InputList/InputList.vue'
@@ -11,7 +11,7 @@ import InputList from '@/components/input/InputList/InputList.vue'
 import { InputChoseColor } from '@/modules/inputs/InputChoseColor'
 import { InputChoseIcon } from '@/modules/inputs/InputChoseIcon'
 import InputNameCategory from '@/components/inputs/text/InputNameCategory/InputNameCategory.vue'
-import InputSelectTypeTransaction from '@/components/inputs/select/InputSelectTypeTransaction/InputSelectTypeTransaction.vue'
+import { InputSelectType } from '@/components/inputs/select/InputSelectType'
 
 import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
 
@@ -80,7 +80,7 @@ onMounted(async () => {
     </InputWithIcon>
     <InputWithIcon>
       <template #input>
-        <InputSelectTypeTransaction v-model:selected-value="typeField" />
+        <InputSelectType v-model:selected-value="typeField" />
       </template>
     </InputWithIcon>
     <InputList header="Цвет">

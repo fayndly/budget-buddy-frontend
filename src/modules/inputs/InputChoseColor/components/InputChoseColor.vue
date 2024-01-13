@@ -6,7 +6,7 @@ import ButtonRegenerateColors from './custom/ButtonRegenerateColors/ButtonRegene
 import ButtonAddColor from './custom/ButtonAddColor/ButtonAddColor.vue'
 import DialogSetColor from '@/components/dialogs/DialogSetColor/DialogSetColor.vue'
 
-import type { IColor } from '../types/index'
+import type { IColor } from '@/utils/types/data/data.types'
 import type { IPropsInputChoseColor } from '../types/props.types'
 import { GeneratorColors } from '../helpers/generatorColors'
 
@@ -20,12 +20,12 @@ const updateValueHandler = (): void => {
   emit('update:modelValue', chosedColor.value)
 }
 
-const getDefaultColor = computed(() => props.defaultColor)
+const getDefaultColor = computed(() => props.defaultValue)
 
 watch(getDefaultColor, () => {
-  if (props.defaultColor) {
+  if (props.defaultValue) {
     colorManager.clearWrapperColors()
-    colorManager.addColor(props.defaultColor)
+    colorManager.addColor(props.defaultValue)
     colorManager.generateColors()
     colorManager.setDefaultColor()
 

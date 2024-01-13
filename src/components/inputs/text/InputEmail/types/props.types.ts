@@ -1,5 +1,3 @@
-export interface IPropsInputEmail {
-  modelValue: any
-  hasError: boolean
-  errors: string[]
-}
+import type { IPropsInput } from '@/utils/types/inputs/props.types'
+
+export interface IPropsInputEmail extends IPropsInput<string> {}

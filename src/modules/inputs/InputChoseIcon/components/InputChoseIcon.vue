@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 
-import type { IIcon } from '../types/index'
+import type { IIcon } from '@/utils/types/data/data.types'
 
 import InputRadioIcon from '@/components/inputs/radio/InputRadioIcon/InputRadioIcon.vue'
 import ButtonAddIcon from './custom/ButtonAddIcon/ButtonAddIcon.vue'
@@ -19,12 +19,12 @@ const chosedIcon = ref<IIcon | null>(null)
 
 const iconManager = new GeneratorIcons(icons, chosedIcon, 9)
 
-const getDefaultIcon = computed(() => props.defaultIcon)
+const getDefaultIcon = computed(() => props.defaultValue)
 
 watch(getDefaultIcon, () => {
-  if (props.defaultIcon) {
+  if (props.defaultValue) {
     iconManager.clearWrapperIcons()
-    iconManager.addIcon(props.defaultIcon, props.defaultIcon)
+    iconManager.addIcon(props.defaultValue, props.defaultValue)
     iconManager.generateIcons()
     iconManager.setDefaultIcon()
 

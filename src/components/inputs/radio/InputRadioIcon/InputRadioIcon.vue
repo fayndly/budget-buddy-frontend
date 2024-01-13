@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IRadioIcon } from './types/props'
+import type { IRadioIcon } from './types/props.types'
 
 const props = defineProps<IRadioIcon>()
 const emit = defineEmits(['update:modelValue'])

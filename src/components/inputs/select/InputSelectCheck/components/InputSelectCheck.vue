@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import '@material/web/select/outlined-select'
-import '@material/web/select/select-option'
-
-import { attributesInputSelectCheck } from '../constants/attributes'
+import { staticAttributesInputSelectCheck } from '../constants/attributes'
 import type { IPropsInputSelectCheck } from '../types/props.types'
 
 defineProps<IPropsInputSelectCheck>()
@@ -11,7 +8,7 @@ defineEmits(['update:modelValue'])
 
 <template>
   <md-outlined-select
-    v-bind="attributesInputSelectCheck"
+    v-bind="staticAttributesInputSelectCheck"
     :error="hasError"
     :error-text="errors[0]"
     @change="$emit('update:modelValue', $event.target.value)"

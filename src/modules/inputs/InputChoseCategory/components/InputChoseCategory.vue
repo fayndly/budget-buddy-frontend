@@ -16,15 +16,15 @@ const updateValueHandler = (): void => {
   emit('update:modelValue', chosedCategory.value)
 }
 
-const getDefaultCategory = computed(() => props.defaultCategory)
+const getDefaultCategory = computed(() => props.defaultValue)
 
 watch(chosedCategory, () => {
   if (chosedCategory.value) updateValueHandler()
 })
 
 watch(getDefaultCategory, () => {
-  if (props.defaultCategory) {
-    chosedCategory.value = props.defaultCategory
+  if (props.defaultValue) {
+    chosedCategory.value = props.defaultValue
     updateValueHandler()
   }
 })

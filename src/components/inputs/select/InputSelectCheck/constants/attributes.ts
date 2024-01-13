@@ -1,4 +1,4 @@
-export const attributesInputSelectCheck = {
+export const staticAttributesInputSelectCheck = {
   name: 'check',
   id: 'check',
   required: true,

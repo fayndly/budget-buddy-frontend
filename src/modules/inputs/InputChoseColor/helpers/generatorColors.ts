@@ -1,6 +1,6 @@
 import type { Ref } from 'vue'
 
-import type { IColor } from '../types/index'
+import type { IColor } from '@/utils/types/data/data.types'
 
 export class GeneratorColors {
   private wrapperColors: Ref<IColor[]>
