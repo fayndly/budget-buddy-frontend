@@ -1,6 +1,7 @@
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
+import type { IFormFields } from '../types/formFields.types'
 
-export const useQueryHandler = (route: RouteLocationNormalizedLoaded, formData: any) => {
+export const useQueryHandler = (route: RouteLocationNormalizedLoaded, formData: IFormFields) => {
   if (route.query) {
     const {
       type,

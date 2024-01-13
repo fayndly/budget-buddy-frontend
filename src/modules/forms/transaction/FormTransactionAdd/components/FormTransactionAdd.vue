@@ -70,11 +70,11 @@ watch(getType, async () => {
 import { useQueryHandler } from '../helpers/useQueryHandler'
 
 const route = useRoute()
-useQueryHandler(route, formData)
 
 onMounted(async () => {
   await useGetCurrencies()
   await useGetChecks()
+  useQueryHandler(route, formData)
 })
 const router = useRouter()
 
