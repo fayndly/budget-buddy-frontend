@@ -4,7 +4,7 @@ import TemplateMain from '@/templates/TemplateMain.vue'
 import TemplateSection from '@/templates/TemplateSection.vue'
 import TitleHeader from '@/components/titles/TitleHeader.vue'
 
-import { FormTransactionUpdate } from '@/modules/forms/FormTransactionUpdate'
+import { FormTransactionUpdate } from '@/modules/forms/transaction/FormTransactionUpdate'
 </script>
 
 <template>

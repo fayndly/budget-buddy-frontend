@@ -5,7 +5,7 @@ import type { IDate } from '@/utils/types/interfaces'
 
 import { InputChoseDateController } from '../helpers/InputChoseDateController'
 
-import RadioDate from '@/components/radio/RadioDate/RadioDate.vue'
+import InputRadioDate from '@/components/inputs/radio/InputRadioDate/InputRadioDate.vue'
 import DialogSetDate from '@/components/dialogs/DialogSetDate/DialogSetDate.vue'
 import ButtonAddCustomDate from './custom/ButtonAddCustomDate/ButtonAddCustomDate.vue'
 
@@ -14,11 +14,11 @@ defineOptions({
 })
 
 const dates = ref<IDate[]>([])
-const dateField = ref<IDate>()
+const dateField = ref<IDate | null>(null)
 
 const emit = defineEmits(['update:modelValue'])
 watch(dateField, () => {
-  emit('update:modelValue', dateField.value)
+  emit('update:modelValue', dateField.value?.date)
 })
 
 const inputChoseDateManager = new InputChoseDateController(dateField, dates)
@@ -47,13 +47,14 @@ const closeModalHandler = () => {
 <template>
   <ul class="list-dates">
     <li v-for="date in dates" :key="date.id">
-      <RadioDate
-        :id="date.id"
-        :value="date"
+      <InputRadioDate
         name="date"
+        :id="date.id"
+        :value="date.date.toLocaleDateString('ru-RU')"
         :date="date.date"
         :header="date.text"
-        v-model:checked-value="dateField"
+        :checked="date.id === dateField?.id"
+        v-model:modelValue="dateField"
       />
     </li>
     <li>

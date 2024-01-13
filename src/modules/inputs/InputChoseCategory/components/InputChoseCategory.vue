@@ -1,20 +1,32 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 
 import RadioCategory from '@/components/radio/RadioCategory/RadioCategory.vue'
 import ButtonShowMore from './custom/ButtonShowMore/ButtonShowMore.vue'
 import ButtonAddCategory from './custom/ButtonAddCategory/ButtonAddCategory.vue'
 
-import type { IPropsInputChoseCategory } from '../types/props'
-import type { ICategory } from '@/utils/types/interfaces'
+import type { IPropsInputChoseCategory } from '../types/props.types'
 
-defineProps<IPropsInputChoseCategory>()
-const emit = defineEmits(['update:checkedValue', 'clickButtonAddCategory'])
+const props = defineProps<IPropsInputChoseCategory>()
+const emit = defineEmits(['update:modelValue', 'clickButtonAddCategory'])
 
-const chosedCategory = ref<ICategory>()
+const chosedCategory = ref<string | null>(null)
+
+const updateValueHandler = (): void => {
+  emit('update:modelValue', chosedCategory.value)
+}
+
+const getDefaultCategory = computed(() => props.defaultCategory)
 
 watch(chosedCategory, () => {
-  emit('update:checkedValue', chosedCategory.value)
+  if (chosedCategory.value) updateValueHandler()
+})
+
+watch(getDefaultCategory, () => {
+  if (props.defaultCategory) {
+    chosedCategory.value = props.defaultCategory
+    updateValueHandler()
+  }
 })
 
 const isMoreCategoriesShow = ref<boolean>(false)
@@ -25,20 +37,19 @@ const toogleShowMore = () => {
 const clickButtonAddCategoryHandler = () => {
   emit('clickButtonAddCategory')
 }
-// $router.push({ name: 'AddCategory', query: { type: 'income' } })
 </script>
 
 <template>
   <ul class="list-categories" :class="{ 'hide-elements': !isMoreCategoriesShow }">
-    <li v-for="category in categories" :key="category.id">
+    <li v-for="category in values" :key="category.id">
       <RadioCategory
-        :id="category.id"
-        :value="category"
         name="category"
+        :id="category.id"
+        :value="category.id"
         :icon="category.icon"
         :color="category.color"
-        :shortDesc="category.shortDesc"
-        v-model:checkedValue="chosedCategory"
+        :nameCategory="category.name"
+        v-model:modelValue="chosedCategory"
       />
     </li>
     <li>

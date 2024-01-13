@@ -6,7 +6,7 @@ import { staticAttributesInputSelectCurrency } from '../constants/attributes'
 import type { IPropsInputSelectCurrency } from '../types/props.types'
 
 defineProps<IPropsInputSelectCurrency>()
-defineEmits(['update:selectedValue'])
+defineEmits(['update:modelValue'])
 </script>
 
 <template>
@@ -14,12 +14,12 @@ defineEmits(['update:selectedValue'])
     v-bind="staticAttributesInputSelectCurrency"
     :error="hasError"
     :error-text="errors[0]"
-    @change="$emit('update:selectedValue', $event.target.value)"
+    @change="$emit('update:modelValue', $event.target.value)"
   >
     <md-select-option
       v-for="currency in values"
       :key="currency.id"
-      :selected="currency.id === selectedValue"
+      :selected="currency.id === modelValue"
       :value="currency.id"
     >
       <div slot="headline">{{ currency.name }}</div>

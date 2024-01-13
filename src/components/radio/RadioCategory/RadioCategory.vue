@@ -11,7 +11,7 @@ function updateValueHandler(): void {
 }
 
 const isChecked = computed(() => {
-  return props.checkedValue?.id === props.value?.id
+  return props.modelValue === props.value
 })
 </script>
 
@@ -28,7 +28,7 @@ const isChecked = computed(() => {
     />
     <span class="radio-category__fake-input" :style="`background-color: ${color}`">
       <span v-if="icon" class="radio-category__icon material-icons-outlined">{{ icon }}</span>
-      <span class="radio-category__text label-large">{{ shortDesc }}</span>
+      <span class="radio-category__text label-large">{{ nameCategory }}</span>
     </span>
   </label>
 </template>

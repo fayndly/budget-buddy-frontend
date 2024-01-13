@@ -52,3 +52,9 @@ export interface ITransaction extends IMongoTimestamps {
   time: string
   fullDescription: string
 }
+
+export interface IDate {
+  date: Date
+  text: string
+  id: string
+}

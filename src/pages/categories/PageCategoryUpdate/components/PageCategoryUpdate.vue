@@ -4,7 +4,7 @@ import TemplateMain from '@/templates/TemplateMain.vue'
 import TemplateSection from '@/templates/TemplateSection.vue'
 import TitleHeader from '@/components/titles/TitleHeader.vue'
 
-import { FormCategoryUpdate } from '@/modules/forms/FormCategoryUpdate'
+import { FormCategoryUpdate } from '@/modules/forms/category/FormCategoryUpdate'
 </script>
 
 <template>

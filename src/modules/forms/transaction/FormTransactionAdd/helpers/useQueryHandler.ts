@@ -1,11 +1,6 @@
 import type { RouteLocationNormalizedLoaded } from 'vue-router'
-import type { Ref } from 'vue'
 
-export const useQueryHandler = (
-  route: RouteLocationNormalizedLoaded,
-  typeField: Ref<any>,
-  checkField: Ref<any>
-) => {
+export const useQueryHandler = (route: RouteLocationNormalizedLoaded, formData: any) => {
   if (route.query) {
     const {
       type,
@@ -15,12 +10,12 @@ export const useQueryHandler = (
       check?: string | undefined
     } = route.query
     if (type && (type === 'expense' || type === 'income')) {
-      typeField.value = type
+      formData.type = type
     } else {
-      typeField.value = 'expense'
+      formData.type = 'expense'
     }
     if (check) {
-      checkField.value = check
+      formData.check = check
     }
   }
 }

@@ -2,10 +2,10 @@ import type { Ref } from 'vue'
 import type { IDate } from '@/utils/types/interfaces'
 
 export class InputChoseDateController {
-  private dateChosedWrapper: Ref<IDate | undefined>
+  private dateChosedWrapper: Ref<IDate | null>
   private datesWrapper: Ref<IDate[]>
 
-  constructor(dateChosedWrapper: Ref<IDate | undefined>, datesWrapper: Ref<IDate[]>) {
+  constructor(dateChosedWrapper: Ref<IDate | null>, datesWrapper: Ref<IDate[]>) {
     this.dateChosedWrapper = dateChosedWrapper
     this.datesWrapper = datesWrapper
   }
@@ -27,11 +27,11 @@ export class InputChoseDateController {
   generateDates(): void {
     const today: Date = new Date(Date.now())
 
-    const yesterday: Date = new Date()
+    const yesterday: Date = new Date(Date.now())
     yesterday.setDate(yesterday.getDate() - 1)
 
-    const twoDaysAgo: Date = new Date()
-    twoDaysAgo.setDate(yesterday.getDate() - 2)
+    const twoDaysAgo: Date = new Date(Date.now())
+    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2)
 
     const dates: IDate[] = [
       {

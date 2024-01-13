@@ -42,12 +42,12 @@ export interface IArgumentsGetTransactions {
 }
 export interface IArgumentsPostTransactionAdd {
   type: TTypeTransaction
-  shortDescription: string
+  name: string
   currency: TMongoObjectId
   amount: number
   check: TMongoObjectId
   category: TMongoObjectId
-  time: Date
-  fullDescription: string
+  time: string
+  description?: string | null
 }
 export interface IArgumentsPatchTransactionUpdate extends IArgumentsPostTransactionAdd {}

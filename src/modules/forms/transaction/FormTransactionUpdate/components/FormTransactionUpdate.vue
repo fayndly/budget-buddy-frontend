@@ -11,7 +11,7 @@ import InputFullDescription from '@/components/inputs/text/InputFullDescription/
 import InputShortDescription from '@/components/inputs/text/InputShortDescription/InputShortDescription.vue'
 import InputSelectTypeTransaction from '@/components/inputs/select/InputSelectTypeTransaction/InputSelectTypeTransaction.vue'
 import { InputSelectCurrency } from '@/components/inputs/select/InputSelectCurrency'
-import InputSelectCheck from '@/components/inputs/select/InputSelectCheck/InputSelectCheck.vue'
+import { InputSelectCheck } from '@/components/inputs/select/InputSelectCheck'
 import { InputCount } from '@/components/inputs/text/InputCount'
 
 import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
@@ -88,6 +88,69 @@ const getChecks = async (): Promise<ICheck[]> => {
     }
   ]
 }
+
+interface ITransactionData {
+  _id: string
+  user: string
+  type: 'expense' | 'income'
+  shortDescription: string
+  currency: {
+    _id: string
+    name: string
+    symbol: string
+  }
+  amount: number
+  check: {
+    _id: string
+    name: string
+  }
+  category: {
+    _id: string
+    name: string
+    type: 'expense' | 'income'
+    color: string
+    icon: string
+  }
+  time: string
+  fullDescription: string
+  createdAt: string
+  updatedAt: string
+  __v: number
+}
+const getTransactionData = async (): Promise<ITransactionData> => {
+  return {
+    _id: '658429b3de78d0a1e535ecbe',
+    user: '65393051366139b39ce5eced',
+    type: 'expense',
+    shortDescription: 'text',
+    currency: {
+      _id: '653698b1a2cb054a9a95f3e1',
+      name: 'RUB',
+      symbol: '₽'
+    },
+    amount: 12000,
+    check: {
+      _id: '653fe517ab8e6a94a540064e',
+      name: 'сбер'
+    },
+    category: {
+      _id: '65393051366139b39ce5ecf2',
+      name: 'Инвестиции',
+      type: 'income',
+      color: '#1a1a1a',
+      icon: 'icon-category-income'
+    },
+    time: '2023-10-01T00:00:00.000Z',
+    fullDescription: 'text',
+    createdAt: '2023-12-21T12:04:03.585Z',
+    updatedAt: '2023-12-21T12:04:03.585Z',
+    __v: 0
+  }
+}
+const transactionData = ref<ITransactionData | null>(null)
+onMounted(async () => {
+  transactionData.value = await getTransactionData()
+})
 
 const currencies = ref<ICurrency[]>([])
 const categories = ref<ICategory[]>([])

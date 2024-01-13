@@ -1,8 +1,9 @@
-import type { ICategory } from '@/utils/types/interfaces'
-import type { IPropsRadio } from '@/utils/types/props/inputs'
-
-export interface IPropsRadioCategory extends IPropsRadio<ICategory | undefined> {
+export interface IPropsRadioCategory {
+  modelValue: string | null
+  value: string
+  id: string
+  name: string
   icon?: string
   color: string
-  shortDesc: string
+  nameCategory: string
 }

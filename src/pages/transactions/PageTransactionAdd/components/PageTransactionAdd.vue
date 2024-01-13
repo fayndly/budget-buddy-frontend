@@ -11,7 +11,7 @@ import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
 
 import TitleHeader from '@/components/titles/TitleHeader.vue'
 
-import { FormAddTransaction } from '@/modules/forms/FormAddTransaction/'
+import { FormTransactionAdd } from '@/modules/forms/transaction/FormTransactionAdd'
 
 const namePage = ref<ITypeTransaction>('expense')
 const namePageRu: INamePageRu = {
@@ -42,7 +42,7 @@ const updateTypeHandler = (newValue: ITypeTransaction) => {
       />
     </TemplateSection>
     <TemplateSection>
-      <FormAddTransaction @updateType="updateTypeHandler" />
+      <FormTransactionAdd @updateType="updateTypeHandler" />
     </TemplateSection>
   </TemplateMain>
 </template>

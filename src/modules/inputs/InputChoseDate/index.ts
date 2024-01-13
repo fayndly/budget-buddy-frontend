@@ -1,2 +1,3 @@
 import InputChoseDate from './components/InputChoseDate.vue'
-export { InputChoseDate }
+import { rulesInputChoseDate } from './constants/rules'
+export { InputChoseDate, rulesInputChoseDate }

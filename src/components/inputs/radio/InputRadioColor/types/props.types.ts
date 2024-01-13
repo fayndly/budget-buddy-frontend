@@ -1,6 +1,6 @@
 import type { IColor } from '@/modules/inputs/InputChoseColor'
 
-export interface IRadioColor {
+export interface IPropsRadioColor {
   name: string
   id: string
   value: string

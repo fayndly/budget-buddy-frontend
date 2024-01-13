@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { IRadioColor } from './types/props.types'
+import type { IPropsRadioColor } from './types/props.types'
 
-const props = defineProps<IRadioColor>()
+const props = defineProps<IPropsRadioColor>()
 const emit = defineEmits(['update:modelValue'])
 
 function updateValueHandler(): void {
