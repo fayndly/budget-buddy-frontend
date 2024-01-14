@@ -57,7 +57,10 @@ onMounted(async () => {
   } else {
     router.replace({ name: 'NotFounded' })
   }
-  if (isCategoryNotFound.value) router.replace({ name: 'NotFounded' })
+  if (isCategoryNotFound.value) {
+    console.log('isCategoryNotFound')
+    router.replace({ name: 'NotFounded' })
+  }
 
   if (category.value) categoryInfo.value = getFormatArrayItems(category.value)
 })
