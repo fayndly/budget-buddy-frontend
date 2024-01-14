@@ -45,12 +45,16 @@ class Api {
     return await this.instance.get('/auth/check')
   }
 
+  async getCurrency(id: TMongoObjectId): Promise<AxiosResponse<IDataCurrency, any>> {
+    return await this.instance.get(`/currencies/${id}`)
+  }
+
   async getCurrencies(): Promise<AxiosResponse<IDataCurrency[], any>> {
     return await this.instance.get('/currencies')
   }
 
   async getCheck(id: TMongoObjectId): Promise<AxiosResponse<IDataCheck, any>> {
-    return await this.instance.get('/checks', { params: { id } })
+    return await this.instance.get(`/checks/${id}`)
   }
 
   async getChecks(): Promise<AxiosResponse<IDataCheck[], any>> {
@@ -65,15 +69,15 @@ class Api {
     params: IArgumentsPatchCheckUpdate,
     id: TMongoObjectId
   ): Promise<AxiosResponse<IDataCheck, any>> {
-    return await this.instance.patch('/checks', params, { params: { id } })
+    return await this.instance.patch(`/checks/${id}`, params)
   }
 
   async deleteCheckDelete(id: TMongoObjectId): Promise<AxiosResponse<IDataId, any>> {
-    return await this.instance.delete('/checks', { params: { id } })
+    return await this.instance.delete(`/checks/${id}`)
   }
 
   async getCategory(id: TMongoObjectId): Promise<AxiosResponse<IDataCategory, any>> {
-    return await this.instance.get('/categories', { params: { id } })
+    return await this.instance.get(`/categories/${id}`)
   }
 
   async getCategories(
@@ -92,15 +96,15 @@ class Api {
     params: IArgumentsPatchCategoryUpdate,
     id: TMongoObjectId
   ): Promise<AxiosResponse<IDataCategory, any>> {
-    return await this.instance.patch('/categories', params, { params: { id } })
+    return await this.instance.patch(`/categories/${id}`, params)
   }
 
   async deleteCategoryDelete(id: TMongoObjectId): Promise<AxiosResponse<IDataId, any>> {
-    return await this.instance.delete('/categories', { params: { id } })
+    return await this.instance.delete(`/categories/${id}`)
   }
 
   async getTransaction(id: TMongoObjectId): Promise<AxiosResponse<IDataTransaction, any>> {
-    return await this.instance.get('/transactions', { params: { id } })
+    return await this.instance.get(`/transactions/${id}`)
   }
 
   async getTransactions(
@@ -119,11 +123,11 @@ class Api {
     params: IArgumentsPatchTransactionUpdate,
     id: TMongoObjectId
   ): Promise<AxiosResponse<IDataTransaction, any>> {
-    return await this.instance.patch('/transactions', params, { params: { id } })
+    return await this.instance.patch(`/transactions/${id}`, params)
   }
 
   async deleteTransactionDelete(id: TMongoObjectId): Promise<AxiosResponse<IDataId, any>> {
-    return await this.instance.delete('/transactions', { params: { id } })
+    return await this.instance.delete(`/transactions/${id}`)
   }
 }
 

@@ -1,29 +1,21 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted } from 'vue'
 import TemplateMain from '@/templates/TemplateMain.vue'
 import TemplateSection from '@/templates/TemplateSection.vue'
 
 import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
 
+import CheckListItem from './custom/CheckListItem/CheckListItem.vue'
+
+import { useGetChecks, checks } from '../services/useGetChecks'
+
 import '@material/web/fab/fab'
 
 import '@material/web/list/list'
-import '@material/web/list/list-item'
 
-const checks = ref([
-  {
-    name: 'Сбер',
-    count: 12645,
-    currancy: '₽',
-    id: '123'
-  },
-  {
-    name: 'Тинькофф',
-    count: 9530,
-    currancy: '₽',
-    id: '234'
-  }
-])
+onMounted(async () => {
+  await useGetChecks()
+})
 </script>
 
 <template>
@@ -31,19 +23,7 @@ const checks = ref([
   <TemplateMain class="main-checks">
     <TemplateSection>
       <md-list class="list-checks">
-        <md-list-item
-          type="button"
-          v-for="check in checks"
-          :key="check.id"
-          class="list-checks__item"
-          @click="$router.push({ name: 'Check', params: { checkId: '123' } })"
-        >
-          <div slot="headline">{{ check.name }}</div>
-          <div slot="supporting-text">
-            {{ check.count.toLocaleString('ru-RU') }}{{ check.currancy }}
-          </div>
-          <span class="material-icons-outlined" slot="end"> chevron_right </span>
-        </md-list-item>
+        <CheckListItem v-for="check in checks" :key="check.id" :check="check" />
       </md-list>
     </TemplateSection>
     <md-fab class="fab-add-check" variant="secondary" @click="$router.push({ name: 'ChecksAdd' })"
