@@ -44,13 +44,13 @@ export interface ITransaction extends IMongoTimestamps {
   id: TMongoObjectId
   user: TMongoObjectId
   type: TTypeTransaction
-  shortDescription: string
+  name: string
   currency: TMongoObjectId
   amount: number
   check: TMongoObjectId
   category: TMongoObjectId
   time: string
-  fullDescription: string
+  description: string
 }
 
 export interface IDate {

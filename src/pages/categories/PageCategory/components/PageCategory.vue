@@ -58,7 +58,6 @@ onMounted(async () => {
     router.replace({ name: 'NotFounded' })
   }
   if (isCategoryNotFound.value) {
-    console.log('isCategoryNotFound')
     router.replace({ name: 'NotFounded' })
   }
 
