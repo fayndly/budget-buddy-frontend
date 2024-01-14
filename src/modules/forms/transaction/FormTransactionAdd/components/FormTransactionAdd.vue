@@ -1,13 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, reactive, computed } from 'vue'
 
-// import InputFullDescription from '@/components/inputs/text/InputFullDescription/InputFullDescription.vue'
-// import InputShortDescription from '@/components/inputs/text/InputShortDescription/InputShortDescription.vue'
-// import InputSelectTypeTransaction from '@/components/inputs/select/InputSelectTypeTransaction/InputSelectTypeTransaction.vue'
-// import { InputSelectCurrency } from '@/components/inputs/select/InputSelectCurrency'
-// import InputSelectCheck from '@/components/inputs/select/InputSelectCheck/InputSelectCheck.vue'
-// import { InputCount } from '@/components/inputs/text/InputCount'
-
 import InputWithIcon from '@/components/input/InputWithIcon/InputWithIcon.vue'
 import InputList from '@/components/input/InputList/InputList.vue'
 import BarSnackbar from '@/components/bars/BarSnackbar/BarSnackbar.vue'
@@ -15,7 +8,7 @@ import BarSnackbar from '@/components/bars/BarSnackbar/BarSnackbar.vue'
 import { InputName } from '@/components/inputs/text/InputName'
 import { InputSelectType } from '@/components/inputs/select/InputSelectType'
 import { InputSelectCurrency } from '@/components/inputs/select/InputSelectCurrency'
-import { InputCount } from '@/components/inputs/text/InputCount'
+import { InputAmount } from '@/components/inputs/text/InputAmount'
 import { InputSelectCheck } from '@/components/inputs/select/InputSelectCheck'
 import { InputChoseCategory } from '@/modules/inputs/InputChoseCategory'
 import { InputChoseDate } from '@/modules/inputs/InputChoseDate'
@@ -23,7 +16,7 @@ import { InputDescription } from '@/components/inputs/text/InputDescription'
 
 import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
 
-import type { ICurrency } from '@/utils/types/data/data.types'
+import type { ICurrency, ICheck } from '@/utils/types/data/data.types'
 
 import type { IFormFields } from '../types/formFields.types'
 
@@ -75,6 +68,7 @@ onMounted(async () => {
   await useGetCurrencies()
   await useGetChecks()
   useQueryHandler(route, formData)
+  if (getActiveCheck.value?.currency) formData.currency = getActiveCheck.value?.currency
 })
 const router = useRouter()
 
@@ -106,9 +100,16 @@ watch(postErrorText, () => {
 
 import { getById } from '@/utils/helpers/getById'
 
-const getActiveCurrency = computed(() => {
+const getActiveCurrency = computed((): null | ICurrency => {
   if (formData.currency) {
     return getById<ICurrency>(currencies, formData.currency)
+  }
+  return null
+})
+
+const getActiveCheck = computed((): null | ICheck => {
+  if (formData.check) {
+    return getById<ICheck>(checks, formData.check)
   }
   return null
 })
@@ -159,7 +160,7 @@ const getSumbolFromType = computed(() => {
     </InputWithIcon>
     <InputWithIcon icon="price_change">
       <template #input>
-        <InputCount
+        <InputAmount
           v-model:modelValue="formData.amount"
           :suffixText="getActiveCurrency?.symbol"
           :prefixText="getSumbolFromType"

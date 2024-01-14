@@ -1,4 +1,4 @@
-export const staticAttributesInputCount = {
+export const staticAttributesInputAmount = {
   name: 'count',
   id: 'count',
   required: true,

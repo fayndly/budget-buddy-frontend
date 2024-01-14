@@ -8,7 +8,7 @@ import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormB
 import BarSnackbar from '@/components/bars/BarSnackbar/BarSnackbar.vue'
 
 import { InputName } from '@/components/inputs/text/InputName'
-import { InputCount } from '@/components/inputs/text/InputCount'
+import { InputAmount } from '@/components/inputs/text/InputAmount'
 import { InputSelectCurrency } from '@/components/inputs/select/InputSelectCurrency'
 
 import useVuelidate from '@vuelidate/core'
@@ -85,7 +85,7 @@ onMounted(async () => {
     </InputWithIcon>
     <InputWithIcon icon="account_balance">
       <template #input>
-        <InputCount
+        <InputAmount
           label="Первоначальная сумма"
           v-model:modelValue="formData.count"
           :suffixText="getActiveCurrency?.symbol"

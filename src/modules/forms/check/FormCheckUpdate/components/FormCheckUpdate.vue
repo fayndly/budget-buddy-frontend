@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 
 import InputWithIcon from '@/components/input/InputWithIcon/InputWithIcon.vue'
 
-import { InputCount } from '@/components/inputs/text/InputCount'
+import { InputAmount } from '@/components/inputs/text/InputAmount'
 import { InputSelectCurrency } from '@/components/inputs/select/InputSelectCurrency'
 import InputName from './custom/InputName/InputName.vue'
 
@@ -113,7 +113,7 @@ onMounted(async () => {
     </InputWithIcon>
     <InputWithIcon icon="account_balance">
       <template #input>
-        <InputCount
+        <InputAmount
           label="Первоначальная сумма"
           v-model:model-value="countField"
           :prefix="currencyField?.symbol"

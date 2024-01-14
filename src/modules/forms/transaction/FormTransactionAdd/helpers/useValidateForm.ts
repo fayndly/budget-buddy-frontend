@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { rulesInputName } from '@/components/inputs/text/InputName'
 import { rulesInputSelectType } from '@/components/inputs/select/InputSelectType'
 import { rulesInputSelectCurrency } from '@/components/inputs/select/InputSelectCurrency'
-import { rulesInputCount } from '@/components/inputs/text/InputCount'
+import { rulesInputAmount } from '@/components/inputs/text/InputAmount'
 import { rulesInputSelectCheck } from '@/components/inputs/select/InputSelectCheck'
 import { rulesInputChoseCategory } from '@/modules/inputs/InputChoseCategory'
 import { rulesInputChoseDate } from '@/modules/inputs/InputChoseDate'
@@ -14,7 +14,7 @@ export const rules = computed(() => {
     name: rulesInputName,
     type: rulesInputSelectType,
     currency: rulesInputSelectCurrency,
-    amount: rulesInputCount,
+    amount: rulesInputAmount,
     check: rulesInputSelectCheck,
     category: rulesInputChoseCategory,
     time: rulesInputChoseDate,

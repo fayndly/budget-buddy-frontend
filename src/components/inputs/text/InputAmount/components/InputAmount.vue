@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { staticAttributesInputCount } from '../constants/attributes'
-import type { IPropsInputCount } from '../types/props.types'
+import { staticAttributesInputAmount } from '../constants/attributes'
+import type { IPropsInputAmount } from '../types/props.types'
 
-withDefaults(defineProps<IPropsInputCount>(), {
+withDefaults(defineProps<IPropsInputAmount>(), {
   label: 'Сумма'
 })
 defineEmits(['update:modelValue'])
@@ -10,7 +10,7 @@ defineEmits(['update:modelValue'])
 
 <template>
   <md-outlined-text-field
-    v-bind="staticAttributesInputCount"
+    v-bind="staticAttributesInputAmount"
     :label="label"
     :prefix-text="prefixText"
     :suffix-text="suffixText"

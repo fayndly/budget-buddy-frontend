@@ -12,7 +12,7 @@ import { InputDescription } from '@/components/inputs/text/InputDescription'
 import { InputSelectType } from '@/components/inputs/select/InputSelectType'
 import { InputSelectCurrency } from '@/components/inputs/select/InputSelectCurrency'
 import { InputSelectCheck } from '@/components/inputs/select/InputSelectCheck'
-import { InputCount } from '@/components/inputs/text/InputCount'
+import { InputAmount } from '@/components/inputs/text/InputAmount'
 
 import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
 
@@ -222,7 +222,7 @@ const clickButtonAddCategoryHandler = () => {
     </InputWithIcon>
     <InputWithIcon icon="price_change">
       <template #input>
-        <InputCount
+        <InputAmount
           label="Сумма"
           v-model:model-value="countField"
           :prefix="currencyField?.symbol"
