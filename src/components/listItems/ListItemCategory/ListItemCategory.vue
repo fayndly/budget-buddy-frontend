@@ -4,6 +4,11 @@ import '@material/web/list/list-item'
 import type { IPropsListItemCategory } from './props.types'
 
 defineProps<IPropsListItemCategory>()
+
+const translateType = {
+  expense: 'Расход',
+  income: 'Доход'
+}
 </script>
 
 <template>
@@ -14,7 +19,7 @@ defineProps<IPropsListItemCategory>()
   >
     <div slot="headline">{{ category.name }}</div>
     <div slot="supporting-text">
-      {{ category.type }}
+      {{ translateType[category.type] }}
     </div>
     <span class="material-icons-outlined list-item-category__icon-end" slot="end">
       chevron_right

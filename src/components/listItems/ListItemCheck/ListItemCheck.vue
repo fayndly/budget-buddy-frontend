@@ -8,7 +8,7 @@ import { useGetOneCurrency, currency } from './useGetOneCurrency'
 const props = defineProps<IPropsListItemCheck>()
 
 onMounted(async () => {
-  await useGetOneCurrency(props.check.currency)
+  props.check.currency && (await useGetOneCurrency(props.check.currency))
 })
 </script>
 
