@@ -4,80 +4,62 @@ import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
 import TemplateMain from '@/templates/TemplateMain.vue'
 import TemplateSection from '@/templates/TemplateSection.vue'
 
-import '@material/web/button/text-button'
+import ListDataInfo from '@/components/wrappers/ListDataInfo/ListDataInfo.vue'
 
-interface ICategoryData {
-  _id: string
-  user: string
-  name: string
-  type: 'expense' | 'income'
-  color: string
-  icon: string
-  createdAt: string
-  updatedAt: string
-  __v: number
-}
+import type {
+  ICategory,
+  TTypeTransaction,
+  TFormatListDataInfo
+} from '@/utils/types/data/data.types'
 
-type TFormatArrayItems = Array<{ titleName: string; value: any; valueLinkTo?: any }>
+import { useGetOneCategory, category, isCategoryNotFound } from '../services/useGetOneCategory'
 
-const getCategoryData = async (): Promise<ICategoryData> => {
-  return {
-    _id: '65393051366139b39ce5ecf1',
-    user: '65393051366139b39ce5eced',
-    name: 'Зарплата',
-    type: 'income',
-    color: '#1a1a1a',
-    icon: 'icon-category-income',
-    __v: 0,
-    createdAt: '2023-10-25T15:12:17.712Z',
-    updatedAt: '2023-10-25T15:12:17.712Z'
-  }
-}
+import { translateType } from '@/utils/helpers'
 
-const translateType = {
-  expense: 'Расход',
-  income: 'Доход',
-  notFounded: 'Нет данных'
-}
+const categoryInfo = ref<TFormatListDataInfo | null>(null)
 
-const categoryInfo = ref<TFormatArrayItems | null>(null)
-const categoryData = ref<ICategoryData | null>(null)
-
-const getFormatArrayItems = (categoryData: ICategoryData): TFormatArrayItems => {
+const getFormatArrayItems = (categoryData: ICategory): TFormatListDataInfo => {
   return [
     {
       titleName: 'Имя',
-      value: categoryData?.name || 'Нет данных'
+      value: categoryData?.name
     },
     {
       titleName: 'Тип',
-      value: translateType[categoryData?.type] || 'Нет данных'
+      value: translateType[categoryData?.type]
     },
     {
       titleName: 'Цвет',
-      value: categoryData?.color || 'Нет данных'
+      value: categoryData?.color
     },
     {
       titleName: 'Иконка',
-      value: categoryData?.icon || 'Нет данных'
+      value: categoryData?.icon
     },
     {
       titleName: 'Время создания',
-      value: getReadableTime(categoryData?.createdAt) || 'Нет данных'
+      value: new Date(categoryData?.createdAt).toLocaleString('ru-RU')
+    },
+    {
+      titleName: 'Время обновления',
+      value: new Date(categoryData?.updatedAt).toLocaleString('ru-RU')
     }
   ]
 }
 
-const getReadableTime = (time: string | undefined): string => {
-  if (!time) {
-    return 'Нет данных'
-  }
-  return new Date(time).toLocaleDateString('ru-RU')
-}
+import { useRoute, useRouter } from 'vue-router'
+const route = useRoute()
+const router = useRouter()
 
 onMounted(async () => {
-  categoryData.value = await getCategoryData()
-  categoryInfo.value = getFormatArrayItems(categoryData.value)
+  if (route.params.categoryId) {
+    await useGetOneCategory(route.params.categoryId as TTypeTransaction)
+  } else {
+    router.replace({ name: 'NotFounded' })
+  }
+  if (isCategoryNotFound.value) router.replace({ name: 'NotFounded' })
+
+  if (category.value) categoryInfo.value = getFormatArrayItems(category.value)
 })
 </script>
 
@@ -86,44 +68,14 @@ onMounted(async () => {
     title="Категория"
     :showButtonEdit="true"
     @clickButtonEdit="
-      $router.push({ name: 'CategoriesUpdate', params: { categoryId: categoryData?._id } })
+      $router.push({ name: 'CategoriesUpdate', params: { categoryId: category?.id } })
     "
   />
   <TemplateMain>
     <TemplateSection>
-      <ul class="category-info">
-        <li class="category-info__item" v-for="item in categoryInfo" :key="item.titleName">
-          <h2 class="category-info__title title-medium on-surface-text">{{ item.titleName }}:</h2>
-          <span
-            v-if="item.valueLinkTo"
-            class="title-medium primary-text"
-            @click="$router.push(item.valueLinkTo)"
-            >{{ item.value }}</span
-          >
-          <span v-else class="category-info__text title-medium on-background-text">{{
-            item.value
-          }}</span>
-        </li>
-      </ul>
+      <ListDataInfo :values="categoryInfo" />
     </TemplateSection>
   </TemplateMain>
 </template>
 
-<style lang="scss">
-.category-info {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  &__item {
-    display: flex;
-    align-items: start;
-    justify-content: space-between;
-    gap: 8px;
-  }
-  &__title {
-  }
-  &__text {
-    text-align: end;
-  }
-}
-</style>
+<style lang="scss"></style>

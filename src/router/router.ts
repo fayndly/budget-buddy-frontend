@@ -176,6 +176,14 @@ const router = createRouter({
       component: PageSettings
     },
     {
+      path: '/not-founded',
+      name: 'NotFounded',
+      component: PageNotFound,
+      meta: {
+        layout: AppLayoutsEnum.withoutNavbar
+      }
+    },
+    {
       path: '/:catchAll(.*)',
       name: RouteNamesEnum.notFound,
       component: PageNotFound,

@@ -69,3 +69,5 @@ export interface IIcon {
   iconName: string
   id: string
 }
+
+export type TFormatListDataInfo = { titleName: string; value: any; valueLinkTo?: any }[]
