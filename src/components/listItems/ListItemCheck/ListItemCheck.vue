@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import '@material/web/list/list-item'
-import { useGetOneCurrency, currency } from '../../../services/useGetOneCurrency'
 
-import type { IPropsCheckListItem } from './props.types'
+import type { IPropsListItemCheck } from './props.types'
+import { useGetOneCurrency, currency } from './useGetOneCurrency'
 
-const props = defineProps<IPropsCheckListItem>()
+const props = defineProps<IPropsListItemCheck>()
 
 onMounted(async () => {
   await useGetOneCurrency(props.check.currency)

@@ -32,6 +32,7 @@ import TabsTypeCategories from '@/components/tabs/TabsTypeCategories/TabsTypeCat
 <style lang="scss" scoped>
 .main-categories {
   padding: 0px;
+  height: 100px;
 }
 .fab-add-categories {
   position: absolute;

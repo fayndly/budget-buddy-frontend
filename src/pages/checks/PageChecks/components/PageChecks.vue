@@ -5,7 +5,7 @@ import TemplateSection from '@/templates/TemplateSection.vue'
 
 import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
 
-import CheckListItem from './custom/CheckListItem/CheckListItem.vue'
+import ListItemCheck from '@/components/listItems/ListItemCheck/ListItemCheck.vue'
 
 import { useGetChecks, checks } from '../services/useGetChecks'
 
@@ -23,7 +23,7 @@ onMounted(async () => {
   <TemplateMain class="main-checks">
     <TemplateSection>
       <md-list class="list-checks">
-        <CheckListItem v-for="check in checks" :key="check.id" :check="check" />
+        <ListItemCheck v-for="check in checks" :key="check.id" :check="check" />
       </md-list>
     </TemplateSection>
     <md-fab class="fab-add-check" variant="secondary" @click="$router.push({ name: 'ChecksAdd' })"
