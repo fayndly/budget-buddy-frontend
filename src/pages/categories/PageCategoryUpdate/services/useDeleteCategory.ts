@@ -16,6 +16,7 @@ export const useDeleteCategory = async (id: TMongoObjectId) => {
       console.log(response.data.id)
     })
     .catch((err) => {
+      isCategoryDeleted.value = false
       console.log(err)
       postErrorText.value = err.response.data.message
     })

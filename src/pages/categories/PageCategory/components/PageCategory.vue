@@ -55,10 +55,10 @@ onMounted(async () => {
   if (route.params.categoryId) {
     await useGetOneCategory(route.params.categoryId as TTypeTransaction)
   } else {
-    router.replace({ name: 'NotFounded' })
+    return router.replace({ name: 'NotFounded' })
   }
   if (isCategoryNotFound.value) {
-    router.replace({ name: 'NotFounded' })
+    return router.replace({ name: 'NotFounded' })
   }
 
   if (category.value) categoryInfo.value = getFormatArrayItems(category.value)

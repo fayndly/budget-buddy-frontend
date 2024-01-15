@@ -13,11 +13,12 @@ export const useGetOneCategory = async (id: TTypeTransaction) => {
   return await apiManager
     .getCategory(id)
     .then((response) => {
+      isCategoryNotFound.value = false
       category.value = clearData<IDataCategory, ICategory>(response.data)
     })
     .catch((err) => {
       console.log(err)
-      if (err.response.status === 403) isCategoryNotFound.value = true
+      if (err.response.status === 404) isCategoryNotFound.value = true
       category.value = null
     })
 }

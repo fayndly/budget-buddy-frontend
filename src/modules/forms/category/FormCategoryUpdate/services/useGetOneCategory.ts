@@ -16,8 +16,9 @@ export const useGetOneCategory = async (id: TTypeTransaction) => {
       category.value = clearData<IDataCategory, ICategory>(response.data)
     })
     .catch((err) => {
-      console.log(err)
       if (err.response.status === 404) isCategoryNotFound.value = true
+      console.log(isCategoryNotFound.value)
+
       category.value = null
     })
 }
