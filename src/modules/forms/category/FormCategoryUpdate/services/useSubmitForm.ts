@@ -17,12 +17,13 @@ export const usePatchCategoryUpdate = async (
   name: string,
   type: TTypeTransaction,
   color: string,
-  icon?: string | null
+  icon: string | null
 ): Promise<void> => {
   isLoading.value = true
   postErrorText.value = null
   const params = { name, type, color, icon }
-  if (!icon) delete params.icon
+  if (icon === null) params.icon = 'null'
+
   await apiManager
     .patchCategoryUpdate(params, id)
     .then((response) => {
