@@ -34,16 +34,15 @@ export class GeneratorIcons {
 
   generateIcons(): void {
     this.addIcon(null, 'Нет')
-    for (let i = 0; i < this.numberIcons; i++) {
+    while (this.wrapperIcons.value.length < this.numberIcons) {
       const icon = this.getRandomIcon()
       this.addIcon(icon.value, icon.iconName)
     }
   }
 
-  regenerateColors(): void {
+  regenerateIcons(): void {
     this.clearWrapperIcons()
     this.generateIcons()
-    this.setDefaultIcon()
   }
 
   setDefaultIcon(): void {

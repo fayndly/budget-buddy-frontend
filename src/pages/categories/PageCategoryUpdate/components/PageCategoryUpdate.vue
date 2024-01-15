@@ -1,17 +1,56 @@
 <script setup lang="ts">
-import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
+import { ref, watch } from 'vue'
 import TemplateMain from '@/templates/TemplateMain.vue'
 import TemplateSection from '@/templates/TemplateSection.vue'
+
+import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
+
 import TitleHeader from '@/components/titles/TitleHeader.vue'
 
-import { FormCategoryUpdate } from '@/modules/forms/category/FormCategoryUpdate'
+import BarSnackbar from '@/components/bars/BarSnackbar/BarSnackbar.vue'
+
+import DialogConfirmDeletion from '@/components/dialogs/DialogConfirmDeletion/DialogConfirmDeletion.vue'
+
+import { FormCategoryUpdate, isLoading } from '@/modules/forms/category/FormCategoryUpdate'
+import { useDeleteCategory, isCategoryDeleted, postErrorText } from '../services/useDeleteCategory'
+
+import type { TMongoObjectId } from '@/utils/types/data/data.types'
+
+import { useRoute, useRouter } from 'vue-router'
+const route = useRoute()
+const router = useRouter()
+
+const deleteCategoryHandler = async () => {
+  if (route.params.categoryId) {
+    await useDeleteCategory(route.params.categoryId as TMongoObjectId)
+  }
+  if (isCategoryDeleted.value) router.replace({ name: 'Categories' })
+}
+
+const modalConfirmDeletionIsOpen = ref<boolean>(false)
+const closeModalHandler = () => {
+  modalConfirmDeletionIsOpen.value = false
+}
+
+const isSnackbarOpen = ref<boolean>(false)
+watch(postErrorText, () => {
+  if (postErrorText.value) isSnackbarOpen.value = true
+})
 </script>
 
 <template>
+  <Teleport to="#app">
+    <BarSnackbar
+      :title="postErrorText"
+      :isOpen="isSnackbarOpen"
+      @clickButtonClose="isSnackbarOpen = false"
+    />
+  </Teleport>
   <BarTopApp
     title="Редактировать категорию"
     :showButtonDelete="true"
-    @clickButtonDelete="console.log('delete category')"
+    @clickButtonDelete="modalConfirmDeletionIsOpen = true"
+    :showProgress="isLoading"
   />
   <TemplateMain>
     <TemplateSection>
@@ -21,6 +60,13 @@ import { FormCategoryUpdate } from '@/modules/forms/category/FormCategoryUpdate'
       <FormCategoryUpdate />
     </TemplateSection>
   </TemplateMain>
+  <DialogConfirmDeletion
+    headline="Подтверждение"
+    text="Вы действительно хотите удалить эту категорию?"
+    :isOpen="modalConfirmDeletionIsOpen"
+    @confirmDelete="deleteCategoryHandler"
+    @closeModal="closeModalHandler"
+  />
 </template>
 
 <style lang="scss"></style>

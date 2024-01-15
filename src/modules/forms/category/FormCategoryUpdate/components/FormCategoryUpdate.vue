@@ -1,96 +1,114 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { reactive, ref, watch, onMounted } from 'vue'
 
-import type { IColor } from '@/modules/inputs/InputChoseColor'
-import type { ITypeTransaction } from '@/utils/types/types'
-import type { IIcon } from '@/utils/types/data/data.types'
+import BarSnackbar from '@/components/bars/BarSnackbar/BarSnackbar.vue'
 
 import InputWithIcon from '@/components/input/InputWithIcon/InputWithIcon.vue'
 import InputList from '@/components/input/InputList/InputList.vue'
 
+import { InputName } from '@/components/inputs/text/InputName'
+import { InputSelectType } from '@/components/inputs/select/InputSelectType'
 import { InputChoseColor } from '@/modules/inputs/InputChoseColor'
 import { InputChoseIcon } from '@/modules/inputs/InputChoseIcon'
-import InputNameCategory from '@/components/inputs/text/InputNameCategory/InputNameCategory.vue'
-import { InputSelectType } from '@/components/inputs/select/InputSelectType'
-
 import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
 
-interface ICategoryData {
-  _id: string
-  user: string
-  name: string
-  type: 'expense' | 'income'
-  color: string
-  icon: string
-  createdAt: string
-  updatedAt: string
-  __v: number
-}
+import type { IFormFields } from '../types/formFields.types'
+import type { TTypeTransaction } from '@/utils/types/data/data.types'
 
-const getCategoryData = async (): Promise<ICategoryData> => {
-  return {
-    _id: '65393051366139b39ce5ecf1',
-    user: '65393051366139b39ce5eced',
-    name: 'Зарплата',
-    type: 'income',
-    color: '#e28909',
-    icon: 'icon-category-income',
-    __v: 0,
-    createdAt: '2023-10-25T15:12:17.712Z',
-    updatedAt: '2023-10-25T15:12:17.712Z'
-  }
-}
+import useVuelidate from '@vuelidate/core'
+import { ValidationErrors } from '@/utils/validations/validationErrors'
+import { rules } from '../helpers/useValidateForm'
 
-const categoryData = ref<ICategoryData | null>(null)
+import {
+  usePatchCategoryUpdate,
+  postErrorText,
+  serverValidateErrors
+} from '../services/useSubmitForm'
 
-const nameField = ref<string>('')
-const typeField = ref<ITypeTransaction | null>(null)
-const colorField = ref<IColor>()
-const iconField = ref<IIcon>()
+import { useGetOneCategory, category, isCategoryNotFound } from '../services/useGetOneCategory'
+
+const formData = reactive<IFormFields>({
+  name: '',
+  type: null,
+  color: null,
+  icon: null
+})
+
+const validation = useVuelidate(rules, formData, { $externalResults: serverValidateErrors })
+const validationErrorsManager = new ValidationErrors(validation)
+
+import { useRoute, useRouter } from 'vue-router'
+const route = useRoute()
+const router = useRouter()
 
 const submitForm = async () => {
-  const dataFormToString = `
-name: ${nameField.value}
-type: ${typeField.value}
-color: ${colorField.value?.value}
-icon: ${iconField.value?.value}
-  `
-  alert(dataFormToString)
+  validation.value.$clearExternalResults()
+  if (!(await validation.value.$validate())) return
+  if (route.params.categoryId && formData.name && formData.type && formData.color)
+    await usePatchCategoryUpdate(
+      route.params.categoryId as TTypeTransaction,
+      formData.name,
+      formData.type,
+      formData.color.value,
+      formData.icon?.value
+    )
 }
 
-const substituteValuesToForm = (data: ICategoryData) => {
-  nameField.value = data.name
-  typeField.value = data.type
-  // colorField.value = data.color
-  // iconField.value = data.icon
-}
+const isSnackbarOpen = ref<boolean>(false)
+watch(postErrorText, () => {
+  if (postErrorText.value) isSnackbarOpen.value = true
+})
 
 onMounted(async () => {
-  categoryData.value = await getCategoryData()
-  substituteValuesToForm(categoryData.value)
+  if (route.params.categoryId) {
+    await useGetOneCategory(route.params.categoryId as TTypeTransaction)
+  } else {
+    return router.replace({ name: 'NotFounded' })
+  }
+  if (isCategoryNotFound.value) {
+    return router.replace({ name: 'NotFounded' })
+  }
+
+  formData.name = category.value?.name
+  formData.type = category.value?.type
 })
 </script>
 
 <template>
-  <form class="form-add-category" @submit.prevent="submitForm">
+  <Teleport to="#app">
+    <BarSnackbar
+      :title="postErrorText"
+      :isOpen="isSnackbarOpen"
+      @clickButtonClose="isSnackbarOpen = false"
+    />
+  </Teleport>
+  <form class="form-update-category" @submit.prevent="submitForm" novalidate>
     <InputWithIcon>
       <template #input>
-        <InputNameCategory v-model:model-value="nameField" />
+        <InputName
+          v-model:modelValue="formData.name"
+          :hasError="validationErrorsManager.isInputHasErrors('name')"
+          :errors="validationErrorsManager.getInputErrors('name')"
+        />
       </template>
     </InputWithIcon>
     <InputWithIcon>
       <template #input>
-        <InputSelectType v-model:selected-value="typeField" />
+        <InputSelectType
+          v-model:modelValue="formData.type"
+          :hasError="validationErrorsManager.isInputHasErrors('type')"
+          :errors="validationErrorsManager.getInputErrors('type')"
+        />
       </template>
     </InputWithIcon>
-    <InputList header="Цвет">
+    <InputList header="Цвет" :errrors="validationErrorsManager.getInputErrors('color')">
       <template #content>
-        <InputChoseColor v-model:checked-value="colorField" :defaultColor="categoryData?.color" />
+        <InputChoseColor v-model:modelValue="formData.color" :defaultValue="category?.color" />
       </template>
     </InputList>
-    <InputList header="Иконка">
+    <InputList header="Иконка" :errrors="validationErrorsManager.getInputErrors('icon')">
       <template #content>
-        <InputChoseIcon v-model:checked-value="iconField" />
+        <InputChoseIcon v-model:modelValue="formData.icon" :defaultValue="category?.icon" />
       </template>
     </InputList>
     <SubmitFormButtons />
@@ -98,7 +116,7 @@ onMounted(async () => {
 </template>
 
 <style lang="scss" scoped>
-.form-add-category {
+.form-update-category {
   display: flex;
   flex-direction: column;
   align-items: end;

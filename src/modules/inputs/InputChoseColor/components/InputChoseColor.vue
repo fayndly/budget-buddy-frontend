@@ -21,8 +21,9 @@ const updateValueHandler = (): void => {
 }
 
 const getDefaultColor = computed(() => props.defaultValue)
+const colorManager = new GeneratorColors(colors, chosedColor, 9)
 
-watch(getDefaultColor, () => {
+const setDefaultColor = () => {
   if (props.defaultValue) {
     colorManager.clearWrapperColors()
     colorManager.addColor(props.defaultValue)
@@ -31,9 +32,12 @@ watch(getDefaultColor, () => {
 
     updateValueHandler()
   }
-})
+}
 
-const colorManager = new GeneratorColors(colors, chosedColor, 9)
+setDefaultColor()
+watch(getDefaultColor, () => {
+  setDefaultColor()
+})
 
 colorManager.generateColors()
 colorManager.setDefaultColor()

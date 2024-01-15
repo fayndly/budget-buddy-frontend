@@ -1,2 +1,4 @@
 import FormCategoryUpdate from './components/FormCategoryUpdate.vue'
-export { FormCategoryUpdate }
+import { isLoading } from './services/useSubmitForm'
+
+export { FormCategoryUpdate, isLoading }

@@ -21,7 +21,7 @@ const iconManager = new GeneratorIcons(icons, chosedIcon, 9)
 
 const getDefaultIcon = computed(() => props.defaultValue)
 
-watch(getDefaultIcon, () => {
+const setDefaultIcon = () => {
   if (props.defaultValue) {
     iconManager.clearWrapperIcons()
     iconManager.addIcon(props.defaultValue, props.defaultValue)
@@ -30,6 +30,10 @@ watch(getDefaultIcon, () => {
 
     updateValueHandler()
   }
+}
+setDefaultIcon()
+watch(getDefaultIcon, () => {
+  setDefaultIcon()
 })
 
 iconManager.generateIcons()
