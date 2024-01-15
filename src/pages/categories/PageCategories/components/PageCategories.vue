@@ -13,19 +13,6 @@ import TabsTypeCategories from '@/components/tabs/TabsTypeCategories/TabsTypeCat
     <TemplateSection>
       <router-view></router-view>
     </TemplateSection>
-    <md-fab
-      class="fab-add-categories"
-      variant="secondary"
-      @click="
-        $router.push({
-          name: 'CategoriesAdd',
-          query: {
-            type: 'income'
-          }
-        })
-      "
-      ><span slot="icon" class="material-icons-outlined">add</span></md-fab
-    >
   </TemplateMain>
 </template>
 
@@ -33,10 +20,5 @@ import TabsTypeCategories from '@/components/tabs/TabsTypeCategories/TabsTypeCat
 .main-categories {
   padding: 0px;
   height: 100px;
-}
-.fab-add-categories {
-  position: absolute;
-  bottom: calc(16px + 80px);
-  right: 16px;
 }
 </style>
