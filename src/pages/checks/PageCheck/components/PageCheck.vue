@@ -9,6 +9,7 @@ import ListDataInfo from '@/components/wrappers/ListDataInfo/ListDataInfo.vue'
 import type { ICheck, TTypeTransaction, TFormatListDataInfo } from '@/utils/types/data/data.types'
 
 import { useGetOneCheck, check, isCheckNotFound } from '../services/useGetOneCheck'
+import { useGetOneCurrency, currency } from '../services/useGetOneCurrency'
 
 const checkInfo = ref<TFormatListDataInfo | null>(null)
 
@@ -19,16 +20,20 @@ const getFormatArrayItems = (checkData: ICheck): TFormatListDataInfo => {
       value: checkData?.name
     },
     {
+      titleName: 'Валюта',
+      value: currency.value?.symbol
+    },
+    {
       titleName: 'Сумма',
-      value: checkData?.amount.toLocaleString('ru-RU')
+      value: checkData?.amount.toLocaleString(currency.value?.designation)
     },
     {
       titleName: 'Время создания',
-      value: new Date(checkData?.createdAt).toLocaleString('ru-RU')
+      value: new Date(checkData?.createdAt).toLocaleString()
     },
     {
       titleName: 'Время обновления',
-      value: new Date(checkData?.updatedAt).toLocaleString('ru-RU')
+      value: new Date(checkData?.updatedAt).toLocaleString()
     }
   ]
 }
@@ -44,6 +49,7 @@ onMounted(async () => {
     router.replace({ name: 'NotFounded' })
   }
   if (isCheckNotFound.value) router.replace({ name: 'NotFounded' })
+  if (check.value?.currency) await useGetOneCurrency(check.value?.currency)
 
   if (check.value) checkInfo.value = getFormatArrayItems(check.value)
 })

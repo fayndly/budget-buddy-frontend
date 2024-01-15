@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IPropsListDataInfo } from './props.types.ts'
+import type { IPropsListDataInfo } from './props.types'
 defineProps<IPropsListDataInfo>()
 </script>
 

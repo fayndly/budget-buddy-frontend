@@ -18,8 +18,8 @@ import {
 } from '../services/useGetOneTransaction'
 
 import { check, useGetOneCheck } from '../services/useGetOneCheck'
-
 import { category, useGetOneCategory } from '../services/useGetOneCategory'
+import { currency, useGetOneCurrency } from '../services/useGetOneCurrency'
 
 import { translateType } from '@/utils/helpers'
 
@@ -33,8 +33,12 @@ const getFormatArrayItems = (transactionData: ITransaction): TFormatListDataInfo
       value: translateType[transactionData?.type]
     },
     {
+      titleName: 'Валюта',
+      value: currency.value?.symbol
+    },
+    {
       titleName: 'Сумма',
-      value: transactionData?.amount.toLocaleString('ru-RU')
+      value: transactionData?.amount.toLocaleString(currency.value?.designation)
     },
     {
       titleName: 'Счет',
@@ -46,15 +50,15 @@ const getFormatArrayItems = (transactionData: ITransaction): TFormatListDataInfo
       value: category.value?.name,
       valueLinkTo: { name: 'Category', params: { categoryId: category.value?.id } }
     },
-    { titleName: 'Время', value: new Date(transactionData?.time).toLocaleString('ru-RU') },
+    { titleName: 'Время', value: new Date(transactionData?.time).toLocaleString() },
     { titleName: 'Описание', value: transactionData?.description },
     {
       titleName: 'Время создания',
-      value: new Date(transactionData?.createdAt).toLocaleString('ru-RU')
+      value: new Date(transactionData?.createdAt).toLocaleString()
     },
     {
       titleName: 'Время обновления',
-      value: new Date(transactionData?.updatedAt).toLocaleString('ru-RU')
+      value: new Date(transactionData?.updatedAt).toLocaleString()
     }
   ]
 
@@ -81,6 +85,7 @@ onMounted(async () => {
   if (transaction.value?.check) await useGetOneCheck(transaction.value.check as TTypeTransaction)
   if (transaction.value?.category)
     await useGetOneCategory(transaction.value.category as TTypeTransaction)
+  if (transaction.value?.currency) await useGetOneCurrency(transaction.value?.currency)
 
   if (transaction.value) transactionInfo.value = getFormatArrayItems(transaction.value)
 })
