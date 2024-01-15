@@ -4,6 +4,7 @@
 // import '@material/web/button/filled-tonal-button'
 
 import 'material-icons/iconfont/material-icons.css'
+// import '@material/web/all'
 import AppLayout from '@/layouts/AppLayout.vue'
 
 // const schema = ref<'dark' | 'light'>('dark')

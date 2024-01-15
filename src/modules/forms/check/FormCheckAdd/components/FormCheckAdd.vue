@@ -76,7 +76,7 @@ onMounted(async () => {
     <InputWithIcon icon="money">
       <template #input>
         <InputSelectCurrency
-          v-model:selectedValue="formData.currency"
+          v-model:modelValue="formData.currency"
           :values="currencies"
           :hasError="validationErrorsManager.isInputHasErrors('currency')"
           :errors="validationErrorsManager.getInputErrors('currency')"

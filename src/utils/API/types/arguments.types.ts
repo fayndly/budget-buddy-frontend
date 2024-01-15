@@ -17,9 +17,9 @@ export interface IArgumentsGetCategories {
 export interface IArgumentsPostCheckAdd {
   name: string
   amount: number
-  currency: string | null
+  currency: TMongoObjectId
 }
-export interface IArgumentsPatchCheckUpdate extends IArgumentsPostCheckAdd {}
+export interface IArgumentsPatchCheckUpdate extends Omit<IArgumentsPostCheckAdd, 'amount'> {}
 
 export interface IArgumentsGetCategory {
   id: TMongoObjectId

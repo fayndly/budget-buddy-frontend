@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import '@material/web/textfield/outlined-text-field'
+
 import { staticAttributesInputName } from '../constants/staticAttributes'
 import type { IPropsInputName } from '../types/props.types'
 

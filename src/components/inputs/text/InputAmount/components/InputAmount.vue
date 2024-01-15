@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import '@material/web/textfield/outlined-text-field'
+
 import { staticAttributesInputAmount } from '../constants/attributes'
 import type { IPropsInputAmount } from '../types/props.types'
 
 withDefaults(defineProps<IPropsInputAmount>(), {
-  label: 'Сумма'
+  label: 'Сумма',
+  isDisabled: false
 })
 defineEmits(['update:modelValue'])
 </script>
@@ -11,6 +14,7 @@ defineEmits(['update:modelValue'])
 <template>
   <md-outlined-text-field
     v-bind="staticAttributesInputAmount"
+    :disabled="isDisabled"
     :label="label"
     :prefix-text="prefixText"
     :suffix-text="suffixText"

@@ -68,5 +68,3 @@ watch(postErrorText, () => {
     @closeModal="closeModalHandler"
   />
 </template>
-
-<style lang="scss"></style>

@@ -1,113 +1,108 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { reactive, ref, watch, onMounted, computed } from 'vue'
+
+import BarSnackbar from '@/components/bars/BarSnackbar/BarSnackbar.vue'
 
 import InputWithIcon from '@/components/input/InputWithIcon/InputWithIcon.vue'
 
+import { InputName } from '@/components/inputs/text/InputName'
 import { InputAmount } from '@/components/inputs/text/InputAmount'
 import { InputSelectCurrency } from '@/components/inputs/select/InputSelectCurrency'
-import InputName from './custom/InputName/InputName.vue'
-
 import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
 
-import type { ICurrency } from '@/utils/types/interfaces'
+import type { IFormFields } from '../types/formFields.types'
+import type { TTypeTransaction, ICurrency } from '@/utils/types/data/data.types'
 
-const currencies: ICurrency[] = [
-  {
-    name: 'RUB',
-    id: '123',
-    symbol: '₽'
-  },
-  {
-    name: 'EUR',
-    id: '234',
-    symbol: '€'
-  },
-  {
-    name: 'USD',
-    id: '345',
-    symbol: '$'
-  }
-]
-interface ICheckData {
-  transactions: {
-    expense: string[]
-    income: string[]
-  }
-  _id: string
-  user: string
-  name: string
-  amount: number
-  currency: {
-    id: string
-    name: string
-    symbol: string
-  }
-  createdAt: string
-  updatedAt: string
-  __v: number
-}
+import useVuelidate from '@vuelidate/core'
+import { ValidationErrors } from '@/utils/validations/validationErrors'
+import { rules } from '../helpers/useValidateForm'
 
-const checkData = ref<ICheckData | null>(null)
+import { usePatchCheckUpdate, postErrorText, serverValidateErrors } from '../services/useSubmitForm'
 
-const getCheckData = async (): Promise<ICheckData> => {
-  return {
-    transactions: {
-      expense: ['653fe533ab8e6a94a540065b', '658429b3de78d0a1e535ecbe'],
-      income: []
-    },
-    _id: '653fe517ab8e6a94a540064e',
-    user: '65393051366139b39ce5eced',
-    name: 'сбер',
-    amount: -24000,
-    currency: {
-      id: '123',
-      name: 'RUB',
-      symbol: '₽'
-    },
-    createdAt: '2023-10-30T17:17:11.217Z',
-    updatedAt: '2023-12-21T12:04:03.853Z',
-    __v: 9
-  }
-}
+import { getById } from '@/utils/helpers/getById'
 
-const nameField = ref<string>('')
-const currencyField = ref<ICurrency>()
-const countField = ref<number>(0)
+import { useGetOneCheck, check, isCheckNotFound } from '../services/useGetOneCheck'
+import { useGetCurrencies, currencies } from '../services/useGetCurrencies'
+
+const formData = reactive<IFormFields>({
+  name: '',
+  currency: null,
+  amount: 0
+})
+
+const validation = useVuelidate(rules, formData, { $externalResults: serverValidateErrors })
+const validationErrorsManager = new ValidationErrors(validation)
+
+import { useRoute, useRouter } from 'vue-router'
+const route = useRoute()
+const router = useRouter()
 
 const submitForm = async () => {
-  const dataFormToString = `
-name: ${nameField.value}
-count: ${countField.value}
-currency: ${currencyField.value?.id}
-  `
-  alert(dataFormToString)
+  validation.value.$clearExternalResults()
+  if (!(await validation.value.$validate())) return
+  if (route.params.checkId && formData.name && formData.currency)
+    await usePatchCheckUpdate(
+      route.params.checkId as TTypeTransaction,
+      formData.name,
+      formData.currency
+    )
 }
 
-const substituteValuesToForm = (data: ICheckData) => {
-  nameField.value = data.name
-  currencyField.value = data.currency
-  countField.value = data.amount
-}
+const isSnackbarOpen = ref<boolean>(false)
+watch(postErrorText, () => {
+  if (postErrorText.value) isSnackbarOpen.value = true
+})
+
+const getActiveCurrency = computed(() => {
+  if (formData.currency) {
+    return getById<ICurrency>(currencies, formData.currency)
+  }
+  return null
+})
 
 onMounted(async () => {
-  checkData.value = await getCheckData()
-  substituteValuesToForm(checkData.value)
+  if (route.params.checkId) {
+    await useGetOneCheck(route.params.checkId as TTypeTransaction)
+  } else {
+    return router.replace({ name: 'NotFounded' })
+  }
+  if (isCheckNotFound.value) {
+    return router.replace({ name: 'NotFounded' })
+  }
+
+  await useGetCurrencies()
+
+  formData.name = check.value?.name
+  formData.currency = check.value?.currency
+  formData.amount = check.value?.amount
 })
 </script>
 
 <template>
-  <form class="form-add-check" @submit.prevent="submitForm">
+  <Teleport to="#app">
+    <BarSnackbar
+      :title="postErrorText"
+      :isOpen="isSnackbarOpen"
+      @clickButtonClose="isSnackbarOpen = false"
+    />
+  </Teleport>
+  <form class="form-update-check" @submit.prevent="submitForm" novalidate>
     <InputWithIcon>
       <template #input>
-        <InputName v-model:model-value="nameField" />
+        <InputName
+          v-model:modelValue="formData.name"
+          :hasError="validationErrorsManager.isInputHasErrors('name')"
+          :errors="validationErrorsManager.getInputErrors('name')"
+        />
       </template>
     </InputWithIcon>
     <InputWithIcon icon="money">
       <template #input>
         <InputSelectCurrency
-          v-model:checked-value="currencyField"
-          :currencies="currencies"
-          :defaultValue="currencies[0]"
+          v-model:modelValue="formData.currency"
+          :values="currencies"
+          :hasError="validationErrorsManager.isInputHasErrors('currency')"
+          :errors="validationErrorsManager.getInputErrors('currency')"
         />
       </template>
     </InputWithIcon>
@@ -115,8 +110,11 @@ onMounted(async () => {
       <template #input>
         <InputAmount
           label="Первоначальная сумма"
-          v-model:model-value="countField"
-          :prefix="currencyField?.symbol"
+          :isDisabled="true"
+          v-model:modelValue="formData.amount"
+          :suffixText="getActiveCurrency?.symbol"
+          :hasError="validationErrorsManager.isInputHasErrors('amount')"
+          :errors="validationErrorsManager.getInputErrors('amount')"
         />
       </template>
     </InputWithIcon>
@@ -125,7 +123,7 @@ onMounted(async () => {
 </template>
 
 <style lang="scss" scoped>
-.form-add-check {
+.form-update-check {
   display: flex;
   flex-direction: column;
   align-items: end;

@@ -1,2 +1,4 @@
 import FormCheckUpdate from './components/FormCheckUpdate.vue'
-export { FormCheckUpdate }
+import { isLoading } from './services/useSubmitForm'
+
+export { FormCheckUpdate, isLoading }

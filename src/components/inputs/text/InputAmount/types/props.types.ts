@@ -4,4 +4,5 @@ export interface IPropsInputAmount extends IPropsInput<number> {
   prefixText?: string
   suffixText?: string
   label?: string
+  isDisabled?: boolean
 }
