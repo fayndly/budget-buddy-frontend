@@ -36,6 +36,8 @@ import { checks, useGetChecks } from '../services/useGetChecks'
 
 import { useRoute, useRouter } from 'vue-router'
 
+const emits = defineEmits(['updateType'])
+
 const formData = reactive<IFormFields>({
   name: '',
   type: null,
@@ -51,7 +53,6 @@ const validation = useVuelidate(rules, formData, { $externalResults: serverValid
 const validationErrorsManager = new ValidationErrors(validation)
 
 const getType = computed(() => formData.type)
-const emits = defineEmits(['updateType'])
 watch(getType, async () => {
   if (formData.type) {
     await useGetCategories(formData.type)

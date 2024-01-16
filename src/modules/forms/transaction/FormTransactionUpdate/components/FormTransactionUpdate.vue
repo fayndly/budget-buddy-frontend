@@ -54,6 +54,13 @@ const formData = reactive<IFormFields>({
 const validation = useVuelidate(rules, formData, { $externalResults: serverValidateErrors })
 const validationErrorsManager = new ValidationErrors(validation)
 
+const getType = computed(() => formData.type)
+watch(getType, async () => {
+  if (formData.type) {
+    await useGetCategories(formData.type)
+  }
+})
+
 import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const router = useRouter()
@@ -109,7 +116,6 @@ onMounted(async () => {
 
   await useGetCurrencies()
   await useGetChecks()
-  await useGetCategories(formData.type)
 
   formData.name = transaction.value?.name
   formData.type = transaction.value?.type
