@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 
 import type { IDate } from '@/utils/types/data/data.types'
 import type { IPropsInputChoseDate } from '../types/props.types'
@@ -10,18 +10,39 @@ import InputRadioDate from '@/components/inputs/radio/InputRadioDate/InputRadioD
 import DialogSetDate from '@/components/dialogs/DialogSetDate/DialogSetDate.vue'
 import ButtonAddCustomDate from './custom/ButtonAddCustomDate/ButtonAddCustomDate.vue'
 
+const props = defineProps<IPropsInputChoseDate>()
+const emit = defineEmits(['update:modelValue'])
+
 const dates = ref<IDate[]>([])
 const dateField = ref<IDate | null>(null)
 
-const props = defineProps<IPropsInputChoseDate>()
-const emit = defineEmits(['update:modelValue'])
-watch(dateField, () => {
+const updateValueHandler = (): void => {
   emit('update:modelValue', dateField.value?.date)
-})
+}
 
 const dateManager = new DateController(dateField, dates)
+
+const getDefaultDate = computed(() => props.defaultValue)
+
+const setDefaultDate = () => {
+  if (props.defaultValue) {
+    dateManager.clearWrapperDates()
+    dateManager.addDate(new Date(props.defaultValue), null)
+    dateManager.generateDates()
+    dateManager.setDefaultDate()
+
+    updateValueHandler()
+  }
+}
+
+setDefaultDate()
+watch(getDefaultDate, () => {
+  setDefaultDate()
+})
+
 dateManager.generateDates()
-dateManager.setDefaultValue()
+dateManager.setDefaultDate()
+updateValueHandler()
 
 const ButtonAddCustomDateHandler = () => {
   modalSetDateIsOpen.value = true
@@ -48,11 +69,12 @@ const closeModalHandler = () => {
       <InputRadioDate
         name="date"
         :id="date.id"
-        :value="date.date.toLocaleDateString('ru-RU')"
+        :value="date.date.toLocaleDateString()"
         :date="date.date"
         :header="date.text"
-        :checked="date.id === dateField?.id"
         v-model:modelValue="dateField"
+        :checked="date.id === dateField?.id"
+        @change="updateValueHandler"
       />
     </li>
     <li>

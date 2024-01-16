@@ -61,11 +61,11 @@ const submitIconHandler = (icon: string) => {
   <ul class="list-icons">
     <li v-for="icon in icons" :key="icon.id">
       <InputRadioIcon
+        name="icon"
         :id="icon.id"
         :value="icon.value"
         :iconName="icon.iconName"
         :hasText="icon.value === null"
-        name="icon"
         v-model:modelValue="chosedIcon"
         :checked="icon.id === chosedIcon?.id"
         @change="updateValueHandler"

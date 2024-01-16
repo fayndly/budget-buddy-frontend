@@ -18,6 +18,7 @@ const updateValueHandler = (): void => {
     <input
       class="radio-icon__input"
       type="radio"
+      required
       :name="name"
       :id="id"
       :value="value"

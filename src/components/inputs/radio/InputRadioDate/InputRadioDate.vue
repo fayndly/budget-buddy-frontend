@@ -20,10 +20,10 @@ const getWithPrefixZero = (time: number): string => {
       class="radio-date__input"
       type="radio"
       required
-      :checked="checked"
+      :name="name"
       :id="id"
       :value="value"
-      :name="name"
+      :checked="checked"
       @change="updateValueHandler"
     />
     <span class="radio-date__fake-input">

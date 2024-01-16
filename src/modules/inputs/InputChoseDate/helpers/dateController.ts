@@ -14,7 +14,7 @@ export class DateController {
     this.dateChosedWrapper.value = value
   }
 
-  setDefaultValue(): void {
+  setDefaultDate(): void {
     if (this.datesWrapper.value?.length) {
       this.setValue(this.datesWrapper.value[0])
     }
@@ -22,6 +22,22 @@ export class DateController {
 
   addValue(value: IDate): void {
     this.datesWrapper.value.push(value)
+  }
+
+  clearWrapperDates() {
+    this.datesWrapper.value.length = 0
+  }
+
+  addDate(date: Date, text: string | null) {
+    if (!text) {
+      text = date.getFullYear().toString()
+    }
+    const ddate: IDate = {
+      date,
+      text,
+      id: 'date_' + (this.datesWrapper.value.length + 1)
+    }
+    this.datesWrapper.value.push(ddate)
   }
 
   generateDates(): void {
