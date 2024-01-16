@@ -4,6 +4,8 @@ import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
 import TemplateMain from '@/templates/TemplateMain.vue'
 import TemplateSection from '@/templates/TemplateSection.vue'
 
+import LoaderMainSection from '@/components/loaders/LoaderMainSection/LoaderMainSection.vue'
+
 import ListDataInfo from '@/components/wrappers/ListDataInfo/ListDataInfo.vue'
 
 import type {
@@ -17,6 +19,8 @@ import { useGetOneCategory, category, isCategoryNotFound } from '../services/use
 import { translateType } from '@/utils/helpers'
 
 const categoryInfo = ref<TFormatListDataInfo | null>(null)
+
+const isDataLoading = ref<boolean>(false)
 
 const getFormatArrayItems = (categoryData: ICategory): TFormatListDataInfo => {
   return [
@@ -52,6 +56,8 @@ const route = useRoute()
 const router = useRouter()
 
 onMounted(async () => {
+  isDataLoading.value = true
+
   if (route.params.categoryId) {
     await useGetOneCategory(route.params.categoryId as TTypeTransaction)
   } else {
@@ -62,6 +68,8 @@ onMounted(async () => {
   }
 
   if (category.value) categoryInfo.value = getFormatArrayItems(category.value)
+
+  isDataLoading.value = false
 })
 </script>
 
@@ -74,6 +82,7 @@ onMounted(async () => {
     "
   />
   <TemplateMain>
+    <LoaderMainSection v-if="isDataLoading" />
     <TemplateSection>
       <ListDataInfo :values="categoryInfo" />
     </TemplateSection>

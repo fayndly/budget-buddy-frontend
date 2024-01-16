@@ -10,6 +10,7 @@ export const isTransactionNotFound = ref<boolean>(false)
 
 export const useGetOneTransaction = async (id: TTypeTransaction) => {
   isTransactionNotFound.value = false
+
   return await apiManager
     .getTransaction(id)
     .then((response) => {

@@ -4,6 +4,8 @@ import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
 import TemplateMain from '@/templates/TemplateMain.vue'
 import TemplateSection from '@/templates/TemplateSection.vue'
 
+import LoaderMainSection from '@/components/loaders/LoaderMainSection/LoaderMainSection.vue'
+
 import ListDataInfo from '@/components/wrappers/ListDataInfo/ListDataInfo.vue'
 
 import type { ICheck, TTypeTransaction, TFormatListDataInfo } from '@/utils/types/data/data.types'
@@ -12,6 +14,8 @@ import { useGetOneCheck, check, isCheckNotFound } from '../services/useGetOneChe
 import { useGetOneCurrency, currency } from '../services/useGetOneCurrency'
 
 const checkInfo = ref<TFormatListDataInfo | null>(null)
+
+const isDataLoading = ref<boolean>(false)
 
 const getFormatArrayItems = (checkData: ICheck): TFormatListDataInfo => {
   return [
@@ -43,6 +47,8 @@ const route = useRoute()
 const router = useRouter()
 
 onMounted(async () => {
+  isDataLoading.value = true
+
   if (route.params.checkId) {
     await useGetOneCheck(route.params.checkId as TTypeTransaction)
   } else {
@@ -52,6 +58,8 @@ onMounted(async () => {
   if (check.value?.currency) await useGetOneCurrency(check.value?.currency)
 
   if (check.value) checkInfo.value = getFormatArrayItems(check.value)
+
+  isDataLoading.value = false
 })
 </script>
 
@@ -62,6 +70,7 @@ onMounted(async () => {
     @clickButtonEdit="$router.push({ name: 'ChecksUpdate', params: { checkId: check?.id } })"
   />
   <TemplateMain>
+    <LoaderMainSection v-if="isDataLoading" />
     <TemplateSection>
       <ListDataInfo :values="checkInfo" />
     </TemplateSection>

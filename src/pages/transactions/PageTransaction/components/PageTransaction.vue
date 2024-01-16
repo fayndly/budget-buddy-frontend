@@ -4,6 +4,8 @@ import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
 import TemplateMain from '@/templates/TemplateMain.vue'
 import TemplateSection from '@/templates/TemplateSection.vue'
 
+import LoaderMainSection from '@/components/loaders/LoaderMainSection/LoaderMainSection.vue'
+
 import ListDataInfo from '@/components/wrappers/ListDataInfo/ListDataInfo.vue'
 import type {
   ITransaction,
@@ -24,6 +26,8 @@ import { currency, useGetOneCurrency } from '../services/useGetOneCurrency'
 import { translateType } from '@/utils/helpers'
 
 const transactionInfo = ref<TFormatListDataInfo | null>(null)
+
+const isDataLoading = ref<boolean>(false)
 
 const getFormatArrayItems = (transactionData: ITransaction): TFormatListDataInfo => {
   const FormatListDataInfo = [
@@ -73,6 +77,7 @@ const route = useRoute()
 const router = useRouter()
 
 onMounted(async () => {
+  isDataLoading.value = true
   if (route.params.transactionId) {
     await useGetOneTransaction(route.params.transactionId as TTypeTransaction)
   } else {
@@ -88,6 +93,7 @@ onMounted(async () => {
   if (transaction.value?.currency) await useGetOneCurrency(transaction.value?.currency)
 
   if (transaction.value) transactionInfo.value = getFormatArrayItems(transaction.value)
+  isDataLoading.value = false
 })
 </script>
 
@@ -100,6 +106,7 @@ onMounted(async () => {
     "
   />
   <TemplateMain>
+    <LoaderMainSection v-if="isDataLoading" />
     <TemplateSection>
       <ListDataInfo :values="transactionInfo" />
     </TemplateSection>
