@@ -28,14 +28,14 @@ export class DateController {
     this.datesWrapper.value.length = 0
   }
 
-  addDate(date: Date, text: string | null) {
+  addDate(date: Date, text: string | null = null, id: string | null = null) {
     if (!text) {
       text = date.getFullYear().toString()
     }
     const ddate: IDate = {
       date,
       text,
-      id: 'date_' + (this.datesWrapper.value.length + 1)
+      id: id || 'date_' + (this.datesWrapper.value.length + 1)
     }
     this.datesWrapper.value.push(ddate)
   }
@@ -67,6 +67,8 @@ export class DateController {
       }
     ]
 
-    this.datesWrapper.value.push(...dates)
+    if (this.datesWrapper.value.length <= 1) {
+      this.datesWrapper.value.push(...dates)
+    }
   }
 }

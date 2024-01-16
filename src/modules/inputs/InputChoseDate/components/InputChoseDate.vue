@@ -27,7 +27,7 @@ const getDefaultDate = computed(() => props.defaultValue)
 const setDefaultDate = () => {
   if (props.defaultValue) {
     dateManager.clearWrapperDates()
-    dateManager.addDate(new Date(props.defaultValue), null)
+    dateManager.addDate(new Date(props.defaultValue))
     dateManager.generateDates()
     dateManager.setDefaultDate()
 
