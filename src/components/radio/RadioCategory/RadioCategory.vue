@@ -1,18 +1,12 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-
 import type { IPropsRadioCategory } from './types/props'
 
 const props = defineProps<IPropsRadioCategory>()
-
 const emit = defineEmits(['update:modelValue'])
+
 function updateValueHandler(): void {
   emit('update:modelValue', props.value)
 }
-
-const isChecked = computed(() => {
-  return props.modelValue === props.value
-})
 </script>
 
 <template>
@@ -20,13 +14,14 @@ const isChecked = computed(() => {
     <input
       class="radio-category__input"
       type="radio"
+      required
       :name="name"
-      :value="value"
       :id="id"
-      :checked="isChecked"
+      :value="value"
+      :checked="checked"
       @change="updateValueHandler"
     />
-    <span class="radio-category__fake-input" :style="`background-color: ${color}`">
+    <span class="radio-category__fake-input" :style="{ 'background-color': color }">
       <span v-if="icon" class="radio-category__icon material-icons-outlined">{{ icon }}</span>
       <span class="radio-category__text label-large">{{ nameCategory }}</span>
     </span>

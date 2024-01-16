@@ -64,8 +64,8 @@ const submitForm = async () => {
   if (formData.type && formData.currency && formData.check && formData.category && formData.time)
     await usePatchTransactionUpdate(
       route.params.transactionId as TTypeTransaction,
-      formData.name,
       formData.type,
+      formData.name,
       formData.currency,
       formData.amount,
       formData.check,

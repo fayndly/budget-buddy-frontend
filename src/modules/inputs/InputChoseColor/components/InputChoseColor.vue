@@ -71,7 +71,7 @@ const submitColorHandler = (color: string) => {
         :value="color.value"
         v-model:modelValue="chosedColor"
         :checked="color.id === chosedColor?.id"
-        @input="updateValueHandler"
+        @change="updateValueHandler"
       />
     </li>
     <li>

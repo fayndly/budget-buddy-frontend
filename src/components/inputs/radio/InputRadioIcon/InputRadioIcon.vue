@@ -18,11 +18,11 @@ const updateValueHandler = (): void => {
     <input
       class="radio-icon__input"
       type="radio"
-      :name="props.name"
-      :id="props.id"
-      :value="props.value"
-      :checked="props.checked"
-      @input="updateValueHandler"
+      :name="name"
+      :id="id"
+      :value="value"
+      :checked="checked"
+      @change="updateValueHandler"
     />
     <span
       v-if="!hasText"

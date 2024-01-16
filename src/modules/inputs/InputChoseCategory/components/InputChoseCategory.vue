@@ -6,11 +6,12 @@ import ButtonShowMore from './custom/ButtonShowMore/ButtonShowMore.vue'
 import ButtonAddCategory from './custom/ButtonAddCategory/ButtonAddCategory.vue'
 
 import type { IPropsInputChoseCategory } from '../types/props.types'
+import type { TMongoObjectId } from '@/utils/types/data/data.types'
 
 const props = defineProps<IPropsInputChoseCategory>()
 const emit = defineEmits(['update:modelValue', 'clickButtonAddCategory'])
 
-const chosedCategory = ref<string | null>(null)
+const chosedCategory = ref<TMongoObjectId | null>(null)
 
 const updateValueHandler = (): void => {
   emit('update:modelValue', chosedCategory.value)
@@ -18,15 +19,15 @@ const updateValueHandler = (): void => {
 
 const getDefaultCategory = computed(() => props.defaultValue)
 
-watch(chosedCategory, () => {
-  if (chosedCategory.value) updateValueHandler()
-})
-
-watch(getDefaultCategory, () => {
+const setDefaultCategory = () => {
   if (props.defaultValue) {
     chosedCategory.value = props.defaultValue
     updateValueHandler()
   }
+}
+setDefaultCategory()
+watch(getDefaultCategory, () => {
+  setDefaultCategory()
 })
 
 const isMoreCategoriesShow = ref<boolean>(false)
@@ -49,7 +50,9 @@ const clickButtonAddCategoryHandler = () => {
         :icon="category.icon"
         :color="category.color"
         :nameCategory="category.name"
+        :checked="category.id === chosedCategory"
         v-model:modelValue="chosedCategory"
+        @change="updateValueHandler"
       />
     </li>
     <li>

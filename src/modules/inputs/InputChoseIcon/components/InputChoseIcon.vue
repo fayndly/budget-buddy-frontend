@@ -68,7 +68,7 @@ const submitIconHandler = (icon: string) => {
         name="icon"
         v-model:modelValue="chosedIcon"
         :checked="icon.id === chosedIcon?.id"
-        @input="updateValueHandler"
+        @change="updateValueHandler"
       />
     </li>
     <li>

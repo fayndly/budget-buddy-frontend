@@ -15,11 +15,11 @@ function updateValueHandler(): void {
       class="radio-color__input"
       type="radio"
       required
-      :checked="props.checked"
-      :id="props.id"
-      :value="props.value"
-      :name="props.name"
-      @input="updateValueHandler"
+      :id="id"
+      :value="value"
+      :name="name"
+      :checked="checked"
+      @change="updateValueHandler"
     />
     <span class="radio-color__fake-input" :style="{ 'background-color': value }"></span>
   </label>
