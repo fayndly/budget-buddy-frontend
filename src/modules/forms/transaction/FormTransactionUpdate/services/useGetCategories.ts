@@ -7,9 +7,11 @@ import type { IDataCategory } from '@/utils/types/data/serverData.types'
 
 export const categories = ref<ICategory[]>([])
 
-export const useGetCategories = async (type: TTypeTransaction | null) => {
+export const useGetCategories = async (type?: TTypeTransaction | null) => {
+  const params: { type?: TTypeTransaction } = {}
+  if (type) params.type = type
   return await apiManager
-    .getCategories({ type })
+    .getCategories(params)
     .then((response) => {
       categories.value = clearData<IDataCategory[], ICategory[]>(response.data)
     })

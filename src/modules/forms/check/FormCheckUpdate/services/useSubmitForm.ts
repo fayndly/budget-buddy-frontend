@@ -3,7 +3,7 @@ import type { AxiosError } from 'axios'
 import { ref, reactive } from 'vue'
 
 import type { TErrorServer } from '@/utils/types/errors'
-import type { TTypeTransaction, TMongoObjectId } from '@/utils/types/data/data.types'
+import type { TMongoObjectId } from '@/utils/types/data/data.types'
 
 import { getFormatValidateErrorsServer } from '@/utils/validations/validationFormat'
 
@@ -15,7 +15,7 @@ export const serverValidateErrors = reactive({})
 export const usePatchCheckUpdate = async (
   id: TMongoObjectId,
   name: string,
-  currency: TTypeTransaction
+  currency: TMongoObjectId
 ): Promise<void> => {
   isLoading.value = true
   postErrorText.value = null

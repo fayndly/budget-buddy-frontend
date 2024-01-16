@@ -48,6 +48,6 @@ export interface IArgumentsPostTransactionAdd {
   check: TMongoObjectId
   category: TMongoObjectId
   time: string
-  description?: string | null
+  description?: string
 }
 export interface IArgumentsPatchTransactionUpdate extends IArgumentsPostTransactionAdd {}

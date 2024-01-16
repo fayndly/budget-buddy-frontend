@@ -72,9 +72,11 @@ onMounted(async () => {
 
   await useGetCurrencies()
 
-  formData.name = check.value?.name
-  formData.currency = check.value?.currency
-  formData.amount = check.value?.amount
+  if (check.value) {
+    formData.name = check.value.name
+    formData.currency = check.value.currency
+    formData.amount = check.value.amount
+  }
 })
 </script>
 

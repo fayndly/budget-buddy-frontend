@@ -20,7 +20,7 @@ export const usePostTransactionAdd = async (
   check: TMongoObjectId,
   category: TMongoObjectId,
   time: string,
-  description?: string | null
+  description?: string
 ): Promise<void> => {
   isLoading.value = true
   postErrorText.value = null
@@ -32,9 +32,8 @@ export const usePostTransactionAdd = async (
     check,
     category,
     time,
-    description
+    description: description || ''
   }
-  if (!description?.length) delete params.description
   await apiManager
     .postTransactionAdd(params)
     .then((response) => {

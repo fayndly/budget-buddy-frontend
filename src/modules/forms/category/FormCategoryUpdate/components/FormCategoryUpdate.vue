@@ -44,13 +44,13 @@ const router = useRouter()
 const submitForm = async () => {
   validation.value.$clearExternalResults()
   if (!(await validation.value.$validate())) return
-  if (route.params.categoryId && formData.name && formData.type && formData.color)
+  if (route.params.categoryId && formData.name && formData.type && formData.color && formData.icon)
     await usePatchCategoryUpdate(
       route.params.categoryId as TTypeTransaction,
       formData.name,
       formData.type,
       formData.color.value,
-      formData.icon?.value
+      formData.icon.value
     )
 }
 
@@ -65,12 +65,12 @@ onMounted(async () => {
   } else {
     return router.replace({ name: 'NotFounded' })
   }
-  if (isCategoryNotFound.value) {
-    return router.replace({ name: 'NotFounded' })
-  }
+  if (isCategoryNotFound.value) return router.replace({ name: 'NotFounded' })
 
-  formData.name = category.value?.name
-  formData.type = category.value?.type
+  if (category.value) {
+    formData.name = category.value.name
+    formData.type = category.value.type
+  }
 })
 </script>
 

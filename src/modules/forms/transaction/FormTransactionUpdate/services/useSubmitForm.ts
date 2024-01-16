@@ -21,12 +21,20 @@ export const usePatchTransactionUpdate = async (
   check: TMongoObjectId,
   category: TMongoObjectId,
   time: string,
-  description?: string | null
+  description?: string
 ): Promise<void> => {
   isLoading.value = true
   postErrorText.value = null
-  const params = { type, name, currency, amount, check, category, time, description }
-
+  const params = {
+    type,
+    name,
+    currency,
+    amount,
+    check,
+    category,
+    time,
+    description: description || ''
+  }
   await apiManager
     .patchTransactionUpdate(params, id)
     .then((response) => {

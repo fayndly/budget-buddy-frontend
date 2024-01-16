@@ -68,6 +68,7 @@ const router = useRouter()
 const submitForm = async () => {
   validation.value.$clearExternalResults()
   if (!(await validation.value.$validate())) return
+
   if (formData.type && formData.currency && formData.check && formData.category && formData.time)
     await usePatchTransactionUpdate(
       route.params.transactionId as TTypeTransaction,
@@ -77,7 +78,7 @@ const submitForm = async () => {
       formData.amount,
       formData.check,
       formData.category,
-      formData.time,
+      formData.time.toISOString(),
       formData.description
     )
 }
@@ -95,7 +96,7 @@ const getActiveCurrency = computed(() => {
 })
 
 const clickButtonAddCategoryHandler = () => {
-  router.push({ name: 'CategoryAdd', query: { type: formData.type } })
+  router.push({ name: 'CategoriesAdd', query: { type: formData.type } })
 }
 
 const getSumbolFromType = computed(() => {
@@ -117,12 +118,14 @@ onMounted(async () => {
   await useGetCurrencies()
   await useGetChecks()
 
-  formData.name = transaction.value?.name
-  formData.type = transaction.value?.type
-  formData.currency = transaction.value?.currency
-  formData.amount = transaction.value?.amount
-  formData.check = transaction.value?.check
-  formData.description = transaction.value?.description
+  if (transaction.value) {
+    formData.name = transaction.value.name
+    formData.type = transaction.value.type
+    formData.currency = transaction.value.currency
+    formData.amount = transaction.value.amount
+    formData.check = transaction.value.check
+    formData.description = transaction.value.description
+  }
 })
 </script>
 
