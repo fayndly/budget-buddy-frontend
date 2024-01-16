@@ -61,7 +61,7 @@ watch(postErrorText, () => {
       <TitleHeader title="Транзакция" icon="edit" />
     </TemplateSection>
     <TemplateSection>
-      <!-- <FormTransactionUpdate /> -->
+      <FormTransactionUpdate />
     </TemplateSection>
   </TemplateMain>
   <DialogConfirmDeletion

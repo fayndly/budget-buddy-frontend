@@ -14,12 +14,18 @@ export const serverValidateErrors = reactive({})
 
 export const usePatchTransactionUpdate = async (
   id: TMongoObjectId,
+  type: TTypeTransaction,
   name: string,
-  currency: TTypeTransaction
+  currency: TMongoObjectId,
+  amount: number,
+  check: TMongoObjectId,
+  category: TMongoObjectId,
+  time: string,
+  description?: string | null
 ): Promise<void> => {
   isLoading.value = true
   postErrorText.value = null
-  const params = { name, currency }
+  const params = { type, name, currency, amount, check, category, time, description }
 
   await apiManager
     .patchTransactionUpdate(params, id)
