@@ -33,7 +33,7 @@ const routesMain = [
 ]
 
 import { PageTransaction } from '@/pages/transactions/PageTransaction'
-import { PageTransactions } from '@/pages/transactions/PageTransactions'
+// import { PageTransactions } from '@/pages/transactions/PageTransactions'
 import { PageTransactionAdd } from '@/pages/transactions/PageTransactionAdd'
 import { PageTransactionUpdate } from '@/pages/transactions/PageTransactionUpdate'
 const routesTransactions = [
@@ -42,11 +42,11 @@ const routesTransactions = [
     name: RouteNamesEnum.transaction,
     component: PageTransaction
   },
-  {
-    path: '/transactions',
-    name: RouteNamesEnum.transactions,
-    component: PageTransactions
-  },
+  // {
+  //   path: '/transactions',
+  //   name: RouteNamesEnum.transactions,
+  //   component: PageTransactions
+  // },
   {
     path: '/transactions/add',
     name: RouteNamesEnum.transactionsAdd,

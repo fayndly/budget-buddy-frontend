@@ -1,2 +1,4 @@
 import FormTransactionUpdate from './components/FormTransactionUpdate.vue'
-export { FormTransactionUpdate }
+import { isLoading } from './services/useSubmitForm'
+
+export { FormTransactionUpdate, isLoading }

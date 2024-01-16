@@ -17,7 +17,7 @@ export const useGetOneCheck = async (id: TTypeTransaction) => {
     })
     .catch((err) => {
       console.log(err)
-      if (err.response.status === 403) isCheckNotFound.value = true
+      if (err.response.status === 404) isCheckNotFound.value = true
       check.value = null
     })
 }

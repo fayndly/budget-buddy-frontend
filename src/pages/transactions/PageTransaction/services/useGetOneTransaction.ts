@@ -17,7 +17,7 @@ export const useGetOneTransaction = async (id: TTypeTransaction) => {
     })
     .catch((err) => {
       console.log(err)
-      if (err.response.status === 403) isTransactionNotFound.value = true
+      if (err.response.status === 404) isTransactionNotFound.value = true
       transaction.value = null
     })
 }
