@@ -3,6 +3,7 @@ import { onMounted } from 'vue'
 
 import TemplateSection from '@/templates/TemplateSection.vue'
 import SectionLoader from '@/components/sections/SectionLoader/SectionLoader.vue'
+import SectionEmpty from '@/components/sections/SectionEmpty/SectionEmpty.vue'
 
 import ListItemCategory from '@/components/listItems/ListItemCategory/ListItemCategory.vue'
 
@@ -11,9 +12,22 @@ import { categories, useGetCategories, isLoading } from '../services/useGetCateg
 onMounted(async () => {
   await useGetCategories()
 })
+
+const pathToCreateCategory = {
+  name: 'CategoriesAdd',
+  query: {
+    type: 'expense'
+  }
+}
 </script>
 
 <template>
+  <SectionEmpty
+    v-if="!isLoading && !categories.length"
+    header="Нет категорий"
+    text="Создайте категорию кнопкой ниже"
+    :routeTo="pathToCreateCategory"
+  />
   <SectionLoader v-if="isLoading && !categories.length" />
   <TemplateSection>
     <md-list class="list-categories">
@@ -22,14 +36,7 @@ onMounted(async () => {
     <md-fab
       class="fab-add-categories"
       variant="secondary"
-      @click="
-        $router.push({
-          name: 'CategoriesAdd',
-          query: {
-            type: 'expense'
-          }
-        })
-      "
+      @click="$router.push(pathToCreateCategory)"
       ><span slot="icon" class="material-icons-outlined">add</span></md-fab
     >
   </TemplateSection>

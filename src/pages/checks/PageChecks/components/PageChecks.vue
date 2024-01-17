@@ -10,6 +10,7 @@ import TemplateSection from '@/templates/TemplateSection.vue'
 import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
 
 import SectionLoader from '@/components/sections/SectionLoader/SectionLoader.vue'
+import SectionEmpty from '@/components/sections/SectionEmpty/SectionEmpty.vue'
 
 import ListItemCheck from '@/components/listItems/ListItemCheck/ListItemCheck.vue'
 
@@ -23,6 +24,12 @@ onMounted(async () => {
 <template>
   <BarTopApp title="Счета" />
   <TemplateMain class="main-checks">
+    <SectionEmpty
+      v-if="!isLoading && !checks.length"
+      header="Нет счетов"
+      text="Создайте счет кнопкой ниже"
+      :routeTo="{ name: 'ChecksAdd' }"
+    />
     <SectionLoader v-if="isLoading && !checks.length" />
     <TemplateSection>
       <md-list class="list-checks">
