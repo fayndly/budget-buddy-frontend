@@ -11,7 +11,7 @@ import { InputSelectCurrency } from '@/components/inputs/select/InputSelectCurre
 import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
 
 import type { IFormFields } from '../types/formFields.types'
-import type { TTypeTransaction, ICurrency } from '@/utils/types/data/data.types'
+import type { TMongoObjectId, ICurrency } from '@/utils/types/data/data.types'
 
 import useVuelidate from '@vuelidate/core'
 import { ValidationErrors } from '@/utils/validations/validationErrors'
@@ -33,16 +33,15 @@ const formData = reactive<IFormFields>({
 const validation = useVuelidate(rules, formData, { $externalResults: serverValidateErrors })
 const validationErrorsManager = new ValidationErrors(validation)
 
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 const route = useRoute()
-const router = useRouter()
 
 const submitForm = async () => {
   validation.value.$clearExternalResults()
   if (!(await validation.value.$validate())) return
   if (route.params.checkId && formData.name && formData.currency)
     await usePatchCheckUpdate(
-      route.params.checkId as TTypeTransaction,
+      route.params.checkId as TMongoObjectId,
       formData.name,
       formData.currency
     )
@@ -51,6 +50,11 @@ const submitForm = async () => {
 const isSnackbarOpen = ref<boolean>(false)
 watch(postErrorText, () => {
   if (postErrorText.value) isSnackbarOpen.value = true
+})
+
+const emits = defineEmits(['notFounded'])
+watch(isCheckNotFound, () => {
+  emits('notFounded', isCheckNotFound.value)
 })
 
 const getActiveCurrency = computed(() => {
@@ -62,12 +66,9 @@ const getActiveCurrency = computed(() => {
 
 onMounted(async () => {
   if (route.params.checkId) {
-    await useGetOneCheck(route.params.checkId as TTypeTransaction)
+    await useGetOneCheck(route.params.checkId as TMongoObjectId)
   } else {
-    return router.replace({ name: 'NotFounded' })
-  }
-  if (isCheckNotFound.value) {
-    return router.replace({ name: 'NotFounded' })
+    isCheckNotFound.value = true
   }
 
   await useGetCurrencies()

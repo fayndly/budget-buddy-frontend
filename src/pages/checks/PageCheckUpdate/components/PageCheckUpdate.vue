@@ -6,6 +6,7 @@ import TemplateSection from '@/templates/TemplateSection.vue'
 import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
 
 import TitleHeader from '@/components/titles/TitleHeader.vue'
+import SectionNotFound from '@/components/sections/SectionNotFound/SectionNotFound.vue'
 
 import BarSnackbar from '@/components/bars/BarSnackbar/BarSnackbar.vue'
 
@@ -36,6 +37,11 @@ const isSnackbarOpen = ref<boolean>(false)
 watch(postErrorText, () => {
   if (postErrorText.value) isSnackbarOpen.value = true
 })
+
+const isCheckNotFound = ref<boolean>(false)
+const setNotFound = (value: boolean) => {
+  isCheckNotFound.value = value
+}
 </script>
 
 <template>
@@ -48,16 +54,21 @@ watch(postErrorText, () => {
   </Teleport>
   <BarTopApp
     title="Редактировать счет"
-    :showButtonDelete="true"
+    :showButtonDelete="!isCheckNotFound"
     @clickButtonDelete="modalConfirmDeletionIsOpen = true"
     :showProgress="isLoading"
   />
   <TemplateMain>
-    <TemplateSection>
+    <SectionNotFound
+      header="Счет не найден"
+      text="Возможно, он был удален и больше не доступен"
+      v-if="isCheckNotFound"
+    />
+    <TemplateSection v-if="!isCheckNotFound">
       <TitleHeader title="Счет" icon="edit" />
     </TemplateSection>
-    <TemplateSection>
-      <FormCheckUpdate />
+    <TemplateSection v-if="!isCheckNotFound">
+      <FormCheckUpdate @notFounded="setNotFound" />
     </TemplateSection>
   </TemplateMain>
   <DialogConfirmDeletion

@@ -13,7 +13,7 @@ import { InputChoseIcon } from '@/modules/inputs/InputChoseIcon'
 import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
 
 import type { IFormFields } from '../types/formFields.types'
-import type { TTypeTransaction } from '@/utils/types/data/data.types'
+import type { TMongoObjectId } from '@/utils/types/data/data.types'
 
 import useVuelidate from '@vuelidate/core'
 import { ValidationErrors } from '@/utils/validations/validationErrors'
@@ -37,16 +37,15 @@ const formData = reactive<IFormFields>({
 const validation = useVuelidate(rules, formData, { $externalResults: serverValidateErrors })
 const validationErrorsManager = new ValidationErrors(validation)
 
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 const route = useRoute()
-const router = useRouter()
 
 const submitForm = async () => {
   validation.value.$clearExternalResults()
   if (!(await validation.value.$validate())) return
   if (route.params.categoryId && formData.name && formData.type && formData.color && formData.icon)
     await usePatchCategoryUpdate(
-      route.params.categoryId as TTypeTransaction,
+      route.params.categoryId as TMongoObjectId,
       formData.name,
       formData.type,
       formData.color.value,
@@ -59,13 +58,17 @@ watch(postErrorText, () => {
   if (postErrorText.value) isSnackbarOpen.value = true
 })
 
+const emits = defineEmits(['notFounded'])
+watch(isCategoryNotFound, () => {
+  emits('notFounded', isCategoryNotFound.value)
+})
+
 onMounted(async () => {
   if (route.params.categoryId) {
-    await useGetOneCategory(route.params.categoryId as TTypeTransaction)
+    await useGetOneCategory(route.params.categoryId as TMongoObjectId)
   } else {
-    return router.replace({ name: 'NotFounded' })
+    isCategoryNotFound.value = true
   }
-  if (isCategoryNotFound.value) return router.replace({ name: 'NotFounded' })
 
   if (category.value) {
     formData.name = category.value.name

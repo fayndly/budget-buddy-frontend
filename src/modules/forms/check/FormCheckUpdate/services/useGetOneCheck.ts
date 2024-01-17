@@ -2,13 +2,13 @@ import { ref } from 'vue'
 import { apiManager } from '@/utils/API'
 import { clearData } from '@/utils/API/helpers/clearData'
 
-import type { ICheck, TTypeTransaction } from '@/utils/types/data/data.types'
+import type { ICheck, TMongoObjectId } from '@/utils/types/data/data.types'
 import type { IDataCheck } from '@/utils/types/data/serverData.types'
 
 export const check = ref<ICheck | null>(null)
 export const isCheckNotFound = ref<boolean>(false)
 
-export const useGetOneCheck = async (id: TTypeTransaction) => {
+export const useGetOneCheck = async (id: TMongoObjectId) => {
   isCheckNotFound.value = false
   return await apiManager
     .getCheck(id)
@@ -16,9 +16,8 @@ export const useGetOneCheck = async (id: TTypeTransaction) => {
       check.value = clearData<IDataCheck, ICheck>(response.data)
     })
     .catch((err) => {
+      console.log(err)
       if (err.response.status === 404) isCheckNotFound.value = true
-      console.log(isCheckNotFound.value)
-
       check.value = null
     })
 }

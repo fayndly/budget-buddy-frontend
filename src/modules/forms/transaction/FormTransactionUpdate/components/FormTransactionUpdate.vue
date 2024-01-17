@@ -17,7 +17,7 @@ import { InputDescription } from '@/components/inputs/text/InputDescription'
 import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
 
 import type { IFormFields } from '../types/formFields.types'
-import type { TTypeTransaction, ICurrency } from '@/utils/types/data/data.types'
+import type { TMongoObjectId, ICurrency } from '@/utils/types/data/data.types'
 
 import useVuelidate from '@vuelidate/core'
 import { ValidationErrors } from '@/utils/validations/validationErrors'
@@ -71,7 +71,7 @@ const submitForm = async () => {
 
   if (formData.type && formData.currency && formData.check && formData.category && formData.time)
     await usePatchTransactionUpdate(
-      route.params.transactionId as TTypeTransaction,
+      route.params.transactionId as TMongoObjectId,
       formData.type,
       formData.name,
       formData.currency,
@@ -86,6 +86,11 @@ const submitForm = async () => {
 const isSnackbarOpen = ref<boolean>(false)
 watch(postErrorText, () => {
   if (postErrorText.value) isSnackbarOpen.value = true
+})
+
+const emits = defineEmits(['notFounded'])
+watch(isTransactionNotFound, () => {
+  emits('notFounded', isTransactionNotFound.value)
 })
 
 const getActiveCurrency = computed(() => {
@@ -107,12 +112,9 @@ const getSumbolFromType = computed(() => {
 
 onMounted(async () => {
   if (route.params.transactionId) {
-    await useGetOneTransaction(route.params.transactionId as TTypeTransaction)
+    await useGetOneTransaction(route.params.transactionId as TMongoObjectId)
   } else {
-    return router.replace({ name: 'NotFounded' })
-  }
-  if (isTransactionNotFound.value) {
-    return router.replace({ name: 'NotFounded' })
+    isTransactionNotFound.value = true
   }
 
   await useGetCurrencies()

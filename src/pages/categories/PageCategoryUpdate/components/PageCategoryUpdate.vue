@@ -6,6 +6,7 @@ import TemplateSection from '@/templates/TemplateSection.vue'
 import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
 
 import TitleHeader from '@/components/titles/TitleHeader.vue'
+import SectionNotFound from '@/components/sections/SectionNotFound/SectionNotFound.vue'
 
 import BarSnackbar from '@/components/bars/BarSnackbar/BarSnackbar.vue'
 
@@ -36,6 +37,11 @@ const isSnackbarOpen = ref<boolean>(false)
 watch(postErrorText, () => {
   if (postErrorText.value) isSnackbarOpen.value = true
 })
+
+const isCategoryNotFound = ref<boolean>(false)
+const setNotFound = (value: boolean) => {
+  isCategoryNotFound.value = value
+}
 </script>
 
 <template>
@@ -48,16 +54,21 @@ watch(postErrorText, () => {
   </Teleport>
   <BarTopApp
     title="Редактировать категорию"
-    :showButtonDelete="true"
+    :showButtonDelete="!isCategoryNotFound"
     @clickButtonDelete="modalConfirmDeletionIsOpen = true"
     :showProgress="isLoading"
   />
   <TemplateMain>
-    <TemplateSection>
+    <SectionNotFound
+      header="Категория не найдена"
+      text="Возможно, она была удалена и больше не доступна"
+      v-if="isCategoryNotFound"
+    />
+    <TemplateSection v-if="!isCategoryNotFound">
       <TitleHeader title="Категория" icon="edit" />
     </TemplateSection>
-    <TemplateSection>
-      <FormCategoryUpdate />
+    <TemplateSection v-if="!isCategoryNotFound">
+      <FormCategoryUpdate @notFounded="setNotFound" />
     </TemplateSection>
   </TemplateMain>
   <DialogConfirmDeletion
