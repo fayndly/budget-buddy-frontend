@@ -5,11 +5,12 @@ import TemplateMain from '@/templates/TemplateMain.vue'
 import TemplateSection from '@/templates/TemplateSection.vue'
 
 import SectionLoader from '@/components/sections/SectionLoader/SectionLoader.vue'
+import SectionNotFound from '@/components/sections/SectionNotFound/SectionNotFound.vue'
 
 import ListDataInfo from '@/components/wrappers/ListDataInfo/ListDataInfo.vue'
 import type {
   ITransaction,
-  TTypeTransaction,
+  TMongoObjectId,
   TFormatListDataInfo
 } from '@/utils/types/data/data.types'
 
@@ -78,21 +79,19 @@ const router = useRouter()
 
 onMounted(async () => {
   isDataLoading.value = true
+
   if (route.params.transactionId) {
-    await useGetOneTransaction(route.params.transactionId as TTypeTransaction)
+    await useGetOneTransaction(route.params.transactionId as TMongoObjectId)
   } else {
-    return router.replace({ name: 'NotFounded' })
-  }
-  if (isTransactionNotFound.value) {
-    return router.replace({ name: 'NotFounded' })
+    isTransactionNotFound.value = true
   }
 
-  if (transaction.value?.check) await useGetOneCheck(transaction.value.check as TTypeTransaction)
-  if (transaction.value?.category)
-    await useGetOneCategory(transaction.value.category as TTypeTransaction)
-  if (transaction.value?.currency) await useGetOneCurrency(transaction.value?.currency)
+  transaction.value?.check && (await useGetOneCheck(transaction.value.check))
+  transaction.value?.category && (await useGetOneCategory(transaction.value.category))
+  transaction.value?.currency && (await useGetOneCurrency(transaction.value.currency))
 
   if (transaction.value) transactionInfo.value = getFormatArrayItems(transaction.value)
+
   isDataLoading.value = false
 })
 </script>
@@ -100,13 +99,18 @@ onMounted(async () => {
 <template>
   <BarTopApp
     title="Транзакция"
-    :showButtonEdit="true"
+    :showButtonEdit="!isTransactionNotFound"
     @clickButtonEdit="
-      $router.push({ name: 'TransactionsUpdate', params: { transactionId: transaction?.id } })
+      router.push({ name: 'TransactionsUpdate', params: { transactionId: transaction?.id } })
     "
   />
   <TemplateMain>
     <SectionLoader v-if="isDataLoading" />
+    <SectionNotFound
+      header="Транзакция не найдена"
+      text="Возможно, она была удалена и больше не доступна"
+      v-if="isTransactionNotFound"
+    />
     <TemplateSection>
       <ListDataInfo :values="transactionInfo" />
     </TemplateSection>

@@ -2,12 +2,12 @@ import { ref } from 'vue'
 import { apiManager } from '@/utils/API'
 import { clearData } from '@/utils/API/helpers/clearData'
 
-import type { ICategory, TTypeTransaction } from '@/utils/types/data/data.types'
+import type { ICategory, TMongoObjectId } from '@/utils/types/data/data.types'
 import type { IDataCategory } from '@/utils/types/data/serverData.types'
 
 export const category = ref<ICategory | null>(null)
 
-export const useGetOneCategory = async (id: TTypeTransaction) => {
+export const useGetOneCategory = async (id: TMongoObjectId) => {
   return await apiManager
     .getCategory(id)
     .then((response) => {

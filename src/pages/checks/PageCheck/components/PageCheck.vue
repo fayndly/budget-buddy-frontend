@@ -9,7 +9,7 @@ import SectionNotFound from '@/components/sections/SectionNotFound/SectionNotFou
 
 import ListDataInfo from '@/components/wrappers/ListDataInfo/ListDataInfo.vue'
 
-import type { ICheck, TTypeTransaction, TFormatListDataInfo } from '@/utils/types/data/data.types'
+import type { ICheck, TMongoObjectId, TFormatListDataInfo } from '@/utils/types/data/data.types'
 
 import { useGetOneCheck, check, isCheckNotFound } from '../services/useGetOneCheck'
 import { useGetOneCurrency, currency } from '../services/useGetOneCurrency'
@@ -51,12 +51,12 @@ onMounted(async () => {
   isDataLoading.value = true
 
   if (route.params.checkId) {
-    await useGetOneCheck(route.params.checkId as TTypeTransaction)
+    await useGetOneCheck(route.params.checkId as TMongoObjectId)
   } else {
     isCheckNotFound.value = true
   }
 
-  if (check.value?.currency) await useGetOneCurrency(check.value?.currency)
+  check.value?.currency && (await useGetOneCurrency(check.value.currency))
 
   if (check.value) checkInfo.value = getFormatArrayItems(check.value)
 

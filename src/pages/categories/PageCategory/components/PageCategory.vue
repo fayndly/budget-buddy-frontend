@@ -5,14 +5,11 @@ import TemplateMain from '@/templates/TemplateMain.vue'
 import TemplateSection from '@/templates/TemplateSection.vue'
 
 import SectionLoader from '@/components/sections/SectionLoader/SectionLoader.vue'
+import SectionNotFound from '@/components/sections/SectionNotFound/SectionNotFound.vue'
 
 import ListDataInfo from '@/components/wrappers/ListDataInfo/ListDataInfo.vue'
 
-import type {
-  ICategory,
-  TTypeTransaction,
-  TFormatListDataInfo
-} from '@/utils/types/data/data.types'
+import type { ICategory, TMongoObjectId, TFormatListDataInfo } from '@/utils/types/data/data.types'
 
 import { useGetOneCategory, category, isCategoryNotFound } from '../services/useGetOneCategory'
 
@@ -59,12 +56,9 @@ onMounted(async () => {
   isDataLoading.value = true
 
   if (route.params.categoryId) {
-    await useGetOneCategory(route.params.categoryId as TTypeTransaction)
+    await useGetOneCategory(route.params.categoryId as TMongoObjectId)
   } else {
-    return router.replace({ name: 'NotFounded' })
-  }
-  if (isCategoryNotFound.value) {
-    return router.replace({ name: 'NotFounded' })
+    isCategoryNotFound.value = true
   }
 
   if (category.value) categoryInfo.value = getFormatArrayItems(category.value)
@@ -76,13 +70,18 @@ onMounted(async () => {
 <template>
   <BarTopApp
     title="Категория"
-    :showButtonEdit="true"
+    :showButtonEdit="!isCategoryNotFound"
     @clickButtonEdit="
-      $router.push({ name: 'CategoriesUpdate', params: { categoryId: category?.id } })
+      router.push({ name: 'CategoriesUpdate', params: { categoryId: category?.id } })
     "
   />
   <TemplateMain>
     <SectionLoader v-if="isDataLoading" />
+    <SectionNotFound
+      header="Категория не найдена"
+      text="Возможно, она была удалена и больше не доступна"
+      v-if="isCategoryNotFound"
+    />
     <TemplateSection>
       <ListDataInfo :values="categoryInfo" />
     </TemplateSection>
