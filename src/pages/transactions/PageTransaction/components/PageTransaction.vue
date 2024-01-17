@@ -4,7 +4,7 @@ import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
 import TemplateMain from '@/templates/TemplateMain.vue'
 import TemplateSection from '@/templates/TemplateSection.vue'
 
-import LoaderMainSection from '@/components/loaders/LoaderMainSection/LoaderMainSection.vue'
+import SectionLoader from '@/components/sections/SectionLoader/SectionLoader.vue'
 
 import ListDataInfo from '@/components/wrappers/ListDataInfo/ListDataInfo.vue'
 import type {
@@ -106,7 +106,7 @@ onMounted(async () => {
     "
   />
   <TemplateMain>
-    <LoaderMainSection v-if="isDataLoading" />
+    <SectionLoader v-if="isDataLoading" />
     <TemplateSection>
       <ListDataInfo :values="transactionInfo" />
     </TemplateSection>

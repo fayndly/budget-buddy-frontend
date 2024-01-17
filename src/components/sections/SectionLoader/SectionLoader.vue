@@ -1,11 +1,11 @@
 <template>
-  <div class="loader-main-section">
+  <section class="section-loader">
     <md-circular-progress indeterminate></md-circular-progress>
-  </div>
+  </section>
 </template>
 
 <style lang="scss" scoped>
-.loader-main-section {
+.section-loader {
   width: 100%;
   height: 100%;
 

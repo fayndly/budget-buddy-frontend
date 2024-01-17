@@ -2,7 +2,7 @@
 import { onMounted } from 'vue'
 
 import TemplateSection from '@/templates/TemplateSection.vue'
-import LoaderMainSection from '@/components/loaders/LoaderMainSection/LoaderMainSection.vue'
+import SectionLoader from '@/components/sections/SectionLoader/SectionLoader.vue'
 
 import ListItemCategory from '@/components/listItems/ListItemCategory/ListItemCategory.vue'
 
@@ -14,7 +14,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <LoaderMainSection v-if="isLoading && !categories.length" />
+  <SectionLoader v-if="isLoading && !categories.length" />
   <TemplateSection>
     <md-list class="list-categories">
       <ListItemCategory v-for="category in categories" :key="category.id" :category="category" />

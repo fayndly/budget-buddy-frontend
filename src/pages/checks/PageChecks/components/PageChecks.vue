@@ -1,19 +1,19 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
+
+import '@material/web/fab/fab'
+import '@material/web/list/list'
+
 import TemplateMain from '@/templates/TemplateMain.vue'
 import TemplateSection from '@/templates/TemplateSection.vue'
 
 import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
 
-import LoaderMainSection from '@/components/loaders/LoaderMainSection/LoaderMainSection.vue'
+import SectionLoader from '@/components/sections/SectionLoader/SectionLoader.vue'
 
 import ListItemCheck from '@/components/listItems/ListItemCheck/ListItemCheck.vue'
 
 import { useGetChecks, checks, isLoading } from '../services/useGetChecks'
-
-import '@material/web/fab/fab'
-
-import '@material/web/list/list'
 
 onMounted(async () => {
   await useGetChecks()
@@ -23,7 +23,7 @@ onMounted(async () => {
 <template>
   <BarTopApp title="Счета" />
   <TemplateMain class="main-checks">
-    <LoaderMainSection v-if="isLoading && !checks.length" />
+    <SectionLoader v-if="isLoading && !checks.length" />
     <TemplateSection>
       <md-list class="list-checks">
         <ListItemCheck v-for="check in checks" :key="check.id" :check="check" />

@@ -4,7 +4,8 @@ import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
 import TemplateMain from '@/templates/TemplateMain.vue'
 import TemplateSection from '@/templates/TemplateSection.vue'
 
-import LoaderMainSection from '@/components/loaders/LoaderMainSection/LoaderMainSection.vue'
+import SectionLoader from '@/components/sections/SectionLoader/SectionLoader.vue'
+import SectionNotFound from '@/components/sections/SectionNotFound/SectionNotFound.vue'
 
 import ListDataInfo from '@/components/wrappers/ListDataInfo/ListDataInfo.vue'
 
@@ -52,9 +53,9 @@ onMounted(async () => {
   if (route.params.checkId) {
     await useGetOneCheck(route.params.checkId as TTypeTransaction)
   } else {
-    router.replace({ name: 'NotFounded' })
+    isCheckNotFound.value = true
   }
-  if (isCheckNotFound.value) router.replace({ name: 'NotFounded' })
+
   if (check.value?.currency) await useGetOneCurrency(check.value?.currency)
 
   if (check.value) checkInfo.value = getFormatArrayItems(check.value)
@@ -66,11 +67,16 @@ onMounted(async () => {
 <template>
   <BarTopApp
     title="Счет"
-    :showButtonEdit="true"
-    @clickButtonEdit="$router.push({ name: 'ChecksUpdate', params: { checkId: check?.id } })"
+    :showButtonEdit="!isCheckNotFound"
+    @clickButtonEdit="router.push({ name: 'ChecksUpdate', params: { checkId: check?.id } })"
   />
   <TemplateMain>
-    <LoaderMainSection v-if="isDataLoading" />
+    <SectionLoader v-if="isDataLoading" />
+    <SectionNotFound
+      header="Счет не найден"
+      text="Возможно, он был удален и больше не доступен"
+      v-if="isCheckNotFound"
+    />
     <TemplateSection>
       <ListDataInfo :values="checkInfo" />
     </TemplateSection>
