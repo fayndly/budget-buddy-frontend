@@ -6,8 +6,11 @@ import type { ICheck } from '@/utils/types/data/data.types'
 import type { IDataCheck } from '@/utils/types/data/serverData.types'
 
 export const checks = ref<ICheck[]>([])
+export const isLoading = ref<boolean>(false)
 
 export const useGetChecks = async () => {
+  isLoading.value = true
+
   return await apiManager
     .getChecks()
     .then((response) => {
@@ -16,5 +19,8 @@ export const useGetChecks = async () => {
     .catch((err) => {
       console.log(err)
       checks.value = []
+    })
+    .finally(() => {
+      isLoading.value = false
     })
 }

@@ -5,9 +5,11 @@ import TemplateSection from '@/templates/TemplateSection.vue'
 
 import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
 
+import LoaderMainSection from '@/components/loaders/LoaderMainSection/LoaderMainSection.vue'
+
 import ListItemCheck from '@/components/listItems/ListItemCheck/ListItemCheck.vue'
 
-import { useGetChecks, checks } from '../services/useGetChecks'
+import { useGetChecks, checks, isLoading } from '../services/useGetChecks'
 
 import '@material/web/fab/fab'
 
@@ -21,6 +23,7 @@ onMounted(async () => {
 <template>
   <BarTopApp title="Счета" />
   <TemplateMain class="main-checks">
+    <LoaderMainSection v-if="isLoading && !checks.length" />
     <TemplateSection>
       <md-list class="list-checks">
         <ListItemCheck v-for="check in checks" :key="check.id" :check="check" />
