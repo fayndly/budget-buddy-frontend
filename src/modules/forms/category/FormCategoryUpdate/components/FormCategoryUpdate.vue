@@ -58,12 +58,19 @@ watch(postErrorText, () => {
   if (postErrorText.value) isSnackbarOpen.value = true
 })
 
-const emits = defineEmits(['notFounded'])
+const emits = defineEmits(['notFounded', 'isLoading'])
 watch(isCategoryNotFound, () => {
   emits('notFounded', isCategoryNotFound.value)
 })
 
+const isLoading = ref<boolean>(false)
+watch(isLoading, () => {
+  emits('isLoading', isLoading.value)
+})
+
 onMounted(async () => {
+  isLoading.value = true
+
   if (route.params.categoryId) {
     await useGetOneCategory(route.params.categoryId as TMongoObjectId)
   } else {
@@ -74,6 +81,8 @@ onMounted(async () => {
     formData.name = category.value.name
     formData.type = category.value.type
   }
+
+  isLoading.value = false
 })
 </script>
 

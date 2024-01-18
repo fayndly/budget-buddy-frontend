@@ -6,6 +6,7 @@ import TemplateSection from '@/templates/TemplateSection.vue'
 import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
 
 import TitleHeader from '@/components/titles/TitleHeader.vue'
+import SectionLoader from '@/components/sections/SectionLoader/SectionLoader.vue'
 import SectionNotFound from '@/components/sections/SectionNotFound/SectionNotFound.vue'
 
 import BarSnackbar from '@/components/bars/BarSnackbar/BarSnackbar.vue'
@@ -42,6 +43,11 @@ const isCheckNotFound = ref<boolean>(false)
 const setNotFound = (value: boolean) => {
   isCheckNotFound.value = value
 }
+
+const isDataLoading = ref<boolean>(false)
+const setLoading = (value: boolean) => {
+  isDataLoading.value = value
+}
 </script>
 
 <template>
@@ -54,21 +60,22 @@ const setNotFound = (value: boolean) => {
   </Teleport>
   <BarTopApp
     title="Редактировать счет"
-    :showButtonDelete="!isCheckNotFound"
+    :showButtonDelete="!isCheckNotFound && !isDataLoading"
     @clickButtonDelete="modalConfirmDeletionIsOpen = true"
     :showProgress="isLoading"
   />
   <TemplateMain>
+    <SectionLoader v-if="isDataLoading" />
     <SectionNotFound
       header="Счет не найден"
       text="Возможно, он был удален и больше не доступен"
-      v-if="isCheckNotFound"
+      v-if="isCheckNotFound && !isDataLoading"
     />
-    <TemplateSection v-if="!isCheckNotFound">
+    <TemplateSection v-if="!isCheckNotFound && !isDataLoading">
       <TitleHeader title="Счет" icon="edit" />
     </TemplateSection>
-    <TemplateSection v-if="!isCheckNotFound">
-      <FormCheckUpdate @notFounded="setNotFound" />
+    <TemplateSection v-show="!isCheckNotFound && !isDataLoading">
+      <FormCheckUpdate @notFounded="setNotFound" @isLoading="setLoading" />
     </TemplateSection>
   </TemplateMain>
   <DialogConfirmDeletion

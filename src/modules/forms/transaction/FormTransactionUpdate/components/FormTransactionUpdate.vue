@@ -88,9 +88,14 @@ watch(postErrorText, () => {
   if (postErrorText.value) isSnackbarOpen.value = true
 })
 
-const emits = defineEmits(['notFounded'])
+const emits = defineEmits(['notFounded', 'isLoading'])
 watch(isTransactionNotFound, () => {
   emits('notFounded', isTransactionNotFound.value)
+})
+
+const isLoading = ref<boolean>(false)
+watch(isLoading, () => {
+  emits('isLoading', isLoading.value)
 })
 
 const getActiveCurrency = computed(() => {
@@ -111,6 +116,8 @@ const getSumbolFromType = computed(() => {
 })
 
 onMounted(async () => {
+  isLoading.value = true
+
   if (route.params.transactionId) {
     await useGetOneTransaction(route.params.transactionId as TMongoObjectId)
   } else {
@@ -128,6 +135,8 @@ onMounted(async () => {
     formData.check = transaction.value.check
     formData.description = transaction.value.description
   }
+
+  isLoading.value = false
 })
 </script>
 

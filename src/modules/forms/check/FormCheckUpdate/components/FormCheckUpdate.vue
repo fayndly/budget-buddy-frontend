@@ -52,9 +52,14 @@ watch(postErrorText, () => {
   if (postErrorText.value) isSnackbarOpen.value = true
 })
 
-const emits = defineEmits(['notFounded'])
+const emits = defineEmits(['notFounded', 'isLoading'])
 watch(isCheckNotFound, () => {
   emits('notFounded', isCheckNotFound.value)
+})
+
+const isLoading = ref<boolean>(false)
+watch(isLoading, () => {
+  emits('isLoading', isLoading.value)
 })
 
 const getActiveCurrency = computed(() => {
@@ -65,6 +70,8 @@ const getActiveCurrency = computed(() => {
 })
 
 onMounted(async () => {
+  isLoading.value = true
+
   if (route.params.checkId) {
     await useGetOneCheck(route.params.checkId as TMongoObjectId)
   } else {
@@ -78,6 +85,8 @@ onMounted(async () => {
     formData.currency = check.value.currency
     formData.amount = check.value.amount
   }
+
+  isLoading.value = false
 })
 </script>
 

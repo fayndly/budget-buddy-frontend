@@ -6,6 +6,7 @@ import TemplateSection from '@/templates/TemplateSection.vue'
 import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
 
 import TitleHeader from '@/components/titles/TitleHeader.vue'
+import SectionLoader from '@/components/sections/SectionLoader/SectionLoader.vue'
 import SectionNotFound from '@/components/sections/SectionNotFound/SectionNotFound.vue'
 
 import BarSnackbar from '@/components/bars/BarSnackbar/BarSnackbar.vue'
@@ -46,6 +47,11 @@ const isTransactionNotFound = ref<boolean>(false)
 const setNotFound = (value: boolean) => {
   isTransactionNotFound.value = value
 }
+
+const isDataLoading = ref<boolean>(false)
+const setLoading = (value: boolean) => {
+  isDataLoading.value = value
+}
 </script>
 
 <template>
@@ -58,21 +64,22 @@ const setNotFound = (value: boolean) => {
   </Teleport>
   <BarTopApp
     title="Редактировать транзакцию"
-    :showButtonDelete="!isTransactionNotFound"
+    :showButtonDelete="!isTransactionNotFound && !isDataLoading"
     @clickButtonDelete="modalConfirmDeletionIsOpen = true"
     :showProgress="isLoading"
   />
   <TemplateMain>
+    <SectionLoader v-if="isDataLoading" />
     <SectionNotFound
       header="Транзакция не найдена"
       text="Возможно, она была удалена и больше не доступна"
-      v-if="isTransactionNotFound"
+      v-if="isTransactionNotFound && !isDataLoading"
     />
-    <TemplateSection v-if="!isTransactionNotFound">
+    <TemplateSection v-if="!isTransactionNotFound && !isDataLoading">
       <TitleHeader title="Транзакция" icon="edit" />
     </TemplateSection>
-    <TemplateSection v-if="!isTransactionNotFound">
-      <FormTransactionUpdate @notFounded="setNotFound" />
+    <TemplateSection v-show="!isTransactionNotFound && !isDataLoading">
+      <FormTransactionUpdate @notFounded="setNotFound" @isLoading="setLoading" />
     </TemplateSection>
   </TemplateMain>
   <DialogConfirmDeletion
