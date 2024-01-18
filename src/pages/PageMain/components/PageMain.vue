@@ -1,39 +1,13 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-
 import TemplateMain from '@/templates/TemplateMain.vue'
 import TemplateSection from '@/templates/TemplateSection.vue'
 
-import BarCheck from '@/components/bars/BarCheck/BarCheck.vue'
+import { BarCheck } from '@/modules/BarCheck'
 import TabsTypeTransactions from '@/components/tabs/TabsTypeTransactions/TabsTypeTransactions.vue'
-
-import type { ICheck } from '@/utils/types/interfaces'
-
-const getChecks = async (): Promise<ICheck[]> => {
-  return [
-    {
-      name: 'Сбер',
-      id: 'check1'
-    },
-    {
-      name: 'Тинькофф',
-      id: 'check2'
-    }
-  ]
-}
-
-const checks = ref<ICheck[]>([])
-const chosedCheck = ref<ICheck | null>(null)
-
-onMounted(async () => {
-  checks.value.push(...(await getChecks()))
-
-  chosedCheck.value = checks.value[1]
-})
 </script>
 
 <template>
-  <BarCheck :checks="checks" :chosedCheck="chosedCheck" />
+  <BarCheck />
   <TabsTypeTransactions />
   <TemplateMain class="main-main">
     <TemplateSection class="main-template-section">
