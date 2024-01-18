@@ -43,7 +43,10 @@ watch(route, () => {
 onMounted(async () => {
   await useGetChecks()
 
-  router.replace({ name: 'Main', params: { checkId: checks.value[0].id } })
+  if (!route.params.checkId) {
+    router.replace({ name: 'Main', params: { checkId: checks.value[0].id } })
+  }
+
   chosedCheck.value = getSelectedCheck(getCheckIdFromRoute.value)
 
   chosedCheck.value?.currency && (await useGetOneCurrency(chosedCheck.value.currency))

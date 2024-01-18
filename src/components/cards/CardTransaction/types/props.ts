@@ -1,8 +1,9 @@
+import type { TMongoObjectId, ICurrency, ICategory } from '@/utils/types/data/data.types'
+
 export interface IPropsCardTransaction {
-  shordDescription: string
-  color: string
-  icon?: string
-  categoryName: string
-  count: number
-  cyrrancy: string
+  id: TMongoObjectId
+  name: string
+  currency: ICurrency | null
+  amount: number
+  category: ICategory | null
 }

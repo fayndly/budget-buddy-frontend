@@ -9,25 +9,27 @@ defineProps<IPropsCardTransaction>()
 <template>
   <div
     class="card-transaction container"
-    @click="$router.push({ name: 'Transaction', params: { transactionId: '123' } })"
+    @click="$router.push({ name: 'Transaction', params: { transactionId: id } })"
   >
     <md-ripple></md-ripple>
-    <div class="card-transaction__category-visual" :style="`background-color: ${color};`">
-      <span v-if="icon" class="material-icons-outlined card-transaction__category-visual-icon">{{
-        icon
-      }}</span>
+    <div class="card-transaction__category-visual" :style="{ 'background-color': category?.color }">
+      <span
+        v-if="category?.icon"
+        class="material-icons-outlined card-transaction__category-visual-icon"
+        >{{ category.icon }}</span
+      >
       <div v-else class="card-transaction__category-visual-icon-empty"></div>
     </div>
     <div class="card-transaction__info">
       <div class="card-transaction__info-title">
-        <p class="card-transaction__info-short-description body-large">{{ shordDescription }}</p>
+        <p class="card-transaction__info-short-description body-large">{{ name }}</p>
         <p class="card-transaction__info-count label-large">
-          {{ count.toLocaleString('ru-RU') }}{{ cyrrancy }}
+          {{ amount.toLocaleString('ru-RU') }}{{ currency?.symbol }}
         </p>
       </div>
       <div class="card-transaction__info-subtitle">
         <p class="card-transaction__info-category body-medium surface-variant-text">
-          {{ categoryName }}
+          {{ category?.name }}
         </p>
       </div>
     </div>
