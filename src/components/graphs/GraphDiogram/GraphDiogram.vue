@@ -1,27 +1,47 @@
 <script setup lang="ts">
+import { watch, ref } from 'vue'
 import type { IPropsGrathDiagram } from './types/props'
+
+import type { IFormatData } from './types/props'
 
 const props = defineProps<IPropsGrathDiagram>()
 
 import { DiagramDataCalculator } from './helpers/DiagramDataCalculator'
 
-const diagramDataCalculatorManager = new DiagramDataCalculator(props.data)
+const transactionsData = ref<IFormatData[]>([])
+
+transactionsData.value = props.data
+
+const diagramDataCalculatorManager = new DiagramDataCalculator(transactionsData)
 diagramDataCalculatorManager.generateDasharray()
 diagramDataCalculatorManager.generateDashoffset()
+
+watch(props, () => {
+  transactionsData.value = props.data
+
+  diagramDataCalculatorManager.generateDasharray()
+  diagramDataCalculatorManager.generateDashoffset()
+})
 </script>
 
 <template>
   <div class="canvas">
-    <p class="headline headline-small">- {{ diagramDataCalculatorManager.sumTransactions }}₽</p>
+    <p
+      class="headline headline-small"
+      :style="{ color: typeTransactions === 'expense' ? '#ff7676' : '#76ff94' }"
+    >
+      {{ typeTransactions === 'expense' ? '-' : '+' }}
+      {{ diagramDataCalculatorManager.sumTransactions.toLocaleString('ru-RU') }}₽
+    </p>
     <svg class="chart" viewBox="0 0 37 37">
       <circle
-        v-for="transaction in data"
-        :key="transaction.color"
+        v-for="transaction in transactionsData"
+        :key="transaction.category?.id"
         class="unit"
         r="15.9"
         cx="50%"
         cy="50%"
-        :style="`stroke: ${transaction.color}; stroke-dasharray: ${transaction.strokeDasharray} 100; stroke-dashoffset: -${transaction.strokeDashoffset};`"
+        :style="`stroke: ${transaction.category?.color}; stroke-dasharray: ${transaction.strokeDasharray} 100; stroke-dashoffset: -${transaction.strokeDashoffset};`"
       ></circle>
     </svg>
   </div>
@@ -48,7 +68,7 @@ diagramDataCalculatorManager.generateDashoffset()
 
 .headline {
   position: absolute;
-  color: #ff7676;
+  font-size: 20px;
 }
 
 .unit {

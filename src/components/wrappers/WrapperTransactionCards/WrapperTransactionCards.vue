@@ -18,6 +18,7 @@ defineProps<{
   flex-direction: column;
   gap: 8px;
   &__header {
+    font-size: 18px;
   }
   &__item {
   }

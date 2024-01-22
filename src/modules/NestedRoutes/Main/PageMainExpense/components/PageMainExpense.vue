@@ -25,7 +25,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <TransactionsVisualInfo />
+  <TransactionsVisualInfo :transactions="transactions" />
   <TransactionsList :transactions="transactions" />
   <md-fab
     variant="primary"

@@ -1,23 +1,25 @@
 <script setup lang="ts">
+import type { ICategory, ICurrency } from '@/utils/types/data/data.types'
+
 defineProps<{
-  color: string
-  name: string
-  icon?: string
-  count: number
-  cyrrancy: string
+  category: ICategory
+  amount: number
+  cyrrancy: ICurrency
 }>()
 </script>
 
 <template>
   <div
     class="card-category"
-    :class="{ 'card-category--with-icon': icon }"
-    :style="`background-color: ${color};`"
+    :class="{ 'card-category--with-icon': category.icon }"
+    :style="{ 'background-color': category.color }"
   >
-    <span v-if="icon" class="card-category__icon material-icons-outlined">{{ icon }}</span>
-    <span class="card-category__name label-large">{{ name }}</span>
+    <span v-if="category.icon" class="card-category__icon material-icons-outlined">{{
+      category.icon
+    }}</span>
+    <span class="card-category__name label-large">{{ category.name }}</span>
     <span class="card-category__count label-large"
-      >{{ count.toLocaleString('ru-RU') }}{{ cyrrancy }}</span
+      >{{ amount.toLocaleString(cyrrancy.designation) }}{{ cyrrancy.symbol }}</span
     >
   </div>
 </template>

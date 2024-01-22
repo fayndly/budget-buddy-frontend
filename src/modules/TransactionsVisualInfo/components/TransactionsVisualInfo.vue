@@ -1,73 +1,88 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 
 import '@material/web/iconbutton/icon-button'
+
+import type { IPropsTransactionsVisualInfo } from '../types/props.types'
 
 import ArrowRightBig from '@/ui/icons/ArrowRightBig.vue'
 import ArrowLeftBig from '@/ui/icons/ArrowLeftBig.vue'
 
 import GraphDiogram from '@/components/graphs/GraphDiogram/GraphDiogram.vue'
-import DialogSetRangeDate from '@/components/dialogs/DialogSetRangeDate/DialogSetRangeDate.vue'
 import CardCategory from '@/components/cards/CardCategory/CardCategory.vue'
+import ChoseMonth from './custom/ChoseMonth/ChoseMonth.vue'
 
-import { months, getRangeDateFromMonth } from '../helpers/index'
+import type { ITransaction, ICategory, TMongoObjectId } from '@/utils/types/data/data.types'
 
-const transactionsData = [
-  {
-    count: 12345,
-    color: '#FF4F4F',
-    strokeDasharray: 0,
-    strokeDashoffset: 0
-  },
-  {
-    count: 345,
-    color: '#5D4FFF',
-    strokeDasharray: 0,
-    strokeDashoffset: 0
-  },
-  {
-    count: 4253,
-    color: '#4FB5FF',
-    strokeDasharray: 0,
-    strokeDashoffset: 0
-  },
-  {
-    count: 6253,
-    color: '#FFC34F',
-    strokeDasharray: 0,
-    strokeDashoffset: 0
-  },
-  {
-    count: 9876,
-    color: '#AAAAAA',
-    strokeDasharray: 0,
-    strokeDashoffset: 0
-  },
-  {
-    count: 4567,
-    color: '#FFF',
-    strokeDasharray: 0,
-    strokeDashoffset: 0
-  }
-]
+import { categories, useGetCategories } from '../services/useGetCategories'
+import { getById } from '@/utils/helpers/getById'
 
-const ButtonAddCustomDateHandler = () => {
-  modalSetDateIsOpen.value = true
+import { check, useGetOneCheck } from '../services/useGetOneCheck'
+import { currency, useGetOneCurrency } from '../services/useGetOneCurrency'
+
+import { useRoute } from 'vue-router'
+const route = useRoute()
+
+watch(route, async () => {
+  await useGetOneCheck(route.params.checkId as TMongoObjectId)
+})
+
+onMounted(async () => {
+  await useGetOneCheck(route.params.checkId as TMongoObjectId)
+
+  check.value?.currency && (await useGetOneCurrency(check.value.currency))
+})
+
+const props = defineProps<IPropsTransactionsVisualInfo>()
+
+const getTransactions = computed(() => {
+  return props.transactions
+})
+
+interface IFormatData {
+  amount: number
+  category: ICategory | null
+  strokeDasharray: number
+  strokeDashoffset: number
 }
 
-const modalSetDateIsOpen = ref<boolean>(false)
+const getFormatData = (transactions: ITransaction[]): IFormatData[] => {
+  const formatData: IFormatData[] = []
 
-const closeModalHandler = () => {
-  modalSetDateIsOpen.value = false
+  transactions.forEach((transaction: ITransaction) => {
+    const isDateIncludes = formatData.reduce((acc, val) => {
+      if (val.category === transaction.category) {
+        val.amount += transaction.amount
+        acc = true
+      }
+
+      return acc
+    }, false)
+
+    if (!isDateIncludes) {
+      formatData.push({
+        amount: transaction.amount,
+        category: transaction.category,
+        strokeDasharray: 0,
+        strokeDashoffset: 0
+      })
+    }
+  })
+
+  formatData.forEach((val) => {
+    val.category = getById<ICategory>(categories, val.category)
+  })
+
+  return formatData
 }
 
-const chosedMonth = ref<string>(new Date(Date.now()).toISOString())
+const formatData = ref<IFormatData[]>([])
 
-const submitDateHandler = (date: Date) => {
-  chosedMonth.value = date.toISOString()
-}
-
-const getStringChosedMonth = computed((): string => months[new Date(chosedMonth.value).getMonth()])
+watch(getTransactions, async () => {
+  await useGetCategories()
+  const formatDatas = getFormatData(props.transactions)
+  formatData.value = [...formatDatas]
+})
 
 const clickButtonSwapHandler = (side: 'left' | 'right') => {
   const chosedMonthFormatDate = new Date(chosedMonth.value)
@@ -79,72 +94,26 @@ const clickButtonSwapHandler = (side: 'left' | 'right') => {
   }
   chosedMonth.value = new Date(chosedMonthFormatDate.setMonth(newMonth)).toISOString()
 }
-
-const categpries = [
-  {
-    color: '#FF4F4F',
-    name: 'Транспорт',
-    icon: 'directions_car',
-    count: 12345,
-    cyrrancy: '₽'
-  },
-  {
-    color: '#5D4FFF',
-    name: 'Интернет',
-    icon: 'language',
-    count: 345,
-    cyrrancy: '₽'
-  },
-  {
-    color: '#4FB5FF',
-    name: 'Взятка',
-    count: 4253,
-    cyrrancy: '₽'
-  },
-  {
-    color: '#FFC34F',
-    name: 'Походы в туалет',
-    count: 6253,
-    cyrrancy: '₽'
-  }
-]
 </script>
 
 <template>
   <div class="transactions-visual-info">
-    <div class="chose-month">
-      <p class="chose-month__title title-medium on-surface-text">Расходы за</p>
-      <md-text-button @click="ButtonAddCustomDateHandler">{{
-        getStringChosedMonth
-      }}</md-text-button>
-    </div>
+    <ChoseMonth typeTitle="expense" />
     <div class="graph-diogram-section">
       <md-icon-button class="button-swap-diagram" @click="clickButtonSwapHandler('left')">
         <ArrowLeftBig />
       </md-icon-button>
-      <GraphDiogram :data="transactionsData" />
+      <GraphDiogram :data="formatData" typeTransactions="expense" />
       <md-icon-button class="button-swap-diagram" @click="clickButtonSwapHandler('right')">
         <ArrowRightBig />
       </md-icon-button>
     </div>
     <ul class="categpries-list">
-      <li v-for="(categpry, index) in categpries" :key="index">
-        <CardCategory
-          :count="categpry.count"
-          :name="categpry.name"
-          :color="categpry.color"
-          :cyrrancy="categpry.cyrrancy"
-          :icon="categpry.icon"
-        />
+      <li v-for="(data, index) in formatData" :key="index">
+        <CardCategory :category="data.category" :amount="data.amount" :cyrrancy="currency" />
       </li>
     </ul>
   </div>
-  <DialogSetRangeDate
-    headline="Выберите месяц"
-    :isOpen="modalSetDateIsOpen"
-    @submitDate="submitDateHandler"
-    @closeModal="closeModalHandler"
-  />
 </template>
 
 <style lang="scss">
@@ -153,12 +122,6 @@ const categpries = [
   flex-direction: column;
 
   gap: 8px;
-}
-
-.chose-month {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .graph-diogram-section {
