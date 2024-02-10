@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { apiManager } from '@/utils/API'
+import { transactionApi } from '@/utils/API'
 
 import type { TMongoObjectId } from '@/utils/types/data/data.types'
 
@@ -8,8 +8,8 @@ export const postErrorText = ref<null | string>(null)
 
 export const useDeleteTransaction = async (id: TMongoObjectId) => {
   postErrorText.value = null
-  return await apiManager
-    .deleteTransactionDelete(id)
+  return await transactionApi
+    .delete(id)
     .then((response) => {
       postErrorText.value = null
       isTransactionDeleted.value = true

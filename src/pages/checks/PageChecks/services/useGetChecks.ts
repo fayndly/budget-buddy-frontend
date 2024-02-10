@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { apiManager } from '@/utils/API'
+import { checkApi } from '@/utils/API'
 import { clearData } from '@/utils/API/helpers/clearData'
 
 import type { ICheck } from '@/utils/types/data/data.types'
@@ -11,8 +11,8 @@ export const isLoading = ref<boolean>(false)
 export const useGetChecks = async () => {
   isLoading.value = true
 
-  return await apiManager
-    .getChecks()
+  return await checkApi
+    .getAll()
     .then((response) => {
       checks.value = clearData<IDataCheck[], ICheck[]>(response.data)
     })

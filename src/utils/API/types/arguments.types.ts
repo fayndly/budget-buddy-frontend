@@ -1,46 +1,31 @@
 import type { TMongoObjectId, TTypeTransaction } from '@/utils/types/data/data.types'
 
-interface IArgumentsAuth {
+interface IArgumentsDataAuth {
   email: string
   password: string
 }
+export interface IArgumentsDataAuthLogin extends IArgumentsDataAuth {}
 
-export interface IArgumentsPostAuthLogin extends IArgumentsAuth {}
-
-export interface IArgumentsPostAuthSignup extends IArgumentsAuth {
+export interface IArgumentsDataAuthSignup extends IArgumentsDataAuth {
   userName: string
 }
 
-export interface IArgumentsGetCategories {
-  type?: TTypeTransaction
-}
-export interface IArgumentsPostCheckAdd {
+export interface IArgumentsDataCheckAdd {
   name: string
   amount: number
   currency: TMongoObjectId
 }
-export interface IArgumentsPatchCheckUpdate extends Omit<IArgumentsPostCheckAdd, 'amount'> {}
+export interface IArgumentsDataCheckUpdate extends Omit<IArgumentsDataCheckAdd, 'amount'> {}
 
-export interface IArgumentsGetCategory {
-  id: TMongoObjectId
-  type: TTypeTransaction
-}
-
-export interface IArgumentsPostCategoryAdd {
+export interface IArgumentsDataCategoryAdd {
   name: string
   type: TTypeTransaction
   color: string
   icon?: string | null
 }
-export interface IArgumentsPatchCategoryUpdate extends IArgumentsPostCategoryAdd {}
+export interface IArgumentsDataCategoryUpdate extends IArgumentsDataCategoryAdd {}
 
-export interface IArgumentsGetTransactions {
-  check?: TMongoObjectId
-  type?: TTypeTransaction
-  startTime?: string
-  endTime?: string
-}
-export interface IArgumentsPostTransactionAdd {
+export interface IArgumentsDataTransactionAdd {
   type: TTypeTransaction
   name: string
   currency: TMongoObjectId
@@ -50,4 +35,4 @@ export interface IArgumentsPostTransactionAdd {
   time: string
   description?: string
 }
-export interface IArgumentsPatchTransactionUpdate extends IArgumentsPostTransactionAdd {}
+export interface IArgumentsDataTransactionUpdate extends IArgumentsDataTransactionAdd {}

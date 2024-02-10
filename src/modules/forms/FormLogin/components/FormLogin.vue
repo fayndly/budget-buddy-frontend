@@ -16,8 +16,11 @@ import {
   usePostAuthLogin,
   postErrorText,
   serverValidateErrors,
-  isButtonSubmitAuthLoading
+  isButtonSubmitAuthLoading,
+  isAuthed
 } from '../services/useSubmitForm'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 const formData = reactive<IFormFields>({
   email: '',
@@ -31,6 +34,10 @@ const submitForm = async () => {
   validation.value.$clearExternalResults()
   if (!(await validation.value.$validate())) return
   await usePostAuthLogin(formData.email, formData.password)
+
+  if (isAuthed.value) {
+    router.push({ name: 'Main' })
+  }
 }
 </script>
 

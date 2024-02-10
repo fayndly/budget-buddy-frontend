@@ -6,7 +6,11 @@ import router from './router/router'
 
 const app = createApp(App)
 
-// app.config.compilerOptions.isCustomElement = (tag) => tag.startsWith('my-')
+router.beforeEach((to, from) => {
+  if (!localStorage.getItem('token') && to.name !== 'AuthLogin') {
+    return { name: 'AuthLogin' }
+  }
+})
 
 app.use(createPinia())
 app.use(router)

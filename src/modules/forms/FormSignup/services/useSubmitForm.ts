@@ -1,4 +1,4 @@
-import { apiManager } from '@/utils/API/index'
+import { authApi } from '@/utils/API/index'
 import type { AxiosError } from 'axios'
 import { ref, reactive } from 'vue'
 
@@ -16,8 +16,8 @@ export const usePostAuthSignup = async (
   email: string,
   password: string
 ): Promise<void> => {
-  await apiManager
-    .postAuthSignup({ userName, email, password })
+  await authApi
+    .signup({ userName, email, password })
     .then((response) => {
       postErrorText.value = null
       localStorage.setItem('token', response.data.token)

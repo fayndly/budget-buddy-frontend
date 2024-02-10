@@ -24,11 +24,11 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 
 watch(route, async () => {
-  await useGetOneCheck(route.params.checkId as TMongoObjectId)
+  // await useGetOneCheck(route.params.checkId as TMongoObjectId)
 })
 
 onMounted(async () => {
-  await useGetOneCheck(route.params.checkId as TMongoObjectId)
+  // await useGetOneCheck(route.params.checkId as TMongoObjectId)
 
   check.value?.currency && (await useGetOneCurrency(check.value.currency))
 })

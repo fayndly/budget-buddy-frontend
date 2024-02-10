@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { apiManager } from '@/utils/API'
+import { categoryApi } from '@/utils/API'
 import { clearData } from '@/utils/API/helpers/clearData'
 
 import type { ICategory, TMongoObjectId } from '@/utils/types/data/data.types'
@@ -10,8 +10,8 @@ export const isCategoryNotFound = ref<boolean>(false)
 
 export const useGetOneCategory = async (id: TMongoObjectId) => {
   isCategoryNotFound.value = false
-  return await apiManager
-    .getCategory(id)
+  return await categoryApi
+    .getOne(id)
     .then((response) => {
       category.value = clearData<IDataCategory, ICategory>(response.data)
     })

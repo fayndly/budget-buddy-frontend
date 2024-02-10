@@ -42,6 +42,7 @@ const submitForm = async () => {
   if (route.params.checkId && formData.name && formData.currency)
     await usePatchCheckUpdate(
       route.params.checkId as TMongoObjectId,
+      // '65be2df3b4aae0ddf4cb8f2a' as TMongoObjectId,
       formData.name,
       formData.currency
     )

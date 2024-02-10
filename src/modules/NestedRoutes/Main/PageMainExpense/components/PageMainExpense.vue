@@ -1,37 +1,52 @@
 <script setup lang="ts">
-import { onMounted, watch } from 'vue'
+import { onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
 import '@material/web/button/text-button'
 
 import { TransactionsVisualInfo } from '@/modules/TransactionsVisualInfo'
 import { TransactionsList } from '@/modules/TransactionsList'
 
-import type { TMongoObjectId } from '@/utils/types/data/data.types'
+// import type { TMongoObjectId } from '@/utils/types/data/data.types'
 
-import { check, useGetOneCheck } from '../services/useGetOneCheck'
-import { transactions, useGetTransactions } from '../services/useGetTransactions'
+// import { check, useGetOneCheck } from '../services/useGetOneCheck'
+// import { transactions, useGetTransactions } from '../services/useGetTransactions'
 
-import { useRoute } from 'vue-router'
-const route = useRoute()
+// import { useMainExpenseStore } from '../stores/MainExpenseStore'
+// import { useBarCheckStore } from '@/modules/BarCheck'
+// import { useTransactionsStore } from '@/stores/API/transactions'
 
-watch(route, async () => {
-  await useGetOneCheck(route.params.checkId as TMongoObjectId)
-  await useGetTransactions(check.value?.id, 'expense')
-})
+// const mainExpenseStore = useMainExpenseStore()
+// const barCheckStore = useBarCheckStore()
+// const transactionsStore = useTransactionsStore()
+
+// const { transactions } = storeToRefs(mainExpenseStore)
+// const { chosedCheck } = storeToRefs(barCheckStore)
 
 onMounted(async () => {
-  await useGetOneCheck(route.params.checkId as TMongoObjectId)
-  await useGetTransactions(check.value?.id, 'expense')
+  // await mainExpenseStore.uploadTransactions()
+  // const newTransactions = transactions.value.map(async (val) => {
+  //   return await transactionsStore.getTransactionById(val.id, {
+  //     hasCategory: true,
+  //     hasCheck: true,
+  //     hasCurrency: true
+  //   })
+  // })
+  // console.log(newTransactions)
 })
 </script>
 
 <template>
-  <TransactionsVisualInfo :transactions="transactions" />
-  <TransactionsList :transactions="transactions" />
+  <!-- <TransactionsVisualInfo :transactions="transactions" />
+  <TransactionsList :transactions="transactions" /> -->
   <md-fab
     variant="primary"
     class="fab-add-transaction"
     aria-label="add"
-    @click="$router.push({ name: 'TransactionsAdd', query: { type: 'expense', check: check?.id } })"
+    @click="
+      console.log('cluic')
+
+      // $router.push({ name: 'TransactionsAdd', query: { type: 'expense', check: chosedCheck?.id } })
+    "
   >
     <span class="material-icons-outlined" slot="icon">add</span>
   </md-fab>

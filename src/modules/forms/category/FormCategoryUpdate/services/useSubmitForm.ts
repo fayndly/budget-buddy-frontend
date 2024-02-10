@@ -1,4 +1,4 @@
-import { apiManager } from '@/utils/API/index'
+import { categoryApi } from '@/utils/API/index'
 import type { AxiosError } from 'axios'
 import { ref, reactive } from 'vue'
 
@@ -24,8 +24,8 @@ export const usePatchCategoryUpdate = async (
   const params = { name, type, color, icon }
   if (icon === null) params.icon = 'null'
 
-  await apiManager
-    .patchCategoryUpdate(params, id)
+  await categoryApi
+    .update(id, params)
     .then((response) => {
       postErrorText.value = null
 

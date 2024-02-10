@@ -1,4 +1,4 @@
-import { apiManager } from '@/utils/API/index'
+import { checkApi } from '@/utils/API/index'
 import type { AxiosError } from 'axios'
 import { ref, reactive } from 'vue'
 
@@ -18,8 +18,8 @@ export const usePostCheckAdd = async (
 ): Promise<void> => {
   isLoading.value = true
   postErrorText.value = null
-  await apiManager
-    .postCheckAdd({ name, currency, amount })
+  await checkApi
+    .create({ name, currency, amount })
     .then((response) => {
       postErrorText.value = null
 

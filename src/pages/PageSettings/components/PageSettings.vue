@@ -5,6 +5,14 @@ import BarTopApp from '@/components/bars/BarTopApp/BarTopApp.vue'
 
 import '@material/web/list/list'
 import '@material/web/list/list-item'
+
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
+const clickLogout = () => {
+  router.push({ name: 'AuthLogin' })
+  localStorage.removeItem('token')
+}
 </script>
 
 <template>
@@ -23,7 +31,7 @@ import '@material/web/list/list-item'
           <span class="material-icons-outlined" slot="end"> chevron_right </span>
         </md-list-item>
         <md-divider></md-divider>
-        <md-list-item interactive type="button" @click="$router.push({ name: 'AuthLogin' })">
+        <md-list-item interactive type="button" @click="clickLogout">
           Выход
           <span slot="start" class="material-icons-outlined"> logout </span>
         </md-list-item>

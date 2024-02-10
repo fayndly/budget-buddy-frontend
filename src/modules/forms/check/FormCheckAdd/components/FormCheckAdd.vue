@@ -23,6 +23,9 @@ import { usePostCheckAdd, postErrorText, serverValidateErrors } from '../service
 import { useGetCurrencies, currencies } from '../services/useGetCurrencies'
 import type { ICurrency } from '@/utils/types/data/data.types'
 
+import { useChecksStore } from '@/stores/API/checks'
+const checksStore = useChecksStore()
+
 const formData = reactive<IFormFields>({
   name: '',
   currency: null,
@@ -43,6 +46,7 @@ const submitForm = async () => {
   validation.value.$clearExternalResults()
   if (!(await validation.value.$validate())) return
   await usePostCheckAdd(formData.name, formData.currency, formData.count)
+  await checksStore.uploadChecks({ hasCurrency: true })
 }
 
 const isSnackbarOpen = ref<boolean>(false)

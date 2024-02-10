@@ -20,9 +20,9 @@ import {
   isTransactionNotFound
 } from '../services/useGetOneTransaction'
 
-import { check, useGetOneCheck } from '../services/useGetOneCheck'
-import { category, useGetOneCategory } from '../services/useGetOneCategory'
-import { currency, useGetOneCurrency } from '../services/useGetOneCurrency'
+// import { check, useGetOneCheck } from '../services/useGetOneCheck'
+// import { category, useGetOneCategory } from '../services/useGetOneCategory'
+// import { currency, useGetOneCurrency } from '../services/useGetOneCurrency'
 
 import { translateType } from '@/utils/helpers'
 
@@ -37,24 +37,24 @@ const getFormatArrayItems = (transactionData: ITransaction): TFormatListDataInfo
       titleName: 'Тип',
       value: translateType[transactionData?.type]
     },
-    {
-      titleName: 'Валюта',
-      value: currency.value?.symbol
-    },
-    {
-      titleName: 'Сумма',
-      value: transactionData?.amount.toLocaleString(currency.value?.designation)
-    },
-    {
-      titleName: 'Счет',
-      value: check.value?.name,
-      valueLinkTo: { name: 'Check', params: { checkId: check.value?.id } }
-    },
-    {
-      titleName: 'Категория',
-      value: category.value?.name,
-      valueLinkTo: { name: 'Category', params: { categoryId: category.value?.id } }
-    },
+    // {
+    //   titleName: 'Валюта',
+    //   value: currency.value?.symbol
+    // },
+    // {
+    //   titleName: 'Сумма',
+    //   value: transactionData?.amount.toLocaleString(currency.value?.designation)
+    // },
+    // {
+    //   titleName: 'Счет',
+    //   value: check.value?.name,
+    //   valueLinkTo: { name: 'Check', params: { checkId: check.value?.id } }
+    // },
+    // {
+    //   titleName: 'Категория',
+    //   value: category.value?.name,
+    //   valueLinkTo: { name: 'Category', params: { categoryId: category.value?.id } }
+    // },
     { titleName: 'Время', value: new Date(transactionData?.time).toLocaleString() },
     { titleName: 'Описание', value: transactionData?.description },
     {
@@ -67,8 +67,8 @@ const getFormatArrayItems = (transactionData: ITransaction): TFormatListDataInfo
     }
   ]
 
-  if (!check.value) delete FormatListDataInfo[3].valueLinkTo
-  if (!category.value) delete FormatListDataInfo[4].valueLinkTo
+  // if (!check.value) delete FormatListDataInfo[3].valueLinkTo
+  // if (!category.value) delete FormatListDataInfo[4].valueLinkTo
 
   return FormatListDataInfo
 }
@@ -86,9 +86,9 @@ onMounted(async () => {
     isTransactionNotFound.value = true
   }
 
-  transaction.value?.check && (await useGetOneCheck(transaction.value.check))
-  transaction.value?.category && (await useGetOneCategory(transaction.value.category))
-  transaction.value?.currency && (await useGetOneCurrency(transaction.value.currency))
+  // transaction.value?.check && (await useGetOneCheck(transaction.value.check))
+  // transaction.value?.category && (await useGetOneCategory(transaction.value.category))
+  // transaction.value?.currency && (await useGetOneCurrency(transaction.value.currency))
 
   if (transaction.value) transactionInfo.value = getFormatArrayItems(transaction.value)
 

@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { apiManager } from '@/utils/API'
+import { checkApi } from '@/utils/API'
 import { clearData } from '@/utils/API/helpers/clearData'
 
 import type { ICheck, TMongoObjectId } from '@/utils/types/data/data.types'
@@ -10,8 +10,8 @@ export const isCheckNotFound = ref<boolean>(false)
 
 export const useGetOneCheck = async (id: TMongoObjectId) => {
   isCheckNotFound.value = false
-  return await apiManager
-    .getCheck(id)
+  return await checkApi
+    .getOne(id)
     .then((response) => {
       check.value = clearData<IDataCheck, ICheck>(response.data)
     })

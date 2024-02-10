@@ -1,4 +1,4 @@
-import { apiManager } from '@/utils/API/index'
+import { transactionApi } from '@/utils/API/index'
 import type { AxiosError } from 'axios'
 import { ref, reactive } from 'vue'
 
@@ -35,8 +35,8 @@ export const usePatchTransactionUpdate = async (
     time,
     description: description || ''
   }
-  await apiManager
-    .patchTransactionUpdate(params, id)
+  await transactionApi
+    .update(id, params)
     .then((response) => {
       postErrorText.value = null
 

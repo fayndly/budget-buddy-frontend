@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { apiManager } from '@/utils/API'
+import { categoryApi } from '@/utils/API'
 import { clearData } from '@/utils/API/helpers/clearData'
 
 import type { ICategory } from '@/utils/types/data/data.types'
@@ -11,8 +11,8 @@ export const isLoading = ref<boolean>(false)
 export const useGetCategories = async () => {
   isLoading.value = true
 
-  return await apiManager
-    .getCategories({ type: 'expense' })
+  return await categoryApi
+    .getAll({ type: 'expense' })
     .then((response) => {
       categories.value = clearData<IDataCategory[], ICategory[]>(response.data)
     })

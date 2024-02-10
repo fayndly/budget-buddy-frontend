@@ -1,4 +1,4 @@
-import { apiManager } from '@/utils/API/index'
+import { categoryApi } from '@/utils/API/index'
 import type { AxiosError } from 'axios'
 import { ref, reactive } from 'vue'
 
@@ -22,8 +22,8 @@ export const usePostCheckAdd = async (
   postErrorText.value = null
   const params = { name, type, color, icon }
   if (!icon) delete params.icon
-  await apiManager
-    .postCategoryAdd(params)
+  await categoryApi
+    .create(params)
     .then((response) => {
       postErrorText.value = null
 

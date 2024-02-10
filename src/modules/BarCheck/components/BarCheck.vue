@@ -1,66 +1,57 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from 'vue'
-
-import type { ICheck, TMongoObjectId } from '@/utils/types/data/data.types'
-
-import { getById } from '@/utils/helpers/getById'
+import { ref, computed, onMounted } from 'vue'
 
 import '@material/web/iconbutton/icon-button'
 import '@material/web/menu/menu'
 import '@material/web/menu/menu-item'
 
-import { checks, useGetChecks } from '../services/useGetChecks'
-import { currency, useGetOneCurrency } from '../services/useGetOneCurrency'
+import { useBarCheckStore } from '../stores/BarCheck'
+import { storeToRefs } from 'pinia'
 
-import { useRouter, useRoute } from 'vue-router'
-const router = useRouter()
-const route = useRoute()
+const barCheckStore = useBarCheckStore()
 
-const chosedCheck = ref<ICheck | null>(null)
+const { chosedCheck, checks } = storeToRefs(barCheckStore)
+
+const getReadableAmount = computed(() => {
+  let readableAmount = ''
+
+  if (chosedCheck.value) {
+    if (typeof chosedCheck.value.currency === 'object') {
+      readableAmount = new Intl.NumberFormat(chosedCheck.value.currency.designation, {
+        notation: 'standard',
+        style: 'currency',
+        currency: chosedCheck.value.currency.name,
+        minimumFractionDigits: 0
+      }).format(chosedCheck.value.amount)
+    }
+  }
+
+  return readableAmount
+})
 
 const isMenuOpen = ref<boolean>(false)
 
-const clickButtonShowMenuHandler = () => {
+const clickToogleShowMeny = () => {
   isMenuOpen.value = !isMenuOpen.value
 }
 
-const clickMenuItemHandler = (check: ICheck) => {
-  router.replace({ name: 'Main', params: { checkId: check.id } })
-}
-
-const getSelectedCheck = (id: TMongoObjectId) => {
-  return getById<ICheck>(checks, id)
-}
-
-const getCheckIdFromRoute = computed(() => {
-  return route.params.checkId as TMongoObjectId
-})
-
-watch(route, () => {
-  chosedCheck.value = getSelectedCheck(getCheckIdFromRoute.value)
-})
-
-onMounted(async () => {
-  await useGetChecks()
-
-  if (!route.params.checkId) {
-    router.replace({ name: 'Main', params: { checkId: checks.value[0].id } })
-  }
-
-  chosedCheck.value = getSelectedCheck(getCheckIdFromRoute.value)
-
-  chosedCheck.value?.currency && (await useGetOneCurrency(chosedCheck.value.currency))
+onMounted(() => {
+  barCheckStore.uploadChecks()
 })
 </script>
 
 <template>
   <div class="bar-check surface">
     <div class="bar-check__chose-check">
-      <p class="bar-check__name-check title-large on-surface-text">{{ chosedCheck?.name }}</p>
-      <md-icon-button id="usage-anchor" @click="clickButtonShowMenuHandler" :selected="isMenuOpen">
-        <span class="material-icons-outlined">arrow_drop_down</span>
-        <span class="material-icons-outlined" slot="selected">arrow_drop_up</span>
-      </md-icon-button>
+      <label for="usage-anchor" class="bar-check__label">
+        <p class="bar-check__name-check title-large on-surface-text">
+          {{ chosedCheck?.name }}
+        </p>
+        <md-icon-button id="usage-anchor" @click="clickToogleShowMeny" :selected="isMenuOpen">
+          <span class="material-icons-outlined">arrow_drop_down</span>
+          <span class="material-icons-outlined" slot="selected">arrow_drop_up</span>
+        </md-icon-button>
+      </label>
       <md-menu
         id="usage-menu"
         anchor="usage-anchor"
@@ -70,7 +61,7 @@ onMounted(async () => {
         <md-menu-item
           v-for="check in checks"
           :key="check.id"
-          @click="clickMenuItemHandler(check)"
+          @click="barCheckStore.setCheck(check)"
           :selected="check.id === chosedCheck?.id"
         >
           <div slot="headline">{{ check.name }}</div>
@@ -83,7 +74,7 @@ onMounted(async () => {
       </md-menu>
     </div>
     <p class="bar-check__count-check title-large on-surface-text">
-      {{ chosedCheck?.amount.toLocaleString(currency?.designation) }}{{ currency?.symbol }}
+      {{ getReadableAmount }}
     </p>
   </div>
 </template>
@@ -100,6 +91,10 @@ onMounted(async () => {
   gap: 8px;
 
   transition: background-color 0.2s ease-in-out;
+  &__label {
+    display: flex;
+    align-items: center;
+  }
   &__name-check {
   }
   &__count-check {

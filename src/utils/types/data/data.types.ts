@@ -27,7 +27,7 @@ export interface ICheck extends IMongoTimestamps {
   user: TMongoObjectId
   name: string
   amount: number
-  currency: null | TMongoObjectId
+  currency: TMongoObjectId | ICurrency
 }
 
 export interface ICategory extends IMongoTimestamps {
@@ -45,10 +45,10 @@ export interface ITransaction extends IMongoTimestamps {
   user: TMongoObjectId
   type: TTypeTransaction
   name: string
-  currency: TMongoObjectId
+  currency: TMongoObjectId | ICurrency
   amount: number
-  check: TMongoObjectId
-  category: TMongoObjectId
+  check: TMongoObjectId | ICheck
+  category: TMongoObjectId | ICategory
   time: string
   description: string
 }

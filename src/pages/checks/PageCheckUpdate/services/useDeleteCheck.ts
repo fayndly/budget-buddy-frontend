@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { apiManager } from '@/utils/API'
+import { checkApi } from '@/utils/API'
 
 import type { TMongoObjectId } from '@/utils/types/data/data.types'
 
@@ -8,12 +8,12 @@ export const postErrorText = ref<null | string>(null)
 
 export const useDeleteCheck = async (id: TMongoObjectId) => {
   postErrorText.value = null
-  return await apiManager
-    .deleteCheckDelete(id)
+  return await checkApi
+    .delete(id)
     .then((response) => {
       postErrorText.value = null
       isCheckDeleted.value = true
-      console.log(response.data.id)
+      console.log(response)
     })
     .catch((err) => {
       isCheckDeleted.value = false

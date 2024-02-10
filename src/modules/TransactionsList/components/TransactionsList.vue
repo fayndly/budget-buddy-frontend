@@ -26,8 +26,8 @@ watch(getTransactions, () => {
 })
 
 onMounted(async () => {
-  await useGetCurrencies()
-  await useGetCategories()
+  // await useGetCurrencies()
+  // await useGetCategories()
 })
 </script>
 

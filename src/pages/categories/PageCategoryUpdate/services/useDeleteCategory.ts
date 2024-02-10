@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { apiManager } from '@/utils/API'
+import { categoryApi } from '@/utils/API'
 
 import type { TMongoObjectId } from '@/utils/types/data/data.types'
 
@@ -8,8 +8,8 @@ export const postErrorText = ref<null | string>(null)
 
 export const useDeleteCategory = async (id: TMongoObjectId) => {
   postErrorText.value = null
-  return await apiManager
-    .deleteCategoryDelete(id)
+  return await categoryApi
+    .delete(id)
     .then((response) => {
       postErrorText.value = null
       isCategoryDeleted.value = true

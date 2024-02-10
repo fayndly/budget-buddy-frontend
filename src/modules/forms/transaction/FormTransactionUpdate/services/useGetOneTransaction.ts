@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { apiManager } from '@/utils/API'
+import { transactionApi } from '@/utils/API'
 import { clearData } from '@/utils/API/helpers/clearData'
 
 import type { ITransaction, TMongoObjectId } from '@/utils/types/data/data.types'
@@ -10,8 +10,8 @@ export const isTransactionNotFound = ref<boolean>(false)
 
 export const useGetOneTransaction = async (id: TMongoObjectId) => {
   isTransactionNotFound.value = false
-  return await apiManager
-    .getTransaction(id)
+  return await transactionApi
+    .getOne(id)
     .then((response) => {
       transaction.value = clearData<IDataTransaction, ITransaction>(response.data)
     })

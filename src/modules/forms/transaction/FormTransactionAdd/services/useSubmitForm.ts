@@ -1,4 +1,4 @@
-import { apiManager } from '@/utils/API/index'
+import { transactionApi } from '@/utils/API/index'
 import type { AxiosError } from 'axios'
 import { ref, reactive } from 'vue'
 
@@ -34,8 +34,8 @@ export const usePostTransactionAdd = async (
     time,
     description: description || ''
   }
-  await apiManager
-    .postTransactionAdd(params)
+  await transactionApi
+    .create(params)
     .then((response) => {
       postErrorText.value = null
 

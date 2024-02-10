@@ -13,14 +13,8 @@ import { PageMainExpense } from '@/modules/NestedRoutes/Main/PageMainExpense'
 import { PageMainIncome } from '@/modules/NestedRoutes/Main/PageMainIncome'
 const routesMain = [
   {
-    path: '/main/:checkId?',
-    redirect: (to: any) => {
-      if (to.params.checkId) {
-        return `/main/${to.params.checkId}/expense`
-      }
-      return `/main/expense`
-    },
-    // redirect: '/main/:checkId?/expense',
+    path: '/main',
+    redirect: '/main/expense',
     name: RouteNamesEnum.main,
     component: PageMain,
     children: [

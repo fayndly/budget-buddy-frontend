@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { apiManager } from '@/utils/API'
+import { categoryApi } from '@/utils/API'
 import { clearData } from '@/utils/API/helpers/clearData'
 
 import type { ICategory, TTypeTransaction } from '@/utils/types/data/data.types'
@@ -10,8 +10,8 @@ export const categories = ref<ICategory[]>([])
 export const useGetCategories = async (type?: TTypeTransaction | null) => {
   const params: { type?: TTypeTransaction } = {}
   if (type) params.type = type
-  return await apiManager
-    .getCategories(params)
+  return await categoryApi
+    .getAll(params)
     .then((response) => {
       categories.value = clearData<IDataCategory[], ICategory[]>(response.data)
     })
