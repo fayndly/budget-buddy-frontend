@@ -69,7 +69,12 @@ onMounted(async () => {
   await useGetCurrencies()
   await useGetChecks()
   useQueryHandler(route, formData)
-  if (getActiveCheck.value?.currency) formData.currency = getActiveCheck.value?.currency
+  if (getActiveCheck.value?.currency) {
+    if (typeof getActiveCheck.value?.currency === 'string')
+      formData.currency = getActiveCheck.value?.currency
+    if (typeof getActiveCheck.value?.currency === 'object')
+      formData.currency = getActiveCheck.value?.currency.id
+  }
 })
 const router = useRouter()
 
@@ -81,17 +86,9 @@ const submitForm = async () => {
   validation.value.$clearExternalResults()
   if (!(await validation.value.$validate())) return
 
-  if (formData.type && formData.currency && formData.check && formData.category && formData.time)
-    await usePostTransactionAdd(
-      formData.name,
-      formData.type,
-      formData.currency,
-      formData.amount,
-      formData.check,
-      formData.category,
-      formData.time.toISOString(),
-      formData.description
-    )
+  const formatData = Object.assign({}, formData) as any
+  formatData.time = formatData.time?.toISOString()
+  await usePostTransactionAdd(formatData)
 }
 
 const isSnackbarOpen = ref<boolean>(false)

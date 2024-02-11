@@ -17,7 +17,7 @@ export class CategoryApiService extends ApiInstance {
     return this.instance.get<IDataCategory>(`/categories/${id}`)
   }
 
-  getAll(filter?: { type: TTypeTransaction }) {
+  getAll(filter?: { type?: TTypeTransaction }) {
     return this.instance.get<IDataCategory[]>('/categories', { params: { filter } })
   }
 

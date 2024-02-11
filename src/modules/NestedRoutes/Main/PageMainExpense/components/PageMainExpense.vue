@@ -43,9 +43,8 @@ onMounted(async () => {
     class="fab-add-transaction"
     aria-label="add"
     @click="
-      console.log('cluic')
-
-      // $router.push({ name: 'TransactionsAdd', query: { type: 'expense', check: chosedCheck?.id } })
+      $router.push({ name: 'TransactionsAdd', query: { type: 'expense' } })
+      //, check: chosedCheck?.id
     "
   >
     <span class="material-icons-outlined" slot="icon">add</span>

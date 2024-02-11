@@ -3,7 +3,10 @@ import { transactionApi } from '@/utils/API'
 import { clearData } from '@/utils/API/helpers/clearData'
 
 import type { ITransaction, TMongoObjectId } from '@/utils/types/data/data.types'
-import type { IDataTransaction } from '@/utils/types/data/serverData.types'
+import type { IDataTransaction } from '@/utils/API/types/data.types'
+
+import { isAxiosError } from 'axios'
+import type { IErrorData } from '@/utils/API/types/error.types'
 
 export const transaction = ref<ITransaction | null>(null)
 export const isTransactionNotFound = ref<boolean>(false)
@@ -17,20 +20,22 @@ export const useGetOneTransaction = async (id: TMongoObjectId) => {
       check: true,
       category: true
     })
-    console.log(data)
-
-    // transaction.value = clearData<IDataTransaction, ITransaction>(data)
+    transaction.value = clearData<IDataTransaction, ITransaction>(data)
   } catch (error) {
-    console.log(error)
-  }
+    if (isAxiosError<IErrorData>(error) && error.response) {
+      const response = error.response
+      console.log(response)
 
-  // return await apiManager
-  //   .getTransaction(id)
-  //   .then((response) => {
-  //   })
-  //   .catch((err) => {
-  //     console.log(err)
-  //     if (err.response.status === 404) isTransactionNotFound.value = true
-  //     transaction.value = null
-  //   })
+      if (
+        response.status === 404 ||
+        response.status === 400 ||
+        (typeof response.data.error === 'object' && response.data.error.name === 'CastError')
+      )
+        isTransactionNotFound.value = true
+
+      transaction.value = null
+    } else {
+      console.log(error)
+    }
+  }
 }

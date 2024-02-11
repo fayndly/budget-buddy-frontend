@@ -1,9 +1,10 @@
 import { transactionApi } from '@/utils/API/index'
-import type { AxiosError } from 'axios'
 import { ref, reactive } from 'vue'
 
-import type { TErrorServer } from '@/utils/types/errors'
 import type { TTypeTransaction, TMongoObjectId } from '@/utils/types/data/data.types'
+
+import { isAxiosError } from 'axios'
+import type { IErrorData } from '@/utils/API/types/error.types'
 
 import { getFormatValidateErrorsServer } from '@/utils/validations/validationFormat'
 
@@ -14,48 +15,39 @@ export const serverValidateErrors = reactive({})
 
 export const usePatchTransactionUpdate = async (
   id: TMongoObjectId,
-  type: TTypeTransaction,
-  name: string,
-  currency: TMongoObjectId,
-  amount: number,
-  check: TMongoObjectId,
-  category: TMongoObjectId,
-  time: string,
-  description?: string
+  dataFields: {
+    name: string
+    type: TTypeTransaction | null
+    currency: TMongoObjectId | null
+    amount: number
+    check: TMongoObjectId | null
+    category: TMongoObjectId | null
+    time: string | null
+    description?: string
+  }
 ): Promise<void> => {
   isLoading.value = true
   postErrorText.value = null
-  const params = {
-    type,
-    name,
-    currency,
-    amount,
-    check,
-    category,
-    time,
-    description: description || ''
-  }
-  await transactionApi
-    .update(id, params)
-    .then((response) => {
-      postErrorText.value = null
 
-      console.log('Ответ от сервера: ', response)
-    })
-    .catch((error: AxiosError<TErrorServer, any>) => {
-      postErrorText.value = 'Ошибка на сервере'
+  try {
+    const { data } = await transactionApi.update(id, dataFields)
+    postErrorText.value = null
+    console.log('Ответ от сервера: ', data)
+  } catch (error) {
+    if (isAxiosError<IErrorData>(error) && error.response) {
+      const response = error.response
+      postErrorText.value = response.data.message
 
-      if (error.response) {
-        if ('message' in error.response.data) postErrorText.value = error.response.data.message
-
-        if (error.response.status === 400 && Array.isArray(error.response.data)) {
-          postErrorText.value = null
-          Object.assign(serverValidateErrors, getFormatValidateErrorsServer(error.response.data))
-        }
+      if (response.status === 400 && Array.isArray(response.data)) {
+        postErrorText.value = null
+        Object.assign(serverValidateErrors, getFormatValidateErrorsServer(response.data))
       }
-      console.log('Ошибка сервера: ', error.response)
-    })
-    .finally(() => {
-      isLoading.value = false
-    })
+
+      console.log(response)
+    } else {
+      console.log(error)
+    }
+  } finally {
+    isLoading.value = false
+  }
 }

@@ -23,7 +23,7 @@ const getFormatArrayItems = (categoryData: ICategory): TFormatListDataInfo => {
   return [
     {
       titleName: 'Имя',
-      value: categoryData?.name
+      value: categoryData.name
     },
     {
       titleName: 'Тип',
@@ -31,19 +31,19 @@ const getFormatArrayItems = (categoryData: ICategory): TFormatListDataInfo => {
     },
     {
       titleName: 'Цвет',
-      value: categoryData?.color
+      value: categoryData.color
     },
     {
       titleName: 'Иконка',
-      value: categoryData?.icon
+      value: categoryData.icon
     },
     {
       titleName: 'Время создания',
-      value: new Date(categoryData?.createdAt).toLocaleString()
+      value: new Date(categoryData.createdAt).toLocaleString()
     },
     {
       titleName: 'Время обновления',
-      value: new Date(categoryData?.updatedAt).toLocaleString()
+      value: new Date(categoryData.updatedAt).toLocaleString()
     }
   ]
 }

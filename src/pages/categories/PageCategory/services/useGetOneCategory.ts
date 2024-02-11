@@ -24,6 +24,7 @@ export const useGetOneCategory = async (id: TMongoObjectId) => {
 
       if (
         response.status === 404 ||
+        response.status === 400 ||
         (typeof response.data.error === 'object' && response.data.error.name === 'CastError')
       )
         isCategoryNotFound.value = true

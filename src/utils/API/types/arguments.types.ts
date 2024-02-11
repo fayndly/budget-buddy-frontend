@@ -28,13 +28,13 @@ export interface IArgumentsDataCategoryAdd {
 export interface IArgumentsDataCategoryUpdate extends IArgumentsDataCategoryAdd {}
 
 export interface IArgumentsDataTransactionAdd {
-  type: TTypeTransaction
+  type: TNullable<TTypeTransaction>
   name: string
-  currency: TMongoObjectId
+  currency: TNullable<TMongoObjectId>
   amount: number
-  check: TMongoObjectId
-  category: TMongoObjectId
-  time: string
+  check: TNullable<TMongoObjectId>
+  category: TNullable<TMongoObjectId>
+  time: TNullable<string>
   description?: string
 }
 export interface IArgumentsDataTransactionUpdate extends IArgumentsDataTransactionAdd {}

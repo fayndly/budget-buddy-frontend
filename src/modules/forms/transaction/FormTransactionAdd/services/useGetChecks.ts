@@ -3,18 +3,16 @@ import { checkApi } from '@/utils/API'
 import { clearData } from '@/utils/API/helpers/clearData'
 
 import type { ICheck } from '@/utils/types/data/data.types'
-import type { IDataCheck } from '@/utils/types/data/serverData.types'
+import type { IDataCheck } from '@/utils/API/types/data.types'
 
 export const checks = ref<ICheck[]>([])
 
 export const useGetChecks = async () => {
-  return await checkApi
-    .getAll()
-    .then((response) => {
-      checks.value = clearData<IDataCheck[], ICheck[]>(response.data)
-    })
-    .catch((err) => {
-      console.log(err)
-      checks.value = []
-    })
+  try {
+    const { data } = await checkApi.getAll()
+    checks.value = clearData<IDataCheck[], ICheck[]>(data)
+  } catch (error) {
+    checks.value = []
+    console.log(error)
+  }
 }

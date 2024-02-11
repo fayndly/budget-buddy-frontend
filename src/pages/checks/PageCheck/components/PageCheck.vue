@@ -21,25 +21,25 @@ const getFormatArrayItems = (checkData: ICheck): TFormatListDataInfo => {
   return [
     {
       titleName: 'Имя',
-      value: checkData?.name
+      value: checkData.name
     },
     {
       titleName: 'Валюта',
-      value: typeof checkData.currency === 'object' && checkData.currency?.symbol
+      value: (typeof checkData.currency === 'object' && checkData.currency?.symbol) || null
     },
     {
       titleName: 'Сумма',
-      value: checkData?.amount.toLocaleString(
+      value: checkData.amount.toLocaleString(
         (typeof checkData.currency === 'object' && checkData.currency?.designation) || undefined
       )
     },
     {
       titleName: 'Время создания',
-      value: new Date(checkData?.createdAt).toLocaleString()
+      value: new Date(checkData.createdAt).toLocaleString()
     },
     {
       titleName: 'Время обновления',
-      value: new Date(checkData?.updatedAt).toLocaleString()
+      value: new Date(checkData.updatedAt).toLocaleString()
     }
   ]
 }

@@ -69,18 +69,9 @@ const submitForm = async () => {
   validation.value.$clearExternalResults()
   if (!(await validation.value.$validate())) return
 
-  if (formData.type && formData.currency && formData.check && formData.category && formData.time)
-    await usePatchTransactionUpdate(
-      route.params.transactionId as TMongoObjectId,
-      formData.type,
-      formData.name,
-      formData.currency,
-      formData.amount,
-      formData.check,
-      formData.category,
-      formData.time.toISOString(),
-      formData.description
-    )
+  const formatData = Object.assign({}, formData) as any
+  formatData.time = formatData.time?.toISOString()
+  await usePatchTransactionUpdate(route.params.transactionId as TMongoObjectId, formatData)
 }
 
 const isSnackbarOpen = ref<boolean>(false)
@@ -130,13 +121,45 @@ onMounted(async () => {
   if (transaction.value) {
     formData.name = transaction.value.name
     formData.type = transaction.value.type
-    formData.currency = transaction.value.currency
+    if (transaction.value.currency) {
+      if (typeof transaction.value.currency === 'object')
+        formData.currency = transaction.value.currency.id
+      if (typeof transaction.value.currency === 'string')
+        formData.currency = transaction.value.currency
+    } else {
+      formData.currency = transaction.value.currency
+    }
     formData.amount = transaction.value.amount
-    formData.check = transaction.value.check
+    if (transaction.value.check) {
+      if (typeof transaction.value.check === 'object') formData.check = transaction.value.check.id
+      if (typeof transaction.value.check === 'string') formData.check = transaction.value.check
+    } else {
+      formData.check = transaction.value.check
+    }
+    // if (transaction.value.category) {
+    //   if (typeof transaction.value.category === 'object')
+    //     formData.category = transaction.value.category.id
+    //   if (typeof transaction.value.category === 'string')
+    //     formData.category = transaction.value.category
+    // } else {
+    //   formData.category = transaction.value.category
+    // }
     formData.description = transaction.value.description
   }
 
   isLoading.value = false
+})
+
+const getDefalutCategory = computed(() => {
+  if (transaction.value) {
+    if (typeof transaction.value?.category === 'object' && transaction.value?.category) {
+      return transaction.value?.category.id
+    }
+    if (typeof transaction.value?.category === 'string' && transaction.value?.category) {
+      return transaction.value?.category
+    }
+  }
+  return null
 })
 </script>
 
@@ -204,7 +227,7 @@ onMounted(async () => {
           v-model:modelValue="formData.category"
           :values="categories"
           @clickButtonAddCategory="clickButtonAddCategoryHandler"
-          :defaultValue="transaction?.category"
+          :defaultValue="getDefalutCategory"
         />
       </template>
     </InputList>

@@ -20,10 +20,6 @@ import {
   isTransactionNotFound
 } from '../services/useGetOneTransaction'
 
-// import { check, useGetOneCheck } from '../services/useGetOneCheck'
-// import { category, useGetOneCategory } from '../services/useGetOneCategory'
-// import { currency, useGetOneCurrency } from '../services/useGetOneCurrency'
-
 import { translateType } from '@/utils/helpers'
 
 const transactionInfo = ref<TFormatListDataInfo | null>(null)
@@ -32,43 +28,60 @@ const isDataLoading = ref<boolean>(false)
 
 const getFormatArrayItems = (transactionData: ITransaction): TFormatListDataInfo => {
   const FormatListDataInfo = [
-    { titleName: 'Имя', value: transactionData?.name },
+    { titleName: 'Имя', value: transactionData.name },
     {
       titleName: 'Тип',
-      value: translateType[transactionData?.type]
+      value: translateType[transactionData.type]
     },
-    // {
-    //   titleName: 'Валюта',
-    //   value: currency.value?.symbol
-    // },
-    // {
-    //   titleName: 'Сумма',
-    //   value: transactionData?.amount.toLocaleString(currency.value?.designation)
-    // },
-    // {
-    //   titleName: 'Счет',
-    //   value: check.value?.name,
-    //   valueLinkTo: { name: 'Check', params: { checkId: check.value?.id } }
-    // },
-    // {
-    //   titleName: 'Категория',
-    //   value: category.value?.name,
-    //   valueLinkTo: { name: 'Category', params: { categoryId: category.value?.id } }
-    // },
-    { titleName: 'Время', value: new Date(transactionData?.time).toLocaleString() },
-    { titleName: 'Описание', value: transactionData?.description },
+    {
+      titleName: 'Валюта',
+      value:
+        (typeof transactionData.currency === 'object' && transactionData.currency?.symbol) || null
+    },
+    {
+      titleName: 'Сумма',
+      value: transactionData.amount.toLocaleString(
+        (typeof transactionData.currency === 'object' && transactionData.currency?.designation) ||
+          undefined
+      )
+    },
+    {
+      titleName: 'Счет',
+      value: (typeof transactionData.check === 'object' && transactionData.check?.name) || null,
+      valueLinkTo: {
+        name: 'Check',
+        params: {
+          checkId: typeof transactionData.check === 'object' && transactionData.check?.id
+        }
+      }
+    },
+    {
+      titleName: 'Категория',
+      value:
+        (typeof transactionData.category === 'object' && transactionData.category?.name) || null,
+      valueLinkTo: {
+        name: 'Category',
+        params: {
+          categoryId: typeof transactionData.category === 'object' && transactionData.category?.id
+        }
+      }
+    },
+    { titleName: 'Время', value: new Date(transactionData.time).toLocaleString() },
+    { titleName: 'Описание', value: transactionData.description },
     {
       titleName: 'Время создания',
-      value: new Date(transactionData?.createdAt).toLocaleString()
+      value: new Date(transactionData.createdAt).toLocaleString()
     },
     {
       titleName: 'Время обновления',
-      value: new Date(transactionData?.updatedAt).toLocaleString()
+      value: new Date(transactionData.updatedAt).toLocaleString()
     }
   ]
 
-  // if (!check.value) delete FormatListDataInfo[3].valueLinkTo
-  // if (!category.value) delete FormatListDataInfo[4].valueLinkTo
+  if (!transactionData.check || typeof transactionData.check !== 'object')
+    delete FormatListDataInfo[4].valueLinkTo
+  if (!transactionData.category || typeof transactionData.category !== 'object')
+    delete FormatListDataInfo[5].valueLinkTo
 
   return FormatListDataInfo
 }
@@ -85,10 +98,6 @@ onMounted(async () => {
   } else {
     isTransactionNotFound.value = true
   }
-
-  // transaction.value?.check && (await useGetOneCheck(transaction.value.check))
-  // transaction.value?.category && (await useGetOneCategory(transaction.value.category))
-  // transaction.value?.currency && (await useGetOneCurrency(transaction.value.currency))
 
   if (transaction.value) transactionInfo.value = getFormatArrayItems(transaction.value)
 
