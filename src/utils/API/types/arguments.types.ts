@@ -1,5 +1,7 @@
 import type { TMongoObjectId, TTypeTransaction } from '@/utils/types/data/data.types'
 
+type TNullable<T> = T | null
+
 interface IArgumentsDataAuth {
   email: string
   password: string
@@ -13,15 +15,15 @@ export interface IArgumentsDataAuthSignup extends IArgumentsDataAuth {
 export interface IArgumentsDataCheckAdd {
   name: string
   amount: number
-  currency: TMongoObjectId | null
+  currency: TNullable<TMongoObjectId>
 }
 export interface IArgumentsDataCheckUpdate extends Omit<IArgumentsDataCheckAdd, 'amount'> {}
 
 export interface IArgumentsDataCategoryAdd {
   name: string
-  type: TTypeTransaction
-  color: string
-  icon?: string | null
+  type: TNullable<TTypeTransaction>
+  color: TNullable<string>
+  icon?: TNullable<string>
 }
 export interface IArgumentsDataCategoryUpdate extends IArgumentsDataCategoryAdd {}
 

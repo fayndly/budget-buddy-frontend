@@ -39,11 +39,11 @@ const getFormatArrayItems = (categoryData: ICategory): TFormatListDataInfo => {
     },
     {
       titleName: 'Время создания',
-      value: new Date(categoryData?.createdAt).toLocaleString('ru-RU')
+      value: new Date(categoryData?.createdAt).toLocaleString()
     },
     {
       titleName: 'Время обновления',
-      value: new Date(categoryData?.updatedAt).toLocaleString('ru-RU')
+      value: new Date(categoryData?.updatedAt).toLocaleString()
     }
   ]
 }

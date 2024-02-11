@@ -22,5 +22,5 @@ export interface IPropsInputRadio<T> {
 
 export interface IPropsChose<T> {
   modelValue: T | null
-  defaultValue?: string
+  defaultValue?: string | null
 }

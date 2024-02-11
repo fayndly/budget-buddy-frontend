@@ -23,7 +23,6 @@ export const useGetOneCheck = async (id: TMongoObjectId) => {
       console.log(response)
       if (
         response.status === 404 ||
-        response.status === 404 ||
         (typeof response.data.error === 'object' && response.data.error.name === 'CastError')
       )
         isCheckNotFound.value = true

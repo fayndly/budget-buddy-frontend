@@ -10,11 +10,10 @@ import type { IErrorData } from '@/utils/API/types/error.types'
 
 export const check = ref<ICheck | null>(null)
 export const isCheckNotFound = ref<boolean>(false)
-export const isDataLoading = ref<boolean>(false)
 
 export const useGetOneCheck = async (id: TMongoObjectId) => {
   isCheckNotFound.value = false
-  isDataLoading.value = true
+
   try {
     const { data } = await checkApi.getOne(id, { currency: true })
     check.value = clearData<IDataCheck, ICheck>(data)
@@ -33,7 +32,5 @@ export const useGetOneCheck = async (id: TMongoObjectId) => {
     } else {
       console.log(error)
     }
-  } finally {
-    isDataLoading.value = false
   }
 }

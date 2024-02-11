@@ -43,14 +43,11 @@ const route = useRoute()
 const submitForm = async () => {
   validation.value.$clearExternalResults()
   if (!(await validation.value.$validate())) return
-  if (route.params.categoryId && formData.name && formData.type && formData.color && formData.icon)
-    await usePatchCategoryUpdate(
-      route.params.categoryId as TMongoObjectId,
-      formData.name,
-      formData.type,
-      formData.color.value,
-      formData.icon.value
-    )
+
+  const formatData = Object.assign({}, formData) as any
+  formatData.color = formatData.color?.value
+  formatData.icon = formatData.icon?.value
+  await usePatchCategoryUpdate(route.params.categoryId as TMongoObjectId, formatData)
 }
 
 const isSnackbarOpen = ref<boolean>(false)

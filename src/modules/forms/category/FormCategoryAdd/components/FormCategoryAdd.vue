@@ -39,8 +39,11 @@ useQueryHandler(route, formData)
 const submitForm = async () => {
   validation.value.$clearExternalResults()
   if (!(await validation.value.$validate())) return
-  if (formData.name && formData.type && formData.color)
-    await usePostCheckAdd(formData.name, formData.type, formData.color.value, formData.icon?.value)
+
+  const formatData = Object.assign({}, formData) as any
+  formatData.color = formatData.color?.value
+  formatData.icon = formatData.icon?.value
+  await usePostCheckAdd(formatData)
 }
 
 const isSnackbarOpen = ref<boolean>(false)

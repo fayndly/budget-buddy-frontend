@@ -14,7 +14,6 @@ export const useGetChecks = async () => {
   try {
     const { data } = await checkApi.getAll({ currency: true })
     checks.value = clearData<IDataCheck[], ICheck[]>(data)
-    console.log(checks.value)
   } catch (error) {
     checks.value = []
   } finally {

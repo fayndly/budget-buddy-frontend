@@ -11,9 +11,11 @@ import ListDataInfo from '@/components/wrappers/ListDataInfo/ListDataInfo.vue'
 
 import type { ICheck, TMongoObjectId, TFormatListDataInfo } from '@/utils/types/data/data.types'
 
-import { useGetOneCheck, check, isCheckNotFound, isDataLoading } from '../services/useGetOneCheck'
+import { useGetOneCheck, check, isCheckNotFound } from '../services/useGetOneCheck'
 
 const checkInfo = ref<TFormatListDataInfo | null>(null)
+
+const isDataLoading = ref<boolean>(false)
 
 const getFormatArrayItems = (checkData: ICheck): TFormatListDataInfo => {
   return [
@@ -47,6 +49,8 @@ const route = useRoute()
 const router = useRouter()
 
 onMounted(async () => {
+  isDataLoading.value = true
+
   if (route.params.checkId) {
     await useGetOneCheck(route.params.checkId as TMongoObjectId)
   } else {
@@ -54,6 +58,8 @@ onMounted(async () => {
   }
 
   if (check.value) checkInfo.value = getFormatArrayItems(check.value)
+
+  isDataLoading.value = false
 })
 </script>
 
