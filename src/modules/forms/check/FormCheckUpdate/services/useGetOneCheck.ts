@@ -3,21 +3,33 @@ import { checkApi } from '@/utils/API'
 import { clearData } from '@/utils/API/helpers/clearData'
 
 import type { ICheck, TMongoObjectId } from '@/utils/types/data/data.types'
-import type { IDataCheck } from '@/utils/types/data/serverData.types'
+import type { IDataCheck } from '@/utils/API/types/data.types'
+
+import { isAxiosError } from 'axios'
+import type { IErrorData } from '@/utils/API/types/error.types'
 
 export const check = ref<ICheck | null>(null)
 export const isCheckNotFound = ref<boolean>(false)
 
 export const useGetOneCheck = async (id: TMongoObjectId) => {
   isCheckNotFound.value = false
-  return await checkApi
-    .getOne(id)
-    .then((response) => {
-      check.value = clearData<IDataCheck, ICheck>(response.data)
-    })
-    .catch((err) => {
-      console.log(err)
-      if (err.response.status === 404) isCheckNotFound.value = true
-      check.value = null
-    })
+
+  try {
+    const { data } = await checkApi.getOne(id)
+    check.value = clearData<IDataCheck, ICheck>(data)
+  } catch (error) {
+    if (isAxiosError<IErrorData>(error) && error.response) {
+      const response = error.response
+      console.log(response)
+      if (
+        response.status === 404 ||
+        response.status === 404 ||
+        (typeof response.data.error === 'object' && response.data.error.name === 'CastError')
+      )
+        isCheckNotFound.value = true
+    } else {
+      console.log(error)
+    }
+    check.value = null
+  }
 }

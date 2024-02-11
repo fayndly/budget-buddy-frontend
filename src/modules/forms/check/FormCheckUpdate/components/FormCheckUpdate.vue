@@ -39,13 +39,7 @@ const route = useRoute()
 const submitForm = async () => {
   validation.value.$clearExternalResults()
   if (!(await validation.value.$validate())) return
-  if (route.params.checkId && formData.name && formData.currency)
-    await usePatchCheckUpdate(
-      route.params.checkId as TMongoObjectId,
-      // '65be2df3b4aae0ddf4cb8f2a' as TMongoObjectId,
-      formData.name,
-      formData.currency
-    )
+  await usePatchCheckUpdate(route.params.checkId as TMongoObjectId, formData)
 }
 
 const isSnackbarOpen = ref<boolean>(false)
@@ -83,7 +77,12 @@ onMounted(async () => {
 
   if (check.value) {
     formData.name = check.value.name
-    formData.currency = check.value.currency
+    if (check.value.currency) {
+      if (typeof check.value.currency === 'object') formData.currency = check.value.currency.id
+      if (typeof check.value.currency === 'string') formData.currency = check.value.currency
+    } else {
+      formData.currency = check.value.currency
+    }
     formData.amount = check.value.amount
   }
 
@@ -122,7 +121,7 @@ onMounted(async () => {
     <InputWithIcon icon="account_balance">
       <template #input>
         <InputAmount
-          label="Первоначальная сумма"
+          label="Сумма"
           :isDisabled="true"
           v-model:modelValue="formData.amount"
           :suffixText="getActiveCurrency?.symbol"

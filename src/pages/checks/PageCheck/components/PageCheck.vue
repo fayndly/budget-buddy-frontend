@@ -11,12 +11,9 @@ import ListDataInfo from '@/components/wrappers/ListDataInfo/ListDataInfo.vue'
 
 import type { ICheck, TMongoObjectId, TFormatListDataInfo } from '@/utils/types/data/data.types'
 
-import { useGetOneCheck, check, isCheckNotFound } from '../services/useGetOneCheck'
-import { useGetOneCurrency, currency } from '../services/useGetOneCurrency'
+import { useGetOneCheck, check, isCheckNotFound, isDataLoading } from '../services/useGetOneCheck'
 
 const checkInfo = ref<TFormatListDataInfo | null>(null)
-
-const isDataLoading = ref<boolean>(false)
 
 const getFormatArrayItems = (checkData: ICheck): TFormatListDataInfo => {
   return [
@@ -26,11 +23,13 @@ const getFormatArrayItems = (checkData: ICheck): TFormatListDataInfo => {
     },
     {
       titleName: 'Валюта',
-      value: currency.value?.symbol
+      value: typeof checkData.currency === 'object' && checkData.currency?.symbol
     },
     {
       titleName: 'Сумма',
-      value: checkData?.amount.toLocaleString(currency.value?.designation)
+      value: checkData?.amount.toLocaleString(
+        (typeof checkData.currency === 'object' && checkData.currency?.designation) || undefined
+      )
     },
     {
       titleName: 'Время создания',
@@ -48,19 +47,13 @@ const route = useRoute()
 const router = useRouter()
 
 onMounted(async () => {
-  isDataLoading.value = true
-
   if (route.params.checkId) {
     await useGetOneCheck(route.params.checkId as TMongoObjectId)
   } else {
     isCheckNotFound.value = true
   }
 
-  check.value?.currency && (await useGetOneCurrency(check.value.currency))
-
   if (check.value) checkInfo.value = getFormatArrayItems(check.value)
-
-  isDataLoading.value = false
 })
 </script>
 

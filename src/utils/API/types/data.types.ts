@@ -18,9 +18,7 @@ export interface IDataToken {
   token: TMongoObjectId
 }
 
-export type TPopulateDoc<T extends IDataCurrency | IDataCheck | IDataCategory | IDataTransaction> =
-  | TMongoObjectId
-  | (T | null)
+export type TPopulateDoc<T> = TMongoObjectId | (T | null)
 
 export interface IDataCurrency extends IMongoTimestamps, IMongoFields {
   name: string

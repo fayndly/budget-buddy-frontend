@@ -1,14 +1,26 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
 import '@material/web/list/list-item'
 
 import type { IPropsListItemCheck } from './props.types'
-import { useGetOneCurrency, currency } from './useGetOneCurrency'
+import { computed } from 'vue'
 
 const props = defineProps<IPropsListItemCheck>()
 
-onMounted(async () => {
-  props.check.currency && (await useGetOneCurrency(props.check.currency))
+const getReadableAmount = computed(() => {
+  let readableAmount = ''
+
+  if (props.check) {
+    if (typeof props.check.currency === 'object') {
+      readableAmount = new Intl.NumberFormat(props.check.currency?.designation, {
+        notation: 'standard',
+        style: 'currency',
+        currency: props.check.currency?.name,
+        minimumFractionDigits: 0
+      }).format(props.check.amount)
+    }
+  }
+
+  return readableAmount
 })
 </script>
 
@@ -19,7 +31,7 @@ onMounted(async () => {
   >
     <div slot="headline">{{ check.name }}</div>
     <div slot="supporting-text">
-      {{ check.amount.toLocaleString(currency?.designation) }}{{ currency?.symbol }}
+      {{ getReadableAmount }}
     </div>
     <span class="material-icons-outlined" slot="end"> chevron_right </span>
   </md-list-item>

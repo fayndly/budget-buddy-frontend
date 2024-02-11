@@ -4,7 +4,7 @@ import { reactive, onMounted, computed, ref, watch } from 'vue'
 import InputWithIcon from '@/components/input/InputWithIcon/InputWithIcon.vue'
 
 import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
-//
+
 import BarSnackbar from '@/components/bars/BarSnackbar/BarSnackbar.vue'
 
 import { InputName } from '@/components/inputs/text/InputName'
@@ -23,13 +23,10 @@ import { usePostCheckAdd, postErrorText, serverValidateErrors } from '../service
 import { useGetCurrencies, currencies } from '../services/useGetCurrencies'
 import type { ICurrency } from '@/utils/types/data/data.types'
 
-import { useChecksStore } from '@/stores/API/checks'
-const checksStore = useChecksStore()
-
 const formData = reactive<IFormFields>({
   name: '',
   currency: null,
-  count: 0
+  amount: 0
 })
 
 const validation = useVuelidate(rules, formData, { $externalResults: serverValidateErrors })
@@ -45,8 +42,7 @@ const getActiveCurrency = computed(() => {
 const submitForm = async () => {
   validation.value.$clearExternalResults()
   if (!(await validation.value.$validate())) return
-  await usePostCheckAdd(formData.name, formData.currency, formData.count)
-  await checksStore.uploadChecks({ hasCurrency: true })
+  await usePostCheckAdd(formData)
 }
 
 const isSnackbarOpen = ref<boolean>(false)
@@ -91,10 +87,10 @@ onMounted(async () => {
       <template #input>
         <InputAmount
           label="Первоначальная сумма"
-          v-model:modelValue="formData.count"
+          v-model:modelValue="formData.amount"
           :suffixText="getActiveCurrency?.symbol"
-          :hasError="validationErrorsManager.isInputHasErrors('count')"
-          :errors="validationErrorsManager.getInputErrors('count')"
+          :hasError="validationErrorsManager.isInputHasErrors('amount')"
+          :errors="validationErrorsManager.getInputErrors('amount')"
         />
       </template>
     </InputWithIcon>

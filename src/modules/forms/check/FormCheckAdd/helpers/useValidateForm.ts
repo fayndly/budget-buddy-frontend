@@ -7,7 +7,7 @@ import { rulesInputAmount } from '@/components/inputs/text/InputAmount'
 export const rules = computed(() => {
   return {
     name: rulesInputName,
-    count: rulesInputAmount,
+    amount: rulesInputAmount,
     currency: rulesInputSelectCurrency
   }
 })

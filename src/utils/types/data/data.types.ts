@@ -1,6 +1,8 @@
 export type TMongoObjectId = string
 export type TTypeTransaction = 'income' | 'expense'
 
+import type { TPopulateDoc } from '@/utils/API/types/data.types'
+
 export interface IMongoTimestamps {
   createdAt: string
   updatedAt: string
@@ -21,13 +23,13 @@ export interface ICurrency extends IMongoTimestamps {
 export interface ICheck extends IMongoTimestamps {
   id: TMongoObjectId
   transactions: {
-    expense: TMongoObjectId[]
-    income: TMongoObjectId[]
+    expense: TPopulateDoc<ITransaction>[]
+    income: TPopulateDoc<ITransaction>[]
   }
   user: TMongoObjectId
   name: string
   amount: number
-  currency: TMongoObjectId | ICurrency
+  currency: TPopulateDoc<ICurrency>
 }
 
 export interface ICategory extends IMongoTimestamps {
@@ -36,7 +38,7 @@ export interface ICategory extends IMongoTimestamps {
   name: string
   type: TTypeTransaction
   color: string
-  icon: string
+  icon: string | null
   isSpecial: boolean
 }
 
@@ -45,10 +47,10 @@ export interface ITransaction extends IMongoTimestamps {
   user: TMongoObjectId
   type: TTypeTransaction
   name: string
-  currency: TMongoObjectId | ICurrency
+  currency: TPopulateDoc<ICurrency>
   amount: number
-  check: TMongoObjectId | ICheck
-  category: TMongoObjectId | ICategory
+  check: TPopulateDoc<ICheck>
+  category: TPopulateDoc<ICategory>
   time: string
   description: string
 }

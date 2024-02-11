@@ -13,7 +13,7 @@ export interface IArgumentsDataAuthSignup extends IArgumentsDataAuth {
 export interface IArgumentsDataCheckAdd {
   name: string
   amount: number
-  currency: TMongoObjectId
+  currency: TMongoObjectId | null
 }
 export interface IArgumentsDataCheckUpdate extends Omit<IArgumentsDataCheckAdd, 'amount'> {}
 
