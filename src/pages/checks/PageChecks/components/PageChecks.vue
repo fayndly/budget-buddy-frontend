@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
-
 import '@material/web/fab/fab'
 import '@material/web/list/list'
 
@@ -14,11 +12,12 @@ import SectionEmpty from '@/components/sections/SectionEmpty/SectionEmpty.vue'
 
 import ListItemCheck from '@/components/listItems/ListItemCheck/ListItemCheck.vue'
 
-import { useGetChecks, checks, isLoading } from '../services/useGetChecks'
+import { useChecksStore } from '@/stores/API/checks'
+import { storeToRefs } from 'pinia'
 
-onMounted(async () => {
-  await useGetChecks()
-})
+const checksStore = useChecksStore()
+
+const { checks, isLoading } = storeToRefs(checksStore)
 </script>
 
 <template>

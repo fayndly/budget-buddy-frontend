@@ -11,9 +11,11 @@ import ListDataInfo from '@/components/wrappers/ListDataInfo/ListDataInfo.vue'
 
 import type { ICheck, TMongoObjectId, TFormatListDataInfo } from '@/utils/types/data/data.types'
 
-import { useGetOneCheck, check, isCheckNotFound } from '../services/useGetOneCheck'
+import { useChecksStore } from '@/stores/API/checks'
+const { getCheckById } = useChecksStore()
 
 const checkInfo = ref<TFormatListDataInfo | null>(null)
+const check = ref<ICheck | null | undefined>(null)
 
 const isDataLoading = ref<boolean>(false)
 
@@ -48,11 +50,15 @@ import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const router = useRouter()
 
+const isCheckNotFound = ref<boolean>(false)
+
 onMounted(async () => {
   isDataLoading.value = true
+  isCheckNotFound.value = false
 
   if (route.params.checkId) {
-    await useGetOneCheck(route.params.checkId as TMongoObjectId)
+    check.value = await getCheckById(route.params.checkId as TMongoObjectId)
+    if (check.value === undefined) isCheckNotFound.value = true
   } else {
     isCheckNotFound.value = true
   }

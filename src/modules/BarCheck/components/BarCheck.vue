@@ -17,10 +17,10 @@ const getReadableAmount = computed(() => {
 
   if (chosedCheck.value) {
     if (typeof chosedCheck.value.currency === 'object') {
-      readableAmount = new Intl.NumberFormat(chosedCheck.value.currency.designation, {
+      readableAmount = new Intl.NumberFormat(chosedCheck.value.currency?.designation, {
         notation: 'standard',
         style: 'currency',
-        currency: chosedCheck.value.currency.name,
+        currency: chosedCheck.value.currency?.name,
         minimumFractionDigits: 0
       }).format(chosedCheck.value.amount)
     }

@@ -8,6 +8,8 @@ import type { IErrorData } from '@/utils/API/types/error.types'
 
 import { getFormatValidateErrorsServer } from '@/utils/validations/validationFormat'
 
+import { useChecksStore } from '@/stores/API/checks'
+
 export const isLoading = ref<boolean>(false)
 
 export const postErrorText = ref<null | string>(null)
@@ -17,6 +19,8 @@ export const usePatchCheckUpdate = async (
   id: TMongoObjectId,
   dataFields: { name: string; currency: TMongoObjectId | null }
 ): Promise<void> => {
+  const { uploadChecks } = useChecksStore()
+
   isLoading.value = true
   postErrorText.value = null
 
@@ -24,6 +28,7 @@ export const usePatchCheckUpdate = async (
     const { data } = await checkApi.update(id, dataFields)
     postErrorText.value = null
     console.log('Ответ от сервера: ', data)
+    await uploadChecks()
   } catch (error) {
     if (isAxiosError<IErrorData>(error) && error.response) {
       const response = error.response

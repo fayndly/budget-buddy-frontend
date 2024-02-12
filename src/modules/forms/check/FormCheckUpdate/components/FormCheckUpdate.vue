@@ -11,7 +11,7 @@ import { InputSelectCurrency } from '@/components/inputs/select/InputSelectCurre
 import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
 
 import type { IFormFields } from '../types/formFields.types'
-import type { TMongoObjectId, ICurrency } from '@/utils/types/data/data.types'
+import type { TMongoObjectId, ICurrency, ICheck } from '@/utils/types/data/data.types'
 
 import useVuelidate from '@vuelidate/core'
 import { ValidationErrors } from '@/utils/validations/validationErrors'
@@ -21,8 +21,12 @@ import { usePatchCheckUpdate, postErrorText, serverValidateErrors } from '../ser
 
 import { getById } from '@/utils/helpers/getById'
 
-import { useGetOneCheck, check, isCheckNotFound } from '../services/useGetOneCheck'
 import { useGetCurrencies, currencies } from '../services/useGetCurrencies'
+
+import { useChecksStore } from '@/stores/API/checks'
+const { getCheckById } = useChecksStore()
+
+const check = ref<ICheck | null | undefined>(null)
 
 const formData = reactive<IFormFields>({
   name: '',
@@ -41,6 +45,8 @@ const submitForm = async () => {
   if (!(await validation.value.$validate())) return
   await usePatchCheckUpdate(route.params.checkId as TMongoObjectId, formData)
 }
+
+const isCheckNotFound = ref<boolean>(false)
 
 const isSnackbarOpen = ref<boolean>(false)
 watch(postErrorText, () => {
@@ -66,9 +72,11 @@ const getActiveCurrency = computed(() => {
 
 onMounted(async () => {
   isLoading.value = true
+  isCheckNotFound.value = false
 
   if (route.params.checkId) {
-    await useGetOneCheck(route.params.checkId as TMongoObjectId)
+    check.value = await getCheckById(route.params.checkId as TMongoObjectId)
+    if (check.value === undefined) isCheckNotFound.value = true
   } else {
     isCheckNotFound.value = true
   }
