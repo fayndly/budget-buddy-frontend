@@ -30,9 +30,17 @@ import {
   serverValidateErrors
 } from '../services/useSubmitForm'
 
-import { currencies, useGetCurrencies } from '../services/useGetCurrencies'
 import { categories, useGetCategories } from '../services/useGetCategories'
-import { checks, useGetChecks } from '../services/useGetChecks'
+
+import { useCurrenciesStore } from '@/stores/API/currencies'
+import { useChecksStore } from '@/stores/API/checks'
+import { storeToRefs } from 'pinia'
+
+const currencyStore = useCurrenciesStore()
+const { currencies } = storeToRefs(currencyStore)
+
+const checksStore = useChecksStore()
+const { checks } = storeToRefs(checksStore)
 
 import { useRoute, useRouter } from 'vue-router'
 
@@ -66,8 +74,6 @@ import { useQueryHandler } from '../helpers/useQueryHandler'
 const route = useRoute()
 
 onMounted(async () => {
-  await useGetCurrencies()
-  await useGetChecks()
   useQueryHandler(route, formData)
   if (getActiveCheck.value?.currency) {
     if (typeof getActiveCheck.value?.currency === 'string')

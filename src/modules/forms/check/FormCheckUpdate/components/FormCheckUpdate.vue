@@ -21,7 +21,11 @@ import { usePatchCheckUpdate, postErrorText, serverValidateErrors } from '../ser
 
 import { getById } from '@/utils/helpers/getById'
 
-import { useGetCurrencies, currencies } from '../services/useGetCurrencies'
+import { useCurrenciesStore } from '@/stores/API/currencies'
+import { storeToRefs } from 'pinia'
+
+const currencyStore = useCurrenciesStore()
+const { currencies } = storeToRefs(currencyStore)
 
 import { useChecksStore } from '@/stores/API/checks'
 const { getCheckById } = useChecksStore()
@@ -80,8 +84,6 @@ onMounted(async () => {
   } else {
     isCheckNotFound.value = true
   }
-
-  await useGetCurrencies()
 
   if (check.value) {
     formData.name = check.value.name

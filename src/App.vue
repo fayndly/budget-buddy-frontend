@@ -6,10 +6,17 @@ import 'material-icons/iconfont/material-icons.css'
 import AppLayout from '@/layouts/AppLayout.vue'
 
 import { useChecksStore } from '@/stores/API/checks'
+import { useCurrenciesStore } from '@/stores/API/currencies'
+// import { useCategoriesStore } from '@/stores/API/categories'
+
 const checksStore = useChecksStore()
+const currenciesStore = useCurrenciesStore()
+// const categoriesStore = useCategoriesStore()
 
 onMounted(async () => {
   await checksStore.uploadChecks()
+  await currenciesStore.uploadCurrencies()
+  // await categoriesStore.uploadCategories()
 })
 </script>
 

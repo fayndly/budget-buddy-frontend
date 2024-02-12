@@ -36,9 +36,18 @@ import {
   transaction,
   isTransactionNotFound
 } from '../services/useGetOneTransaction'
-import { currencies, useGetCurrencies } from '../services/useGetCurrencies'
+
 import { categories, useGetCategories } from '../services/useGetCategories'
-import { checks, useGetChecks } from '../services/useGetChecks'
+
+import { useCurrenciesStore } from '@/stores/API/currencies'
+import { useChecksStore } from '@/stores/API/checks'
+import { storeToRefs } from 'pinia'
+
+const currencyStore = useCurrenciesStore()
+const { currencies } = storeToRefs(currencyStore)
+
+const checksStore = useChecksStore()
+const { checks } = storeToRefs(checksStore)
 
 const formData = reactive<IFormFields>({
   name: '',
@@ -114,9 +123,6 @@ onMounted(async () => {
   } else {
     isTransactionNotFound.value = true
   }
-
-  await useGetCurrencies()
-  await useGetChecks()
 
   if (transaction.value) {
     formData.name = transaction.value.name

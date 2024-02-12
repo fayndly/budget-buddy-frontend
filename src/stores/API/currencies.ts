@@ -2,43 +2,51 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 import type { ICurrency, TMongoObjectId } from '@/utils/types/data/data.types'
-import type { IDataCurrency } from '@/utils/types/data/serverData.types'
+import type { IDataCurrency } from '@/utils/API/types/data.types'
 
-// import { apiManager } from '@/utils/API'
+import { currencyApi } from '@/utils/API'
 import { clearData } from '@/utils/API/helpers/clearData'
 
-export const useCurrencyStore = defineStore('currencyApi', () => {
+export const useCurrenciesStore = defineStore('currenciesApi', () => {
   const currencies = ref<ICurrency[]>([])
+  const isLoading = ref<boolean>(false)
 
-  const getCurrencyById = (id: TMongoObjectId) => {
+  const getCurrencyById = async (id: TMongoObjectId) => {
     const currency = currencies.value.find((val) => val.id === id)
 
     if (!currency) {
-      console.log('Не удалось найти валюту')
+      try {
+        const { data } = await currencyApi.getOne(id)
 
-      // await apiManager
-      //   .getCurrency(id)
-      //   .then((response) => {
-      //     currency = clearData<IDataCurrency, ICurrency>(response.data)
-      //   })
-      //   .catch((err) => {
-      //     console.log(err)
-      //   })
+        await uploadCurrencies()
+
+        return clearData<IDataCurrency, ICurrency>(data)
+      } catch (error) {
+        console.log(error)
+
+        return
+      }
     }
 
     return currency
   }
 
   const uploadCurrencies = async () => {
-    // await apiManager
-    //   .getCurrencies()
-    //   .then((response) => {
-    //     currencies.value = clearData<IDataCurrency[], ICurrency[]>(response.data)
-    //   })
-    //   .catch((err) => {
-    //     currencies.value = []
-    //     console.log(err)
-    //   })
+    console.log('uploadCurrencies')
+
+    isLoading.value = true
+    try {
+      const { data } = await currencyApi.getAll()
+
+      const formatChecks = clearData<IDataCurrency[], ICurrency[]>(data)
+
+      currencies.value = formatChecks
+    } catch (err) {
+      currencies.value = []
+      console.log(err)
+    } finally {
+      isLoading.value = false
+    }
   }
 
   return { currencies, uploadCurrencies, getCurrencyById }

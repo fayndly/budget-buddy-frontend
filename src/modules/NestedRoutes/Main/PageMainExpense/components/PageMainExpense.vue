@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { storeToRefs } from 'pinia'
 import '@material/web/button/text-button'
 
-import { TransactionsVisualInfo } from '@/modules/TransactionsVisualInfo'
-import { TransactionsList } from '@/modules/TransactionsList'
+// import { TransactionsVisualInfo } from '@/modules/TransactionsVisualInfo'
+// import { TransactionsList } from '@/modules/TransactionsList'
 
 // import type { TMongoObjectId } from '@/utils/types/data/data.types'
+
+import { useBarCheckStore } from '@/modules/BarCheck'
+import { storeToRefs } from 'pinia'
+
+const barCheckStore = useBarCheckStore()
+const { chosedCheck } = storeToRefs(barCheckStore)
 
 // import { check, useGetOneCheck } from '../services/useGetOneCheck'
 // import { transactions, useGetTransactions } from '../services/useGetTransactions'
@@ -43,8 +48,7 @@ onMounted(async () => {
     class="fab-add-transaction"
     aria-label="add"
     @click="
-      $router.push({ name: 'TransactionsAdd', query: { type: 'expense' } })
-      //, check: chosedCheck?.id
+      $router.push({ name: 'TransactionsAdd', query: { type: 'expense', check: chosedCheck?.id } })
     "
   >
     <span class="material-icons-outlined" slot="icon">add</span>

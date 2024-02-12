@@ -48,8 +48,6 @@ export const useBarCheckStore = defineStore('BarCheck', () => {
 
   checksStore.$subscribe(
     (_, state) => {
-      console.log('update')
-
       checks.value.length = 0
       checks.value.push(...state.checks)
       setDefaultCheck()

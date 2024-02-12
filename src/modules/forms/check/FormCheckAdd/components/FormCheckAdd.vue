@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, onMounted, computed, ref, watch } from 'vue'
+import { reactive, computed, ref, watch } from 'vue'
 
 import InputWithIcon from '@/components/input/InputWithIcon/InputWithIcon.vue'
 
@@ -20,8 +20,13 @@ import type { IFormFields } from '../types/formFields.types'
 import { getById } from '@/utils/helpers/getById'
 
 import { usePostCheckAdd, postErrorText, serverValidateErrors } from '../services/useSubmitForm'
-import { useGetCurrencies, currencies } from '../services/useGetCurrencies'
 import type { ICurrency } from '@/utils/types/data/data.types'
+
+import { useCurrenciesStore } from '@/stores/API/currencies'
+import { storeToRefs } from 'pinia'
+
+const currencyStore = useCurrenciesStore()
+const { currencies } = storeToRefs(currencyStore)
 
 const formData = reactive<IFormFields>({
   name: '',
@@ -48,10 +53,6 @@ const submitForm = async () => {
 const isSnackbarOpen = ref<boolean>(false)
 watch(postErrorText, () => {
   if (postErrorText.value) isSnackbarOpen.value = true
-})
-
-onMounted(async () => {
-  await useGetCurrencies()
 })
 </script>
 
