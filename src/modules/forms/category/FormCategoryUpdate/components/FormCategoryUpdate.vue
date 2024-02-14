@@ -13,19 +13,23 @@ import { InputChoseIcon } from '@/modules/inputs/InputChoseIcon'
 import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
 
 import type { IFormFields } from '../types/formFields.types'
-import type { TMongoObjectId } from '@/utils/types/data/data.types'
+import type { ICategory, TMongoObjectId } from '@/utils/types/data/data.types'
 
 import useVuelidate from '@vuelidate/core'
 import { ValidationErrors } from '@/utils/validations/validationErrors'
 import { rules } from '../helpers/useValidateForm'
+
+import { useCategoriesStore } from '@/stores/API/categories'
+
+const { getCategoryById } = useCategoriesStore()
+
+const category = ref<ICategory | null | undefined>(null)
 
 import {
   usePatchCategoryUpdate,
   postErrorText,
   serverValidateErrors
 } from '../services/useSubmitForm'
-
-import { useGetOneCategory, category, isCategoryNotFound } from '../services/useGetOneCategory'
 
 const formData = reactive<IFormFields>({
   name: '',
@@ -40,6 +44,8 @@ const validationErrorsManager = new ValidationErrors(validation)
 import { useRoute } from 'vue-router'
 const route = useRoute()
 
+const isCategoryNotFound = ref<boolean>(false)
+
 const submitForm = async () => {
   validation.value.$clearExternalResults()
   if (!(await validation.value.$validate())) return
@@ -47,7 +53,11 @@ const submitForm = async () => {
   const formatData = Object.assign({}, formData) as any
   formatData.color = formatData.color?.value
   formatData.icon = formatData.icon?.value
-  await usePatchCategoryUpdate(route.params.categoryId as TMongoObjectId, formatData)
+  await usePatchCategoryUpdate(
+    route.params.categoryId as TMongoObjectId,
+    formatData,
+    category.value?.type
+  )
 }
 
 const isSnackbarOpen = ref<boolean>(false)
@@ -67,9 +77,11 @@ watch(isLoading, () => {
 
 onMounted(async () => {
   isLoading.value = true
+  isCategoryNotFound.value = false
 
   if (route.params.categoryId) {
-    await useGetOneCategory(route.params.categoryId as TMongoObjectId)
+    category.value = await getCategoryById(route.params.categoryId as TMongoObjectId)
+    if (category.value === undefined) isCategoryNotFound.value = true
   } else {
     isCategoryNotFound.value = true
   }

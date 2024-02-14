@@ -16,7 +16,7 @@ import { InputDescription } from '@/components/inputs/text/InputDescription'
 
 import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
 
-import type { ICurrency, ICheck } from '@/utils/types/data/data.types'
+import type { ICurrency, ICheck, ICategory } from '@/utils/types/data/data.types'
 
 import type { IFormFields } from '../types/formFields.types'
 
@@ -30,10 +30,9 @@ import {
   serverValidateErrors
 } from '../services/useSubmitForm'
 
-import { categories, useGetCategories } from '../services/useGetCategories'
-
 import { useCurrenciesStore } from '@/stores/API/currencies'
 import { useChecksStore } from '@/stores/API/checks'
+import { useCategoriesStore } from '@/stores/API/categories'
 import { storeToRefs } from 'pinia'
 
 const currencyStore = useCurrenciesStore()
@@ -42,6 +41,10 @@ const { currencies } = storeToRefs(currencyStore)
 const checksStore = useChecksStore()
 const { checks } = storeToRefs(checksStore)
 
+const categoriesStore = useCategoriesStore()
+const { categories } = storeToRefs(categoriesStore)
+
+const typingCategories = ref<ICategory[]>([])
 import { useRoute, useRouter } from 'vue-router'
 
 const emits = defineEmits(['updateType'])
@@ -61,9 +64,17 @@ const validation = useVuelidate(rules, formData, { $externalResults: serverValid
 const validationErrorsManager = new ValidationErrors(validation)
 
 const getType = computed(() => formData.type)
-watch(getType, async () => {
+watch(getType, () => {
   if (formData.type) {
-    await useGetCategories(formData.type)
+    typingCategories.value = categoriesStore.getCategories(formData.type)
+
+    emits('updateType', formData.type)
+  }
+})
+
+watch(categories, () => {
+  if (formData.type) {
+    typingCategories.value = categoriesStore.getCategories(formData.type)
 
     emits('updateType', formData.type)
   }
@@ -187,7 +198,7 @@ const getSumbolFromType = computed(() => {
       <template #content>
         <InputChoseCategory
           v-model:modelValue="formData.category"
-          :values="categories"
+          :values="typingCategories"
           @clickButtonAddCategory="clickButtonAddCategoryHandler"
         />
       </template>

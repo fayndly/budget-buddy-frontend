@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref, watch } from 'vue'
+
+import type { ICategory } from '@/utils/types/data/data.types'
 
 import TemplateSection from '@/templates/TemplateSection.vue'
 import SectionLoader from '@/components/sections/SectionLoader/SectionLoader.vue'
@@ -7,10 +9,24 @@ import SectionEmpty from '@/components/sections/SectionEmpty/SectionEmpty.vue'
 
 import ListItemCategory from '@/components/listItems/ListItemCategory/ListItemCategory.vue'
 
-import { categories, useGetCategories, isLoading } from '../services/useGetCategories'
+import { useCategoriesStore } from '@/stores/API/categories'
+import { storeToRefs } from 'pinia'
 
-onMounted(async () => {
-  await useGetCategories()
+const categoriesStore = useCategoriesStore()
+const { categories, isLoading } = storeToRefs(categoriesStore)
+
+const typingCategories = ref<ICategory[]>([])
+
+onMounted(() => {
+  isLoading.value = false
+  typingCategories.value = categoriesStore.getCategories('income')
+  isLoading.value = true
+})
+
+watch(categories, () => {
+  isLoading.value = false
+  typingCategories.value = categoriesStore.getCategories('income')
+  isLoading.value = true
 })
 
 const pathToCreateCategory = {
@@ -28,10 +44,14 @@ const pathToCreateCategory = {
     text="Создайте категорию кнопкой ниже"
     :routeTo="pathToCreateCategory"
   />
-  <SectionLoader v-if="isLoading && !categories.length" />
+  <SectionLoader v-if="isLoading && !typingCategories.length" />
   <TemplateSection>
     <md-list class="list-categories">
-      <ListItemCategory v-for="category in categories" :key="category.id" :category="category" />
+      <ListItemCategory
+        v-for="category in typingCategories"
+        :key="category.id"
+        :category="category"
+      />
     </md-list>
     <md-fab
       class="fab-add-categories"

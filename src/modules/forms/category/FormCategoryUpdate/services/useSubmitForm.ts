@@ -8,6 +8,9 @@ import { getFormatValidateErrorsServer } from '@/utils/validations/validationFor
 import { isAxiosError } from 'axios'
 import type { IErrorData } from '@/utils/API/types/error.types'
 
+import { useCategoriesStore } from '@/stores/API/categories'
+import { useChecksStore } from '@/stores/API/checks'
+
 export const isLoading = ref<boolean>(false)
 
 export const postErrorText = ref<null | string>(null)
@@ -20,8 +23,12 @@ export const usePatchCategoryUpdate = async (
     type: TTypeTransaction | null
     color: string | null
     icon: string | null
-  }
+  },
+  oldType: TTypeTransaction | undefined
 ): Promise<void> => {
+  const { uploadCategories } = useCategoriesStore()
+  const { uploadChecks } = useChecksStore()
+
   isLoading.value = true
   postErrorText.value = null
 
@@ -31,6 +38,9 @@ export const usePatchCategoryUpdate = async (
     const { data } = await categoryApi.update(id, dataFields)
     postErrorText.value = null
     console.log('Ответ от сервера: ', data)
+
+    await uploadCategories()
+    if (oldType && dataFields.type !== oldType) await uploadChecks()
   } catch (error) {
     if (isAxiosError<IErrorData>(error) && error.response) {
       const response = error.response

@@ -17,7 +17,7 @@ import { InputDescription } from '@/components/inputs/text/InputDescription'
 import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
 
 import type { IFormFields } from '../types/formFields.types'
-import type { TMongoObjectId, ICurrency } from '@/utils/types/data/data.types'
+import type { TMongoObjectId, ICurrency, ICategory } from '@/utils/types/data/data.types'
 
 import useVuelidate from '@vuelidate/core'
 import { ValidationErrors } from '@/utils/validations/validationErrors'
@@ -37,10 +37,9 @@ import {
   isTransactionNotFound
 } from '../services/useGetOneTransaction'
 
-import { categories, useGetCategories } from '../services/useGetCategories'
-
 import { useCurrenciesStore } from '@/stores/API/currencies'
 import { useChecksStore } from '@/stores/API/checks'
+import { useCategoriesStore } from '@/stores/API/categories'
 import { storeToRefs } from 'pinia'
 
 const currencyStore = useCurrenciesStore()
@@ -48,6 +47,11 @@ const { currencies } = storeToRefs(currencyStore)
 
 const checksStore = useChecksStore()
 const { checks } = storeToRefs(checksStore)
+
+const categoriesStore = useCategoriesStore()
+const { categories, isCategoriesLoading } = storeToRefs(categoriesStore)
+
+const typingCategories = ref<ICategory[]>([])
 
 const formData = reactive<IFormFields>({
   name: '',
@@ -64,9 +68,16 @@ const validation = useVuelidate(rules, formData, { $externalResults: serverValid
 const validationErrorsManager = new ValidationErrors(validation)
 
 const getType = computed(() => formData.type)
-watch(getType, async () => {
+watch(getType, () => {
   if (formData.type) {
-    await useGetCategories(formData.type)
+    typingCategories.value = categoriesStore.getCategories(formData.type)
+  }
+})
+
+watch(categories, () => {
+  if (formData.type) {
+    if (isCategoriesLoading.value)
+      typingCategories.value = categoriesStore.getCategories(formData.type)
   }
 })
 
@@ -231,7 +242,7 @@ const getDefalutCategory = computed(() => {
       <template #content>
         <InputChoseCategory
           v-model:modelValue="formData.category"
-          :values="categories"
+          :values="typingCategories"
           @clickButtonAddCategory="clickButtonAddCategoryHandler"
           :defaultValue="getDefalutCategory"
         />

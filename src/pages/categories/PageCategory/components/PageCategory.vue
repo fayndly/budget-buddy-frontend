@@ -11,11 +11,13 @@ import ListDataInfo from '@/components/wrappers/ListDataInfo/ListDataInfo.vue'
 
 import type { ICategory, TMongoObjectId, TFormatListDataInfo } from '@/utils/types/data/data.types'
 
-import { useGetOneCategory, category, isCategoryNotFound } from '../services/useGetOneCategory'
-
 import { translateType } from '@/utils/helpers'
 
+import { useCategoriesStore } from '@/stores/API/categories'
+const { getCategoryById } = useCategoriesStore()
+
 const categoryInfo = ref<TFormatListDataInfo | null>(null)
+const category = ref<ICategory | null | undefined>(null)
 
 const isDataLoading = ref<boolean>(false)
 
@@ -52,11 +54,14 @@ import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const router = useRouter()
 
+const isCategoryNotFound = ref<boolean>(false)
+
 onMounted(async () => {
   isDataLoading.value = true
 
   if (route.params.categoryId) {
-    await useGetOneCategory(route.params.categoryId as TMongoObjectId)
+    category.value = await getCategoryById(route.params.categoryId as TMongoObjectId)
+    if (category.value === undefined) isCategoryNotFound.value = true
   } else {
     isCategoryNotFound.value = true
   }
