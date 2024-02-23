@@ -1,5 +1,5 @@
-import type { ITransaction } from '@/utils/types/data/data.types'
+import type { IFormatTransactionsList } from '@/utils/types/data/data.types'
 
 export interface IPropsTransactionsList {
-  transactions: ITransaction[]
+  formatTransactions: IFormatTransactionsList[]
 }

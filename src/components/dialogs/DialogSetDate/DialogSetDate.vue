@@ -9,9 +9,11 @@ export interface IPropsDialogSetDate {
   isOpen: boolean
 }
 const setDefaultDate = (dateNowWrapper: Ref<undefined | string>, dateDefault: Date): void => {
-  const stringDefaultDate = `${defaultDate.getFullYear()}-${
+  const stringDefaultDate = `${defaultDate.getFullYear().toString().padStart(4, '0')}-${(
     dateDefault.getMonth() + 1
-  }-${dateDefault.getDate()}`
+  )
+    .toString()
+    .padStart(2, '0')}-${dateDefault.getDate().toString().padStart(2, '0')}`
 
   dateNowWrapper.value = stringDefaultDate
 }
@@ -23,9 +25,8 @@ setDefaultDate(dateField, defaultDate)
 defineProps<IPropsDialogSetDate>()
 
 const emits = defineEmits(['submitDate', 'closeModal'])
-
 const submitHandler = (): void => {
-  emits('submitDate', new Date(dateField.value || defaultDate))
+  emits('submitDate', new Date(dateField.value + ' 00:00:00' || defaultDate))
   closeModal()
 }
 

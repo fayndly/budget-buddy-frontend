@@ -1,26 +1,28 @@
 <script setup lang="ts">
-import type { ICategory, ICurrency } from '@/utils/types/data/data.types'
+import { reactive } from 'vue'
+import type { IPropsCardCategory } from './types/props.types'
 
-defineProps<{
-  category: ICategory
-  amount: number
-  cyrrancy: ICurrency
-}>()
+const props = defineProps<IPropsCardCategory>()
+
+import { getReadableAmount } from '@/utils/helpers/getReadableAmount'
+
+const stylesCard = reactive({
+  'background-color': props.category?.color,
+  border: props.category?.color ? 'none' : 'solid 2px var(--md-sys-color-outline)'
+})
+
+const classesCard = reactive({
+  'card-category--with-icon': props.category?.icon
+})
 </script>
 
 <template>
-  <div
-    class="card-category"
-    :class="{ 'card-category--with-icon': category.icon }"
-    :style="{ 'background-color': category.color }"
-  >
-    <span v-if="category.icon" class="card-category__icon material-icons-outlined">{{
+  <div class="card-category" :class="classesCard" :style="stylesCard">
+    <span v-if="category?.icon" class="card-category__icon material-icons-outlined">{{
       category.icon
     }}</span>
-    <span class="card-category__name label-large">{{ category.name }}</span>
-    <span class="card-category__count label-large"
-      >{{ amount.toLocaleString(cyrrancy.designation) }}{{ cyrrancy.symbol }}</span
-    >
+    <span class="card-category__name label-large">{{ category?.name || 'Not found' }}</span>
+    <span class="card-category__count label-large">{{ getReadableAmount(amount, currency) }}</span>
   </div>
 </template>
 

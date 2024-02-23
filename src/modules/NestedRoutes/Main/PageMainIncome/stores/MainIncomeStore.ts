@@ -11,7 +11,7 @@ import { useBarCheckStore } from '@/modules/BarCheck'
 import { useMonthStore } from './MonthStore'
 import { storeToRefs } from 'pinia'
 
-export const useMainExpenseStore = defineStore('mainExpense', () => {
+export const useMainIncomeStore = defineStore('mainIncome', () => {
   const barCheckStore = useBarCheckStore()
   const monthStore = useMonthStore()
 
@@ -19,7 +19,7 @@ export const useMainExpenseStore = defineStore('mainExpense', () => {
   const { chosedMonth } = storeToRefs(monthStore)
 
   const transactions = ref<ITransaction[]>([])
-  const isTransactionsExpenseLoading = ref<boolean>(false)
+  const isTransactionsIncomeLoading = ref<boolean>(false)
 
   watch(chosedCheck, async () => {
     if (chosedCheck.value) {
@@ -34,7 +34,7 @@ export const useMainExpenseStore = defineStore('mainExpense', () => {
   })
 
   const uploadTransactions = async () => {
-    isTransactionsExpenseLoading.value = true
+    isTransactionsIncomeLoading.value = true
     try {
       const checksId = chosedCheck.value?.id
       if (!checksId) console.log(checksId)
@@ -42,7 +42,7 @@ export const useMainExpenseStore = defineStore('mainExpense', () => {
       const { data } = await transactionApi.getAll(
         {
           check: checksId,
-          type: 'expense'
+          type: 'income'
         },
         monthStore.getRangeMonth(),
         { category: true, currency: true }
@@ -53,7 +53,7 @@ export const useMainExpenseStore = defineStore('mainExpense', () => {
       transactions.value = []
       console.log(err)
     } finally {
-      isTransactionsExpenseLoading.value = false
+      isTransactionsIncomeLoading.value = false
     }
   }
 

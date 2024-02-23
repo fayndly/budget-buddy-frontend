@@ -96,7 +96,7 @@ onMounted(async () => {
 const router = useRouter()
 
 const clickButtonAddCategoryHandler = () => {
-  router.push({ name: 'CategoryAdd', query: { type: formData.type } })
+  router.push({ name: 'CategoriesAdd', query: { type: formData.type } })
 }
 
 const submitForm = async () => {

@@ -2,47 +2,62 @@
 import { onMounted } from 'vue'
 import '@material/web/button/text-button'
 
-// import { TransactionsVisualInfo } from '@/modules/TransactionsVisualInfo'
-// import { TransactionsList } from '@/modules/TransactionsList'
+import { TransactionsVisualInfo } from '@/modules/TransactionsVisualInfo'
+import { TransactionsList } from '@/modules/TransactionsList'
+import ChoseMonth from '@/components/ChoseMonth/ChoseMonth.vue'
 
-// import type { TMongoObjectId } from '@/utils/types/data/data.types'
-
-import { useBarCheckStore } from '@/modules/BarCheck'
 import { storeToRefs } from 'pinia'
 
+import { useBarCheckStore } from '@/modules/BarCheck'
 const barCheckStore = useBarCheckStore()
 const { chosedCheck } = storeToRefs(barCheckStore)
 
-// import { check, useGetOneCheck } from '../services/useGetOneCheck'
-// import { transactions, useGetTransactions } from '../services/useGetTransactions'
+import { useMainExpenseStore } from '../stores/MainExpenseStore'
+const mainExpenseStore = useMainExpenseStore()
+const { transactions } = storeToRefs(mainExpenseStore)
 
-// import { useMainExpenseStore } from '../stores/MainExpenseStore'
-// import { useBarCheckStore } from '@/modules/BarCheck'
-// import { useTransactionsStore } from '@/stores/API/transactions'
+import { useTransactionsListExpenseStore } from '../stores/TransactionsListStore'
+const transactionsListExpenseStore = useTransactionsListExpenseStore()
+const { formatTransactionsList } = storeToRefs(transactionsListExpenseStore)
 
-// const mainExpenseStore = useMainExpenseStore()
-// const barCheckStore = useBarCheckStore()
-// const transactionsStore = useTransactionsStore()
+import { useTransactionsVisualInfoStore } from '../stores/TransactionsVisualInfoStore'
+const transactionsVisualInfoStore = useTransactionsVisualInfoStore()
+const { formatTransactionsVisualInfo } = storeToRefs(transactionsVisualInfoStore)
 
-// const { transactions } = storeToRefs(mainExpenseStore)
-// const { chosedCheck } = storeToRefs(barCheckStore)
+import { useMonthStore } from '../stores/MonthStore'
+const monthStore = useMonthStore()
+const { chosedMonth } = storeToRefs(monthStore)
 
 onMounted(async () => {
-  // await mainExpenseStore.uploadTransactions()
-  // const newTransactions = transactions.value.map(async (val) => {
-  //   return await transactionsStore.getTransactionById(val.id, {
-  //     hasCategory: true,
-  //     hasCheck: true,
-  //     hasCurrency: true
-  //   })
-  // })
-  // console.log(newTransactions)
+  if (chosedCheck.value) {
+    if (!transactions.value.length) {
+      await mainExpenseStore.uploadTransactions()
+    }
+  }
 })
+
+const clickButtonSwapHandler = (side: 'left' | 'right') => {
+  const chosedMonthFormatDate = new Date(chosedMonth.value)
+  let newMonth = chosedMonthFormatDate.getMonth()
+  if (side === 'left') {
+    newMonth = chosedMonthFormatDate.getMonth() - 1
+  } else if (side === 'right') {
+    newMonth = chosedMonthFormatDate.getMonth() + 1
+  }
+  monthStore.setMonth(new Date(chosedMonthFormatDate.setMonth(newMonth)))
+}
 </script>
 
 <template>
-  <!-- <TransactionsVisualInfo :transactions="transactions" />
-  <TransactionsList :transactions="transactions" /> -->
+  <ChoseMonth v-model:modelValue="chosedMonth" typeTitle="expense" />
+  <TransactionsVisualInfo
+    :formatTransactions="formatTransactionsVisualInfo"
+    typeTransactions="expense"
+    :currencyCheck="typeof chosedCheck?.currency === 'object' ? chosedCheck?.currency : null"
+    @clickButtonSwapLeft="clickButtonSwapHandler('left')"
+    @clickButtonSwapRight="clickButtonSwapHandler('right')"
+  />
+  <TransactionsList :formatTransactions="formatTransactionsList" />
   <md-fab
     variant="primary"
     class="fab-add-transaction"

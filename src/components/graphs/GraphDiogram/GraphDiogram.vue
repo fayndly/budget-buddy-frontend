@@ -2,13 +2,14 @@
 import { watch, ref } from 'vue'
 import type { IPropsGrathDiagram } from './types/props'
 
-import type { IFormatData } from './types/props'
-
 const props = defineProps<IPropsGrathDiagram>()
 
 import { DiagramDataCalculator } from './helpers/DiagramDataCalculator'
+import type { IFormatTransactionsVisualInfo } from '@/utils/types/data/data.types'
 
-const transactionsData = ref<IFormatData[]>([])
+import { getReadableAmount } from '@/utils/helpers/getReadableAmount'
+
+const transactionsData = ref<IFormatTransactionsVisualInfo[]>([])
 
 transactionsData.value = props.data
 
@@ -22,8 +23,13 @@ watch(props, () => {
   diagramDataCalculatorManager.generateDasharray()
   diagramDataCalculatorManager.generateDashoffset()
 })
-</script>
 
+const getStyleCircle = (transaction: IFormatTransactionsVisualInfo) => ({
+  stroke: transaction.category?.color || 'transparent',
+  'stroke-dasharray': `${transaction.strokeDasharray} 100`,
+  'stroke-dashoffset': `-${transaction.strokeDashoffset}`
+})
+</script>
 <template>
   <div class="canvas">
     <p
@@ -31,7 +37,7 @@ watch(props, () => {
       :style="{ color: typeTransactions === 'expense' ? '#ff7676' : '#76ff94' }"
     >
       {{ typeTransactions === 'expense' ? '-' : '+' }}
-      {{ diagramDataCalculatorManager.sumTransactions.toLocaleString('ru-RU') }}₽
+      {{ getReadableAmount(diagramDataCalculatorManager.sumTransactions, currencyCheck) }}
     </p>
     <svg class="chart" viewBox="0 0 37 37">
       <circle
@@ -41,7 +47,7 @@ watch(props, () => {
         r="15.9"
         cx="50%"
         cy="50%"
-        :style="`stroke: ${transaction.category?.color}; stroke-dasharray: ${transaction.strokeDasharray} 100; stroke-dashoffset: -${transaction.strokeDashoffset};`"
+        :style="getStyleCircle(transaction)"
       ></circle>
     </svg>
   </div>
@@ -50,7 +56,12 @@ watch(props, () => {
 <style lang="scss" scoped>
 @keyframes render {
   0% {
+    stroke-opacity: 0;
+    stroke-width: 0px;
     stroke-dasharray: 0 100;
+  }
+  100% {
+    stroke-opacity: 1;
   }
 }
 
@@ -76,8 +87,6 @@ watch(props, () => {
   stroke-width: 5px;
 
   animation-name: render;
-  animation-duration: 0.3s;
-  transition-property: all;
-  transition-duration: 0.3s;
+  animation-duration: 0.5s;
 }
 </style>

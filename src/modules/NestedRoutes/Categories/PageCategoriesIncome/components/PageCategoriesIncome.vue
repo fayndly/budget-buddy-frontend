@@ -13,20 +13,20 @@ import { useCategoriesStore } from '@/stores/API/categories'
 import { storeToRefs } from 'pinia'
 
 const categoriesStore = useCategoriesStore()
-const { categories, isLoading } = storeToRefs(categoriesStore)
+const { categories, isCategoriesLoading } = storeToRefs(categoriesStore)
 
 const typingCategories = ref<ICategory[]>([])
 
 onMounted(() => {
-  isLoading.value = false
+  isCategoriesLoading.value = false
   typingCategories.value = categoriesStore.getCategories('income')
-  isLoading.value = true
+  isCategoriesLoading.value = true
 })
 
 watch(categories, () => {
-  isLoading.value = false
+  isCategoriesLoading.value = false
   typingCategories.value = categoriesStore.getCategories('income')
-  isLoading.value = true
+  isCategoriesLoading.value = true
 })
 
 const pathToCreateCategory = {
@@ -39,12 +39,12 @@ const pathToCreateCategory = {
 
 <template>
   <SectionEmpty
-    v-if="!isLoading && !categories.length"
+    v-if="!isCategoriesLoading && !categories.length"
     header="Нет категорий"
     text="Создайте категорию кнопкой ниже"
     :routeTo="pathToCreateCategory"
   />
-  <SectionLoader v-if="isLoading && !typingCategories.length" />
+  <SectionLoader v-if="isCategoriesLoading && !typingCategories.length" />
   <TemplateSection>
     <md-list class="list-categories">
       <ListItemCategory

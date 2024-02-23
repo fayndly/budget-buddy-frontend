@@ -31,7 +31,7 @@ const getReadableAmount = computed(() => {
 
 const isMenuOpen = ref<boolean>(false)
 
-const clickToogleShowMeny = () => {
+const clickToggleShowMenu = () => {
   isMenuOpen.value = !isMenuOpen.value
 }
 
@@ -47,7 +47,7 @@ onMounted(() => {
         <p class="bar-check__name-check title-large on-surface-text">
           {{ chosedCheck?.name }}
         </p>
-        <md-icon-button id="usage-anchor" @click="clickToogleShowMeny" :selected="isMenuOpen">
+        <md-icon-button id="usage-anchor" @click="clickToggleShowMenu" :selected="isMenuOpen">
           <span class="material-icons-outlined">arrow_drop_down</span>
           <span class="material-icons-outlined" slot="selected">arrow_drop_up</span>
         </md-icon-button>

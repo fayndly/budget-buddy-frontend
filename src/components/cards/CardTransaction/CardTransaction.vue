@@ -3,7 +3,15 @@ import type { IPropsCardTransaction } from './types/props'
 
 import '@material/web/ripple/ripple'
 
-defineProps<IPropsCardTransaction>()
+import { getReadableAmount } from '@/utils/helpers/getReadableAmount'
+import { reactive } from 'vue'
+
+const props = defineProps<IPropsCardTransaction>()
+
+const styleCategoryVisual = reactive({
+  'background-color': props.category?.color,
+  'box-shadow': props.category ? 'none' : 'inset 0 0 2px var(--md-sys-color-outline)'
+})
 </script>
 
 <template>
@@ -12,7 +20,7 @@ defineProps<IPropsCardTransaction>()
     @click="$router.push({ name: 'Transaction', params: { transactionId: id } })"
   >
     <md-ripple></md-ripple>
-    <div class="card-transaction__category-visual" :style="{ 'background-color': category?.color }">
+    <div class="card-transaction__category-visual" :style="styleCategoryVisual">
       <span
         v-if="category?.icon"
         class="material-icons-outlined card-transaction__category-visual-icon"
@@ -24,12 +32,12 @@ defineProps<IPropsCardTransaction>()
       <div class="card-transaction__info-title">
         <p class="card-transaction__info-short-description body-large">{{ name }}</p>
         <p class="card-transaction__info-count label-large">
-          {{ amount.toLocaleString('ru-RU') }}{{ currency?.symbol }}
+          {{ getReadableAmount(amount, currency) }}
         </p>
       </div>
       <div class="card-transaction__info-subtitle">
         <p class="card-transaction__info-category body-medium surface-variant-text">
-          {{ category?.name }}
+          {{ category?.name || 'Not Found' }}
         </p>
       </div>
     </div>
@@ -50,6 +58,7 @@ defineProps<IPropsCardTransaction>()
   &__category-visual {
     padding: 16px 8px;
     border-radius: 20px;
+    box-sizing: border-box;
   }
   &__category-visual-icon {
     display: block;

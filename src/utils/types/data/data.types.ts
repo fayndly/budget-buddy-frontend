@@ -73,3 +73,17 @@ export interface IIcon {
 }
 
 export type TFormatListDataInfo = { titleName: string; value: any; valueLinkTo?: any }[]
+
+export interface IFormatTransactionsList {
+  date: string
+  transactions: ITransaction[]
+}
+
+export interface IFormatTransactionsVisualInfo {
+  id: string
+  amount: number
+  category: ICategory | null
+  currency: ICurrency | null
+  strokeDasharray: number
+  strokeDashoffset: number
+}

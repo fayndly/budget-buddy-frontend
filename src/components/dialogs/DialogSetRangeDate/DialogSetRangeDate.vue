@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, type Ref } from 'vue'
+import { ref } from 'vue'
 
 import '@material/web/button/text-button'
 import '@material/web/dialog/dialog'
@@ -8,21 +8,28 @@ export interface IPropsDialogSetDate {
   headline: string
   isOpen: boolean
 }
-const setDefaultDate = (dateNowWrapper: Ref<undefined | string>, dateDefault: Date): void => {
-  const stringDefaultDate = `${defaultDate.getFullYear()}-${defaultDate.getMonth() + 1}`
+const setDefaultDate = (): void => {
+  const stringDefaultDate = `${defaultDate.getFullYear()}-${(defaultDate.getMonth() + 1)
+    .toString()
+    .padStart(2, '0')}`
 
-  dateNowWrapper.value = stringDefaultDate
+  monthField.value = stringDefaultDate
 }
 
-const defaultDate: Date = new Date(Date.now())
+const defaultDate: Date = new Date()
 const monthField = ref<string>()
-setDefaultDate(monthField, defaultDate)
+
+setDefaultDate()
 
 defineProps<IPropsDialogSetDate>()
 
 const emits = defineEmits(['submitDate', 'closeModal'])
 
 const submitHandler = (): void => {
+  // const timeZone = new Date()
+  // // console.log(timeZone)
+  // console.log(new Date(`${monthField.value} 0:0`).toISOString())
+
   emits('submitDate', new Date(monthField.value || defaultDate))
   closeModal()
 }

@@ -9,7 +9,15 @@ import type { IErrorData } from '@/utils/API/types/error.types'
 export const isTransactionDeleted = ref<boolean>(false)
 export const postErrorText = ref<null | string>(null)
 
+import { useChecksStore } from '@/stores/API/checks'
+import { useMainExpenseStore } from '@/modules/NestedRoutes/Main/PageMainExpense'
+import { useMainIncomeStore } from '@/modules/NestedRoutes/Main/PageMainIncome'
+
 export const useDeleteTransaction = async (id: TMongoObjectId) => {
+  const checksStore = useChecksStore()
+  const mainExpenseStore = useMainExpenseStore()
+  const mainIncomeStore = useMainIncomeStore()
+
   postErrorText.value = null
 
   try {
@@ -17,6 +25,10 @@ export const useDeleteTransaction = async (id: TMongoObjectId) => {
 
     postErrorText.value = null
     isTransactionDeleted.value = true
+
+    await checksStore.uploadChecks()
+    await mainExpenseStore.uploadTransactions()
+    await mainIncomeStore.uploadTransactions()
 
     console.log(data)
   } catch (error) {

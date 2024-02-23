@@ -1,13 +1,11 @@
-import type { ICategory, TTypeTransaction } from '@/utils/types/data/data.types'
-
-export interface IFormatData {
-  amount: number
-  category: ICategory | null
-  strokeDasharray: number
-  strokeDashoffset: number
-}
+import type {
+  TTypeTransaction,
+  IFormatTransactionsVisualInfo,
+  ICurrency
+} from '@/utils/types/data/data.types'
 
 export interface IPropsGrathDiagram {
-  data: IFormatData[]
+  data: IFormatTransactionsVisualInfo[]
   typeTransactions: TTypeTransaction
+  currencyCheck: ICurrency | null
 }
