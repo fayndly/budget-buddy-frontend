@@ -87,7 +87,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: end;
-  padding: 0px 16px;
+  padding: 0 16px;
   gap: 8px;
 
   transition: background-color 0.2s ease-in-out;

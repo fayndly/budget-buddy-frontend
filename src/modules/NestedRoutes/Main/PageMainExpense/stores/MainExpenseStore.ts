@@ -35,6 +35,8 @@ export const useMainExpenseStore = defineStore('mainExpense', () => {
 
   const uploadTransactions = async () => {
     isTransactionsExpenseLoading.value = true
+    transactions.value = []
+
     try {
       const checksId = chosedCheck.value?.id
       if (!checksId) console.log(checksId)
@@ -47,6 +49,7 @@ export const useMainExpenseStore = defineStore('mainExpense', () => {
         monthStore.getRangeMonth(),
         { category: true, currency: true }
       )
+
       const formatCategories = clearData<IDataTransaction[], ITransaction[]>(data)
       transactions.value = formatCategories
     } catch (err) {
@@ -57,5 +60,5 @@ export const useMainExpenseStore = defineStore('mainExpense', () => {
     }
   }
 
-  return { transactions, uploadTransactions }
+  return { transactions, uploadTransactions, isTransactionsExpenseLoading }
 })

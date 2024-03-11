@@ -8,4 +8,5 @@ export interface IPropsTransactionsVisualInfo {
   formatTransactions: IFormatTransactionsVisualInfo[]
   typeTransactions: TTypeTransaction
   currencyCheck: ICurrency | null
+  isLoading: boolean
 }

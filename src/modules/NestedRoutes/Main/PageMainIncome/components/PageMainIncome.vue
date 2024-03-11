@@ -14,11 +14,13 @@ const { chosedCheck } = storeToRefs(barCheckStore)
 
 import { useMainIncomeStore } from '../stores/MainIncomeStore'
 const mainIncomeStore = useMainIncomeStore()
-const { transactions } = storeToRefs(mainIncomeStore)
+const { transactions, isTransactionsIncomeLoading } = storeToRefs(mainIncomeStore)
 
 import { useTransactionsListIncomeStore } from '../stores/TransactionsListStore'
 const transactionsListIncomeStore = useTransactionsListIncomeStore()
-const { formatTransactionsList } = storeToRefs(transactionsListIncomeStore)
+const { formatTransactionsList, isTransactionsListIncomeLoading } = storeToRefs(
+  transactionsListIncomeStore
+)
 
 import { useTransactionsVisualInfoStore } from '../stores/TransactionsVisualInfoStore'
 const transactionsVisualInfoStore = useTransactionsVisualInfoStore()
@@ -56,8 +58,12 @@ const clickButtonSwapHandler = (side: 'left' | 'right') => {
     :currencyCheck="typeof chosedCheck?.currency === 'object' ? chosedCheck?.currency : null"
     @clickButtonSwapLeft="clickButtonSwapHandler('left')"
     @clickButtonSwapRight="clickButtonSwapHandler('right')"
+    :isLoading="isTransactionsListIncomeLoading || isTransactionsIncomeLoading"
   />
-  <TransactionsList :formatTransactions="formatTransactionsList" />
+  <TransactionsList
+    :formatTransactions="formatTransactionsList"
+    :isLoading="isTransactionsListIncomeLoading || isTransactionsIncomeLoading"
+  />
   <md-fab
     variant="primary"
     class="fab-add-transaction"

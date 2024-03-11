@@ -19,11 +19,7 @@ export const useTransactionsVisualInfoStore = defineStore('transactionsVisualInf
 
   watch(transactions, () => {
     console.log('transactions update')
-
-    isTransactionsVisualInfoIncomeLoading.value = true
-    formatTransactionsVisualInfo.value.length = 0
-    formatTransactionsVisualInfo.value.push(...getFormatTransactionsVisualInfo(transactions.value))
-    isTransactionsVisualInfoIncomeLoading.value = false
+    uploadTransactions()
   })
 
   const uploadTransactions = () => {

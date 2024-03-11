@@ -84,6 +84,4 @@ export interface IFormatTransactionsVisualInfo {
   amount: number
   category: ICategory | null
   currency: ICurrency | null
-  strokeDasharray: number
-  strokeDashoffset: number
 }

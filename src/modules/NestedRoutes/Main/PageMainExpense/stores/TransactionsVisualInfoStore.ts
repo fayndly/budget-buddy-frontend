@@ -18,12 +18,7 @@ export const useTransactionsVisualInfoStore = defineStore('transactionsVisualInf
   const formatTransactionsVisualInfo = ref<IFormatTransactionsVisualInfo[]>([])
 
   watch(transactions, () => {
-    console.log('transactions update')
-
-    isTransactionsVisualInfoExpenseLoading.value = true
-    formatTransactionsVisualInfo.value.length = 0
-    formatTransactionsVisualInfo.value.push(...getFormatTransactionsVisualInfo(transactions.value))
-    isTransactionsVisualInfoExpenseLoading.value = false
+    uploadTransactions()
   })
 
   const uploadTransactions = () => {

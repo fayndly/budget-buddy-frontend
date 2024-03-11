@@ -14,20 +14,30 @@ defineProps<IPropsTransactionsVisualInfo>()
 
 <template>
   <div class="transactions-visual-info">
-    <div class="graph-diogram-section">
-      <md-icon-button class="button-swap-diagram" @click="$emit('clickButtonSwapLeft')">
+    <div class="diogram-section">
+      <md-icon-button
+        class="diogram-section__button-swap-diagram"
+        @click="$emit('clickButtonSwapLeft')"
+      >
         <ArrowLeftBig />
       </md-icon-button>
+      <div class="diogram-section__loader" v-if="isLoading">
+        <md-circular-progress indeterminate></md-circular-progress>
+      </div>
       <GraphDiogram
+        v-else
         :data="formatTransactions"
         :typeTransactions="typeTransactions"
         :currencyCheck="currencyCheck"
       />
-      <md-icon-button class="button-swap-diagram" @click="$emit('clickButtonSwapRight')">
+      <md-icon-button
+        class="diogram-section__button-swap-diagram"
+        @click="$emit('clickButtonSwapRight')"
+      >
         <ArrowRightBig />
       </md-icon-button>
     </div>
-    <ul class="categpries-list">
+    <ul class="categpries-list" v-if="formatTransactions.length">
       <li v-for="data in formatTransactions" :key="data.id">
         <CardCategory :category="data.category" :amount="data.amount" :currency="data.currency" />
       </li>
@@ -43,16 +53,18 @@ defineProps<IPropsTransactionsVisualInfo>()
   gap: 8px;
 }
 
-.graph-diogram-section {
+.diogram-section {
   display: flex;
   align-items: center;
-}
-
-.button-swap-diagram {
-  height: 100px;
-  &__left {
+  &__button-swap-diagram {
+    height: 100px;
   }
-  &__right {
+  &__loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 220px;
   }
 }
 

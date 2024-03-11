@@ -14,11 +14,13 @@ const { chosedCheck } = storeToRefs(barCheckStore)
 
 import { useMainExpenseStore } from '../stores/MainExpenseStore'
 const mainExpenseStore = useMainExpenseStore()
-const { transactions } = storeToRefs(mainExpenseStore)
+const { transactions, isTransactionsExpenseLoading } = storeToRefs(mainExpenseStore)
 
 import { useTransactionsListExpenseStore } from '../stores/TransactionsListStore'
 const transactionsListExpenseStore = useTransactionsListExpenseStore()
-const { formatTransactionsList } = storeToRefs(transactionsListExpenseStore)
+const { formatTransactionsList, isTransactionsListExpenseLoading } = storeToRefs(
+  transactionsListExpenseStore
+)
 
 import { useTransactionsVisualInfoStore } from '../stores/TransactionsVisualInfoStore'
 const transactionsVisualInfoStore = useTransactionsVisualInfoStore()
@@ -56,8 +58,12 @@ const clickButtonSwapHandler = (side: 'left' | 'right') => {
     :currencyCheck="typeof chosedCheck?.currency === 'object' ? chosedCheck?.currency : null"
     @clickButtonSwapLeft="clickButtonSwapHandler('left')"
     @clickButtonSwapRight="clickButtonSwapHandler('right')"
+    :isLoading="isTransactionsListExpenseLoading || isTransactionsExpenseLoading"
   />
-  <TransactionsList :formatTransactions="formatTransactionsList" />
+  <TransactionsList
+    :formatTransactions="formatTransactionsList"
+    :isLoading="isTransactionsListExpenseLoading || isTransactionsExpenseLoading"
+  />
   <md-fab
     variant="primary"
     class="fab-add-transaction"

@@ -57,5 +57,5 @@ export const useMainIncomeStore = defineStore('mainIncome', () => {
     }
   }
 
-  return { transactions, uploadTransactions }
+  return { transactions, uploadTransactions, isTransactionsIncomeLoading }
 })

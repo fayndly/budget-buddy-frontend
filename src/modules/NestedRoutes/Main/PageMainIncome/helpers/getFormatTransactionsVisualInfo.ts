@@ -32,9 +32,7 @@ export const getFormatTransactionsVisualInfo = (
         id: Math.random().toString(36),
         amount: transaction.amount,
         category,
-        currency,
-        strokeDasharray: 0,
-        strokeDashoffset: 0
+        currency
       })
     }
   })
