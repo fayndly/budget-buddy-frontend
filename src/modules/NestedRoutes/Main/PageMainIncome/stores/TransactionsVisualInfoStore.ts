@@ -3,22 +3,19 @@ import { ref, watch } from 'vue'
 
 import type { IFormatTransactionsVisualInfo } from '@/utils/types/data/data.types'
 
-import { useMainIncomeStore } from './MainIncomeStore'
 import { storeToRefs } from 'pinia'
+import { useMainIncomeStore } from './MainIncomeStore'
 
 import { getFormatTransactionsVisualInfo } from '../helpers/getFormatTransactionsVisualInfo'
 
 export const useTransactionsVisualInfoStore = defineStore('transactionsVisualInfoIncome', () => {
   const mainIncomeStore = useMainIncomeStore()
-
   const { transactions } = storeToRefs(mainIncomeStore)
 
+  const formatTransactionsVisualInfo = ref<IFormatTransactionsVisualInfo[]>([])
   const isTransactionsVisualInfoIncomeLoading = ref<boolean>(false)
 
-  const formatTransactionsVisualInfo = ref<IFormatTransactionsVisualInfo[]>([])
-
   watch(transactions, () => {
-    console.log('transactions update')
     uploadTransactions()
   })
 

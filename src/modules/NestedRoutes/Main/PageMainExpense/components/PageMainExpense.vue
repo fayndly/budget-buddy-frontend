@@ -4,7 +4,6 @@ import '@material/web/button/text-button'
 
 import { TransactionsVisualInfo } from '@/modules/TransactionsVisualInfo'
 import { TransactionsList } from '@/modules/TransactionsList'
-import ChoseMonth from '@/components/ChoseMonth/ChoseMonth.vue'
 
 import { storeToRefs } from 'pinia'
 
@@ -26,38 +25,26 @@ import { useTransactionsVisualInfoStore } from '../stores/TransactionsVisualInfo
 const transactionsVisualInfoStore = useTransactionsVisualInfoStore()
 const { formatTransactionsVisualInfo } = storeToRefs(transactionsVisualInfoStore)
 
-import { useMonthStore } from '../stores/MonthStore'
-const monthStore = useMonthStore()
-const { chosedMonth } = storeToRefs(monthStore)
+import { ChoseMonth, setNeighborMonth } from '@/modules/ChoseMonth'
 
-onMounted(async () => {
-  if (chosedCheck.value) {
-    if (!transactions.value.length) {
-      await mainExpenseStore.uploadTransactions()
-    }
+onMounted(() => {
+  if (!formatTransactionsVisualInfo.value.length && transactions.value.length) {
+    transactionsVisualInfoStore.uploadTransactions()
+  }
+  if (!formatTransactionsList.value.length && transactions.value.length) {
+    transactionsListExpenseStore.uploadTransactions()
   }
 })
-
-const clickButtonSwapHandler = (side: 'left' | 'right') => {
-  const chosedMonthFormatDate = new Date(chosedMonth.value)
-  let newMonth = chosedMonthFormatDate.getMonth()
-  if (side === 'left') {
-    newMonth = chosedMonthFormatDate.getMonth() - 1
-  } else if (side === 'right') {
-    newMonth = chosedMonthFormatDate.getMonth() + 1
-  }
-  monthStore.setMonth(new Date(chosedMonthFormatDate.setMonth(newMonth)))
-}
 </script>
 
 <template>
-  <ChoseMonth v-model:modelValue="chosedMonth" typeTitle="expense" />
+  <ChoseMonth typeTitle="expense" />
   <TransactionsVisualInfo
     :formatTransactions="formatTransactionsVisualInfo"
     typeTransactions="expense"
     :currencyCheck="typeof chosedCheck?.currency === 'object' ? chosedCheck?.currency : null"
-    @clickButtonSwapLeft="clickButtonSwapHandler('left')"
-    @clickButtonSwapRight="clickButtonSwapHandler('right')"
+    @clickButtonSwapLeft="setNeighborMonth('previous')"
+    @clickButtonSwapRight="setNeighborMonth('next')"
     :isLoading="isTransactionsListExpenseLoading || isTransactionsExpenseLoading"
   />
   <TransactionsList

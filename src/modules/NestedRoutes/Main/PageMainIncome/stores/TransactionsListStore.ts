@@ -18,10 +18,7 @@ export const useTransactionsListIncomeStore = defineStore('transactionsListIncom
   const formatTransactionsList = ref<IFormatTransactionsList[]>([])
 
   watch(transactions, () => {
-    isTransactionsListIncomeLoading.value = true
-    formatTransactionsList.value.length = 0
-    formatTransactionsList.value.push(...getFormatTransactionsList(transactions.value))
-    isTransactionsListIncomeLoading.value = false
+    uploadTransactions()
   })
 
   const uploadTransactions = () => {

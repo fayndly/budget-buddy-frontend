@@ -82,15 +82,16 @@ const options = {
 }
 
 const amountStyle = reactive({
-  color: props.typeTransactions === 'expense' ? '#ff7676' : '#76ff94'
+  color: 'none'
 })
 
-const setAmountColor = () => {
-  amountStyle.color = 'var(--md-sys-color-outline)'
+const setAmountColor = (color?: string | undefined) => {
+  amountStyle.color = color || 'var(--md-sys-color-outline)'
 }
 
 const getStringReadableAmount = computed<string>(() => {
   if (transactionsData.value.length) {
+    setAmountColor(props.typeTransactions === 'expense' ? '#ff7676' : '#76ff94')
     return `${props.typeTransactions === 'expense' ? '-' : '+'}
           ${getReadableAmount(getSumAmounts.value, props.currencyCheck)}`
   } else {

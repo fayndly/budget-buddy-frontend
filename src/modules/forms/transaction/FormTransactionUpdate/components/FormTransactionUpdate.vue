@@ -167,14 +167,10 @@ onMounted(async () => {
   isLoading.value = false
 })
 
-const getDefalutCategory = computed(() => {
+const getDefaultCategory = computed(() => {
   if (transaction.value) {
-    if (typeof transaction.value?.category === 'object' && transaction.value?.category) {
-      return transaction.value?.category.id
-    }
-    if (typeof transaction.value?.category === 'string' && transaction.value?.category) {
-      return transaction.value?.category
-    }
+    const category = transaction.value.category
+    return category && typeof category === 'object' ? category.id : category
   }
   return null
 })
@@ -244,7 +240,7 @@ const getDefalutCategory = computed(() => {
           v-model:modelValue="formData.category"
           :values="typingCategories"
           @clickButtonAddCategory="clickButtonAddCategoryHandler"
-          :defaultValue="getDefalutCategory"
+          :defaultValue="getDefaultCategory"
         />
       </template>
     </InputList>

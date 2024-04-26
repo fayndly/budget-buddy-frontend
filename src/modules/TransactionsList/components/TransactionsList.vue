@@ -5,12 +5,6 @@ import WrapperTransactionCards from '@/components/wrappers/WrapperTransactionCar
 import type { IPropsTransactionsList } from '../types/props.types'
 
 defineProps<IPropsTransactionsList>()
-
-import { useBarCheckStore } from '@/modules/BarCheck'
-import { storeToRefs } from 'pinia'
-
-const barCheckStore = useBarCheckStore()
-const { chosedCheck } = storeToRefs(barCheckStore)
 </script>
 
 <template>
@@ -21,17 +15,6 @@ const { chosedCheck } = storeToRefs(barCheckStore)
         Создайте транзакцию кнопкой ниже
       </p>
     </div>
-    <md-filled-tonal-button
-      class="transactions-list-empty__button"
-      @click="
-        $router.push({ name: 'TransactionsAdd', query: { type: 'income', check: chosedCheck?.id } })
-      "
-    >
-      Создать
-      <span class="material-icons-outlined transactions-list-empty__button-icon" slot="icon"
-        >add</span
-      >
-    </md-filled-tonal-button>
   </div>
   <ul class="transactions-list">
     <li v-for="(cards, index) in formatTransactions" :key="index">

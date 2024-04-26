@@ -8,7 +8,7 @@ import { transactionApi } from '@/utils/API'
 import { clearData } from '@/utils/API/helpers/clearData'
 
 import { useBarCheckStore } from '@/modules/BarCheck'
-import { useMonthStore } from './MonthStore'
+import { useMonthStore } from '@/modules/ChoseMonth'
 import { storeToRefs } from 'pinia'
 
 export const useMainExpenseStore = defineStore('mainExpense', () => {
@@ -38,12 +38,12 @@ export const useMainExpenseStore = defineStore('mainExpense', () => {
     transactions.value = []
 
     try {
-      const checksId = chosedCheck.value?.id
-      if (!checksId) console.log(checksId)
+      const checkId = chosedCheck.value?.id
+      if (!checkId) console.log(checkId)
 
       const { data } = await transactionApi.getAll(
         {
-          check: checksId,
+          check: checkId,
           type: 'expense'
         },
         monthStore.getRangeMonth(),

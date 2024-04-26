@@ -2,14 +2,16 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useMonthStore = defineStore('monthStore', () => {
-  const chosedMonth = ref<string>(new Date().toISOString())
+  const chosedMonth = ref<null | string>(null)
 
   const setMonth = (time: Date) => {
     chosedMonth.value = time.toISOString()
   }
 
+  const getTimeNow = () => new Date()
+
   const getRangeMonth = () => {
-    const date = new Date(chosedMonth.value)
+    const date = new Date(chosedMonth.value || getTimeNow().toISOString())
 
     const currentMonth = date.getMonth()
     const currentYear = date.getFullYear()
@@ -22,6 +24,8 @@ export const useMonthStore = defineStore('monthStore', () => {
       endTime: endTime.toISOString()
     }
   }
+
+  setMonth(getTimeNow())
 
   return { chosedMonth, setMonth, getRangeMonth }
 })

@@ -10,12 +10,10 @@ import { getFormatTransactionsVisualInfo } from '../helpers/getFormatTransaction
 
 export const useTransactionsVisualInfoStore = defineStore('transactionsVisualInfoExpense', () => {
   const mainExpenseStore = useMainExpenseStore()
-
   const { transactions } = storeToRefs(mainExpenseStore)
 
-  const isTransactionsVisualInfoExpenseLoading = ref<boolean>(false)
-
   const formatTransactionsVisualInfo = ref<IFormatTransactionsVisualInfo[]>([])
+  const isTransactionsVisualInfoExpenseLoading = ref<boolean>(false)
 
   watch(transactions, () => {
     uploadTransactions()

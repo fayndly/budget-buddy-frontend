@@ -8,7 +8,7 @@ import { transactionApi } from '@/utils/API'
 import { clearData } from '@/utils/API/helpers/clearData'
 
 import { useBarCheckStore } from '@/modules/BarCheck'
-import { useMonthStore } from './MonthStore'
+import { useMonthStore } from '@/modules/ChoseMonth'
 import { storeToRefs } from 'pinia'
 
 export const useMainIncomeStore = defineStore('mainIncome', () => {
@@ -35,18 +35,21 @@ export const useMainIncomeStore = defineStore('mainIncome', () => {
 
   const uploadTransactions = async () => {
     isTransactionsIncomeLoading.value = true
+    transactions.value = []
+
     try {
-      const checksId = chosedCheck.value?.id
-      if (!checksId) console.log(checksId)
+      const checkId = chosedCheck.value?.id
+      if (!checkId) console.log(checkId)
 
       const { data } = await transactionApi.getAll(
         {
-          check: checksId,
+          check: checkId,
           type: 'income'
         },
         monthStore.getRangeMonth(),
         { category: true, currency: true }
       )
+
       const formatCategories = clearData<IDataTransaction[], ITransaction[]>(data)
       transactions.value = formatCategories
     } catch (err) {
