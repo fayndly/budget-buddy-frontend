@@ -61,11 +61,25 @@ const getData = computed(() => {
   }
 
   if (data.length) {
-    chartData.data = data
+    const hasAboveZero = data.reduce((prev, curr) => {
+      if (curr > 0) {
+        prev = true
+      }
+      return prev
+    }, false)
+
+    if (!hasAboveZero) {
+      chartData.data = data.map<number>((val) => {
+        return val + 1
+      })
+    } else {
+      chartData.data = data
+    }
+
     chartData.backgroundColor = backgroundColor
   } else {
-    chartData.data = [1, 1, 1, 1]
-    chartData.backgroundColor = ['#00000030', '#00000030', '#00000030', '#00000030']
+    chartData.data = Array.from({ length: 4 }, () => 1)
+    chartData.backgroundColor = Array.from({ length: 4 }, () => '#00000030')
   }
 
   return {
