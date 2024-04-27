@@ -4,6 +4,7 @@ import { onMounted } from 'vue'
 import 'material-icons/iconfont/material-icons.css'
 
 import AppLayout from '@/layouts/AppLayout.vue'
+import { AppErrors } from '@/modules/AppErrors'
 
 import { storeToRefs } from 'pinia'
 
@@ -39,6 +40,9 @@ onMounted(async () => {
 </script>
 
 <template>
+  <Teleport to="#app">
+    <AppErrors />
+  </Teleport>
   <AppLayout>
     <router-view />
   </AppLayout>

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { reactive, ref, watch, onMounted } from 'vue'
 
-import BarSnackbar from '@/components/bars/BarSnackbar/BarSnackbar.vue'
+import { useAppErrorsStore } from '@/modules/AppErrors'
+const appErrorsStore = useAppErrorsStore()
 
 import InputWithIcon from '@/components/input/InputWithIcon/InputWithIcon.vue'
 import InputList from '@/components/input/InputList/InputList.vue'
@@ -60,9 +61,8 @@ const submitForm = async () => {
   )
 }
 
-const isSnackbarOpen = ref<boolean>(false)
 watch(postErrorText, () => {
-  if (postErrorText.value) isSnackbarOpen.value = true
+  if (postErrorText.value) appErrorsStore.addError(postErrorText.value)
 })
 
 const emits = defineEmits(['notFounded', 'isLoading'])
@@ -96,13 +96,6 @@ onMounted(async () => {
 </script>
 
 <template>
-  <Teleport to="#app">
-    <BarSnackbar
-      :title="postErrorText"
-      :isOpen="isSnackbarOpen"
-      @clickButtonClose="isSnackbarOpen = false"
-    />
-  </Teleport>
   <form class="form-update-category" @submit.prevent="submitForm" novalidate>
     <InputWithIcon>
       <template #input>

@@ -9,7 +9,8 @@ import TitleHeader from '@/components/titles/TitleHeader.vue'
 import SectionLoader from '@/components/sections/SectionLoader/SectionLoader.vue'
 import SectionNotFound from '@/components/sections/SectionNotFound/SectionNotFound.vue'
 
-import BarSnackbar from '@/components/bars/BarSnackbar/BarSnackbar.vue'
+import { useAppErrorsStore } from '@/modules/AppErrors'
+const appErrorsStore = useAppErrorsStore()
 
 import DialogConfirmDeletion from '@/components/dialogs/DialogConfirmDeletion/DialogConfirmDeletion.vue'
 
@@ -38,9 +39,8 @@ const closeModalHandler = () => {
   modalConfirmDeletionIsOpen.value = false
 }
 
-const isSnackbarOpen = ref<boolean>(false)
 watch(postErrorText, () => {
-  if (postErrorText.value) isSnackbarOpen.value = true
+  if (postErrorText.value) appErrorsStore.addError(postErrorText.value)
 })
 
 const isTransactionNotFound = ref<boolean>(false)
@@ -55,13 +55,6 @@ const setLoading = (value: boolean) => {
 </script>
 
 <template>
-  <Teleport to="#app">
-    <BarSnackbar
-      :title="postErrorText"
-      :isOpen="isSnackbarOpen"
-      @clickButtonClose="isSnackbarOpen = false"
-    />
-  </Teleport>
   <BarTopApp
     title="Редактировать транзакцию"
     :showButtonDelete="!isTransactionNotFound && !isDataLoading"
