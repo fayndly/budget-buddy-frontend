@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { reactive, ref, watch } from 'vue'
+import { reactive, watch } from 'vue'
 
-import BarSnackbar from '@/components/bars/BarSnackbar/BarSnackbar.vue'
+import { useAppErrorsStore } from '@/modules/AppErrors'
+const appErrorsStore = useAppErrorsStore()
 
 import InputWithIcon from '@/components/input/InputWithIcon/InputWithIcon.vue'
 import InputList from '@/components/input/InputList/InputList.vue'
@@ -46,20 +47,12 @@ const submitForm = async () => {
   await usePostCheckAdd(formatData)
 }
 
-const isSnackbarOpen = ref<boolean>(false)
 watch(postErrorText, () => {
-  if (postErrorText.value) isSnackbarOpen.value = true
+  if (postErrorText.value) appErrorsStore.addError(postErrorText.value)
 })
 </script>
 
 <template>
-  <Teleport to="#app">
-    <BarSnackbar
-      :title="postErrorText"
-      :isOpen="isSnackbarOpen"
-      @clickButtonClose="isSnackbarOpen = false"
-    />
-  </Teleport>
   <form class="form-add-category" @submit.prevent="submitForm" novalidate>
     <InputWithIcon>
       <template #input>

@@ -6,7 +6,7 @@ import type { IFormatTransactionsVisualInfo } from '@/utils/types/data/data.type
 import { useMainExpenseStore } from './MainExpenseStore'
 import { storeToRefs } from 'pinia'
 
-import { getFormatTransactionsVisualInfo } from '../helpers/getFormatTransactionsVisualInfo'
+import { getFormatTransactionsVisualInfo } from '@/utils/helpers/getFormatTransactionsVisualInfo'
 
 export const useTransactionsVisualInfoStore = defineStore('transactionsVisualInfoExpense', () => {
   const mainExpenseStore = useMainExpenseStore()

@@ -6,7 +6,7 @@ import type { IFormatTransactionsVisualInfo } from '@/utils/types/data/data.type
 import { storeToRefs } from 'pinia'
 import { useMainIncomeStore } from './MainIncomeStore'
 
-import { getFormatTransactionsVisualInfo } from '../helpers/getFormatTransactionsVisualInfo'
+import { getFormatTransactionsVisualInfo } from '@/utils/helpers/getFormatTransactionsVisualInfo'
 
 export const useTransactionsVisualInfoStore = defineStore('transactionsVisualInfoIncome', () => {
   const mainIncomeStore = useMainIncomeStore()

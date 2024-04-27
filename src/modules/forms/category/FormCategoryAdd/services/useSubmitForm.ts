@@ -6,6 +6,8 @@ import type { TTypeTransaction } from '@/utils/types/data/data.types'
 import { isAxiosError } from 'axios'
 import type { IErrorData } from '@/utils/API/types/error.types'
 
+import { useCategoriesStore } from '@/stores/API/categories'
+
 import { getFormatValidateErrorsServer } from '@/utils/validations/validationFormat'
 
 export const isLoading = ref<boolean>(false)
@@ -19,6 +21,8 @@ export const usePostCheckAdd = async (dataFields: {
   color: string | null
   icon?: string | null
 }): Promise<void> => {
+  const { uploadCategories } = useCategoriesStore()
+
   isLoading.value = true
   postErrorText.value = null
 
@@ -26,8 +30,11 @@ export const usePostCheckAdd = async (dataFields: {
 
   try {
     const { data } = await categoryApi.create(dataFields)
-    postErrorText.value = null
     console.log('Ответ от сервера: ', data)
+
+    postErrorText.value = null
+
+    await uploadCategories()
   } catch (error) {
     if (isAxiosError<IErrorData>(error) && error.response) {
       const response = error.response

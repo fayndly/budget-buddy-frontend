@@ -30,8 +30,10 @@ const styleCategoryVisual = reactive({
     </div>
     <div class="card-transaction__info">
       <div class="card-transaction__info-title">
-        <p class="card-transaction__info-short-description body-large">{{ name }}</p>
-        <p class="card-transaction__info-count label-large">
+        <p class="card-transaction__info-short-description body-large on-background-text">
+          {{ name }}
+        </p>
+        <p class="card-transaction__info-count label-large on-background-text">
           {{ getReadableAmount(amount, currency) }}
         </p>
       </div>
@@ -80,15 +82,13 @@ const styleCategoryVisual = reactive({
     justify-content: space-between;
     padding-right: 8px;
   }
-  &__info-short-description {
-    color: white;
-  }
-  &__info-count {
-    color: white;
-  }
-  &__info-subtitle {
-  }
-  &__info-category {
-  }
+  // &__info-short-description {
+  // }
+  // &__info-count {
+  // }
+  // &__info-subtitle {
+  // }
+  // &__info-category {
+  // }
 }
 </style>

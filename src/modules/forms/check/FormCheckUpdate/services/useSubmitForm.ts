@@ -26,8 +26,10 @@ export const usePatchCheckUpdate = async (
 
   try {
     const { data } = await checkApi.update(id, dataFields)
-    postErrorText.value = null
     console.log('Ответ от сервера: ', data)
+
+    postErrorText.value = null
+
     await uploadChecks()
   } catch (error) {
     if (isAxiosError<IErrorData>(error) && error.response) {

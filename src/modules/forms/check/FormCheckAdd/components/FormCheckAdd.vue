@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { reactive, computed, ref, watch } from 'vue'
+import { reactive, computed, watch } from 'vue'
 
 import InputWithIcon from '@/components/input/InputWithIcon/InputWithIcon.vue'
 
 import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
 
-import BarSnackbar from '@/components/bars/BarSnackbar/BarSnackbar.vue'
+import { useAppErrorsStore } from '@/modules/AppErrors'
+const appErrorsStore = useAppErrorsStore()
 
 import { InputName } from '@/components/inputs/text/InputName'
 import { InputAmount } from '@/components/inputs/text/InputAmount'
@@ -50,20 +51,12 @@ const submitForm = async () => {
   await usePostCheckAdd(formData)
 }
 
-const isSnackbarOpen = ref<boolean>(false)
 watch(postErrorText, () => {
-  if (postErrorText.value) isSnackbarOpen.value = true
+  if (postErrorText.value) appErrorsStore.addError(postErrorText.value)
 })
 </script>
 
 <template>
-  <Teleport to="#app">
-    <BarSnackbar
-      :title="postErrorText"
-      :isOpen="isSnackbarOpen"
-      @clickButtonClose="isSnackbarOpen = false"
-    />
-  </Teleport>
   <form class="form-add-check" @submit.prevent="submitForm" novalidate>
     <InputWithIcon>
       <template #input>

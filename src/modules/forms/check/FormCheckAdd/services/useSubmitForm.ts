@@ -6,6 +6,8 @@ import type { TMongoObjectId } from '@/utils/types/data/data.types'
 import { isAxiosError } from 'axios'
 import type { IErrorData } from '@/utils/API/types/error.types'
 
+import { useChecksStore } from '@/stores/API/checks'
+
 import { getFormatValidateErrorsServer } from '@/utils/validations/validationFormat'
 
 export const isLoading = ref<boolean>(false)
@@ -18,13 +20,18 @@ export const usePostCheckAdd = async (dataFields: {
   currency: TMongoObjectId | null
   amount: number
 }): Promise<void> => {
+  const { uploadChecks } = useChecksStore()
+
   isLoading.value = true
   postErrorText.value = null
 
   try {
     const { data } = await checkApi.create(dataFields)
-    postErrorText.value = null
     console.log('Ответ от сервера: ', data)
+
+    postErrorText.value = null
+
+    await uploadChecks()
   } catch (error) {
     if (isAxiosError<IErrorData>(error) && error.response) {
       const response = error.response

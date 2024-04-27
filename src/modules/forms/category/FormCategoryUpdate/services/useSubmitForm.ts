@@ -10,6 +10,8 @@ import type { IErrorData } from '@/utils/API/types/error.types'
 
 import { useCategoriesStore } from '@/stores/API/categories'
 import { useChecksStore } from '@/stores/API/checks'
+import { useMainExpenseStore } from '@/modules/NestedRoutes/Main/PageMainExpense'
+import { useMainIncomeStore } from '@/modules/NestedRoutes/Main/PageMainIncome'
 
 export const isLoading = ref<boolean>(false)
 
@@ -28,6 +30,8 @@ export const usePatchCategoryUpdate = async (
 ): Promise<void> => {
   const { uploadCategories } = useCategoriesStore()
   const { uploadChecks } = useChecksStore()
+  const mainExpenseStore = useMainExpenseStore()
+  const mainIncomeStore = useMainIncomeStore()
 
   isLoading.value = true
   postErrorText.value = null
@@ -41,6 +45,8 @@ export const usePatchCategoryUpdate = async (
 
     await uploadCategories()
     if (oldType && dataFields.type !== oldType) await uploadChecks()
+    await mainExpenseStore.uploadTransactions()
+    await mainIncomeStore.uploadTransactions()
   } catch (error) {
     if (isAxiosError<IErrorData>(error) && error.response) {
       const response = error.response

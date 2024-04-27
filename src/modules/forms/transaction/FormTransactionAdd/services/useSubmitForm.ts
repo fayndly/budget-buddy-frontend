@@ -36,14 +36,13 @@ export const usePostTransactionAdd = async (dataFields: {
 
   try {
     const { data } = await transactionApi.create(dataFields)
+    console.log('Ответ от сервера: ', data)
 
     postErrorText.value = null
 
     await checksStore.uploadChecks()
     await mainExpenseStore.uploadTransactions()
     await mainIncomeStore.uploadTransactions()
-
-    console.log('Ответ от сервера: ', data)
   } catch (error) {
     if (isAxiosError<IErrorData>(error) && error.response) {
       const response = error.response

@@ -38,24 +38,24 @@ export const useAppErrorsStore = defineStore('appErrorsStore', () => {
     })
   }
 
-  const mocks = ['error 1', 'error 2', 'error 3', 'error 4']
-  // const mocks = []
+  // const mocks = ['error 1', 'error 2', 'error 3', 'error 4']
+  // // const mocks = []
 
-  function* addMockData() {
-    for (let i = 0; i <= mocks.length; i++) {
-      if (mocks[i]) yield addError(mocks[i])
-    }
-  }
+  // function* addMockData() {
+  //   for (let i = 0; i <= mocks.length; i++) {
+  //     if (mocks[i]) yield addError(mocks[i])
+  //   }
+  // }
 
-  const generator = addMockData()
+  // const generator = addMockData()
 
-  const timerId = setInterval(() => {
-    generator.next()
-  }, 1000)
+  // const timerId = setInterval(() => {
+  //   generator.next()
+  // }, 1000)
 
-  setTimeout(() => {
-    clearInterval(timerId)
-  }, 10000)
+  // setTimeout(() => {
+  //   clearInterval(timerId)
+  // }, 10000)
 
   return { errors, addError, deleteError }
 })

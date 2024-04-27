@@ -6,10 +6,6 @@ import 'material-icons/iconfont/material-icons.css'
 import AppLayout from '@/layouts/AppLayout.vue'
 import { AppErrors } from '@/modules/AppErrors'
 
-import { storeToRefs } from 'pinia'
-
-import { useBarCheckStore } from '@/modules/BarCheck'
-
 import { useChecksStore } from '@/stores/API/checks'
 import { useCurrenciesStore } from '@/stores/API/currencies'
 import { useCategoriesStore } from '@/stores/API/categories'
@@ -17,25 +13,17 @@ import { useCategoriesStore } from '@/stores/API/categories'
 import { useMainExpenseStore } from '@/modules/NestedRoutes/Main/PageMainExpense/stores/MainExpenseStore'
 import { useMainIncomeStore } from '@/modules/NestedRoutes/Main/PageMainIncome/stores/MainIncomeStore'
 
-const barCheckStore = useBarCheckStore()
-const { chosedCheck } = storeToRefs(barCheckStore)
-
 const checksStore = useChecksStore()
 const currenciesStore = useCurrenciesStore()
 const categoriesStore = useCategoriesStore()
 
-const mainExpenseStore = useMainExpenseStore()
-const mainIncomeStore = useMainIncomeStore()
+useMainExpenseStore()
+useMainIncomeStore()
 
 onMounted(async () => {
   await checksStore.uploadChecks()
   await currenciesStore.uploadCurrencies()
   await categoriesStore.uploadCategories()
-
-  // if (chosedCheck.value) {
-  //   await mainExpenseStore.uploadTransactions()
-  //   await mainIncomeStore.uploadTransactions()
-  // }
 })
 </script>
 
