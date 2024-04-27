@@ -12,7 +12,12 @@ import SectionNotFound from '@/components/sections/SectionNotFound/SectionNotFou
 import DialogConfirmDeletion from '@/components/dialogs/DialogConfirmDeletion/DialogConfirmDeletion.vue'
 
 import { FormCategoryUpdate, isLoading } from '@/modules/forms/category/FormCategoryUpdate'
-import { useDeleteCategory, isCategoryDeleted, postErrorText } from '../services/useDeleteCategory'
+import {
+  useDeleteCategory,
+  isCategoryDeleted,
+  postErrorText,
+  isDeleting
+} from '../services/useDeleteCategory'
 
 import type { TMongoObjectId } from '@/utils/types/data/data.types'
 
@@ -55,7 +60,7 @@ const setLoading = (value: boolean) => {
     title="Редактировать категорию"
     :showButtonDelete="!isCategoryNotFound && !isDataLoading"
     @clickButtonDelete="modalConfirmDeletionIsOpen = true"
-    :showProgress="isLoading"
+    :showProgress="isLoading || isDeleting"
   />
   <TemplateMain>
     <SectionLoader v-if="isDataLoading" />

@@ -18,7 +18,8 @@ import { FormTransactionUpdate, isLoading } from '@/modules/forms/transaction/Fo
 import {
   useDeleteTransaction,
   isTransactionDeleted,
-  postErrorText
+  postErrorText,
+  isDeleting
 } from '../services/useDeleteTransaction'
 
 import type { TMongoObjectId } from '@/utils/types/data/data.types'
@@ -59,7 +60,7 @@ const setLoading = (value: boolean) => {
     title="Редактировать транзакцию"
     :showButtonDelete="!isTransactionNotFound && !isDataLoading"
     @clickButtonDelete="modalConfirmDeletionIsOpen = true"
-    :showProgress="isLoading"
+    :showProgress="isLoading || isDeleting"
   />
   <TemplateMain>
     <SectionLoader v-if="isDataLoading" />

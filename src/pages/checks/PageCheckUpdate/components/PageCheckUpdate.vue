@@ -15,7 +15,12 @@ const appErrorsStore = useAppErrorsStore()
 import DialogConfirmDeletion from '@/components/dialogs/DialogConfirmDeletion/DialogConfirmDeletion.vue'
 
 import { FormCheckUpdate, isLoading } from '@/modules/forms/check/FormCheckUpdate'
-import { useDeleteCheck, isCheckDeleted, postErrorText } from '../services/useDeleteCheck'
+import {
+  useDeleteCheck,
+  isCheckDeleted,
+  postErrorText,
+  isDeleting
+} from '../services/useDeleteCheck'
 
 import type { TMongoObjectId } from '@/utils/types/data/data.types'
 
@@ -55,7 +60,7 @@ const setLoading = (value: boolean) => {
     title="Редактировать счет"
     :showButtonDelete="!isCheckNotFound && !isDataLoading"
     @clickButtonDelete="modalConfirmDeletionIsOpen = true"
-    :showProgress="isLoading"
+    :showProgress="isLoading || isDeleting"
   />
   <TemplateMain>
     <SectionLoader v-if="isDataLoading" />
