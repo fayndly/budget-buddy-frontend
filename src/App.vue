@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, watch } from 'vue'
+import { onMounted } from 'vue'
 
 import 'material-icons/iconfont/material-icons.css'
 
@@ -26,14 +26,6 @@ const { isUserAuth, isLoading } = storeToRefs(userAuthStore)
 
 useMainExpenseStore()
 useMainIncomeStore()
-
-// watch(isUserAuth, async () => {
-//   if (isUserAuth.value) {
-//     await checksStore.uploadChecks()
-//     await currenciesStore.uploadCurrencies()
-//     await categoriesStore.uploadCategories()
-//   }
-// })
 
 onMounted(async () => {
   await userAuthStore.checkUserAuth()

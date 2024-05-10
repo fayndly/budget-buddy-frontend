@@ -56,7 +56,10 @@ onMounted(() => {
     class="fab-add-transaction"
     aria-label="add"
     @click="
-      $router.push({ name: 'TransactionsAdd', query: { type: 'expense', check: chosedCheck?.id } })
+      $router.push({
+        name: 'TransactionsAdd',
+        query: { type: 'expense', check: chosedCheck?.id }
+      })
     "
   >
     <span class="material-icons-outlined" slot="icon">add</span>
