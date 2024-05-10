@@ -51,5 +51,10 @@ export const useChecksStore = defineStore('checksApi', () => {
     }
   }
 
-  return { checks, uploadChecks, getCheckById, getChecks, isLoading }
+  const $reset = () => {
+    checks.value = []
+    isLoading.value = false
+  }
+
+  return { checks, uploadChecks, getCheckById, getChecks, isLoading, $reset }
 })

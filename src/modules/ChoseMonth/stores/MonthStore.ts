@@ -27,5 +27,9 @@ export const useMonthStore = defineStore('monthStore', () => {
 
   setMonth(getTimeNow())
 
-  return { chosedMonth, setMonth, getRangeMonth }
+  const $reset = () => {
+    chosedMonth.value = null
+  }
+
+  return { chosedMonth, setMonth, getRangeMonth, $reset }
 })

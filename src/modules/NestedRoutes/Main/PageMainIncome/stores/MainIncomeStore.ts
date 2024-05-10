@@ -60,5 +60,10 @@ export const useMainIncomeStore = defineStore('mainIncome', () => {
     }
   }
 
-  return { transactions, uploadTransactions, isTransactionsIncomeLoading }
+  const $reset = () => {
+    transactions.value = []
+    isTransactionsIncomeLoading.value = false
+  }
+
+  return { transactions, uploadTransactions, isTransactionsIncomeLoading, $reset }
 })

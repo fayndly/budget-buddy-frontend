@@ -49,5 +49,10 @@ export const useCurrenciesStore = defineStore('currenciesApi', () => {
     }
   }
 
-  return { currencies, uploadCurrencies, getCurrencyById }
+  const $reset = () => {
+    currencies.value = []
+    isLoading.value = false
+  }
+
+  return { currencies, uploadCurrencies, getCurrencyById, $reset }
 })

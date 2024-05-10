@@ -60,5 +60,10 @@ export const useMainExpenseStore = defineStore('mainExpense', () => {
     }
   }
 
-  return { transactions, uploadTransactions, isTransactionsExpenseLoading }
+  const $reset = () => {
+    transactions.value = []
+    isTransactionsExpenseLoading.value = false
+  }
+
+  return { transactions, uploadTransactions, isTransactionsExpenseLoading, $reset }
 })

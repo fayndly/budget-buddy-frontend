@@ -9,9 +9,12 @@ import '@material/web/list/list-item'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 
+import { useUserAuthStore } from '@/stores/UserAuthStore'
+const userAuthStore = useUserAuthStore()
+
 const clickLogout = () => {
   router.push({ name: 'AuthLogin' })
-  localStorage.removeItem('token')
+  userAuthStore.setUserAuth(false)
 }
 </script>
 

@@ -4,7 +4,6 @@ import { loadLayoutMiddleware } from '@/router/middleware/loadLayout.middleware'
 import { RouteNamesEnum } from '@/router/router.types'
 import { AppLayoutsEnum } from '@/layouts/layouts.types'
 
-import { PageHome } from '@/pages/PageHome'
 import { PageSettings } from '@/pages/PageSettings'
 import { PageNotFound } from '@/pages/PageNotFound'
 
@@ -160,10 +159,7 @@ const router = createRouter({
     {
       path: '/',
       name: RouteNamesEnum.home,
-      component: PageHome,
-      meta: {
-        layout: AppLayoutsEnum.withoutNavbar
-      }
+      redirect: '/main/expense'
     },
     ...routesMain,
     ...routesTransactions,

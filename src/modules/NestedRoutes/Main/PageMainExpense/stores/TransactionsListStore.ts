@@ -18,6 +18,8 @@ export const useTransactionsListExpenseStore = defineStore('transactionsListExpe
   const formatTransactionsList = ref<IFormatTransactionsList[]>([])
 
   watch(transactions, () => {
+    console.log('useTransactionsListExpenseStore updated')
+
     uploadTransactions()
   })
 

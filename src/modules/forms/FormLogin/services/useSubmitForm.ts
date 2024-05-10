@@ -6,6 +6,8 @@ import type { TErrorServer } from '@/utils/types/errors'
 
 import { getFormatValidateErrorsServer } from '@/utils/validations/validationFormat'
 
+import { useUserAuthStore } from '@/stores/UserAuthStore'
+
 export const isButtonSubmitAuthLoading = ref<boolean>(false)
 
 export const postErrorText = ref<null | string>(null)
@@ -15,12 +17,15 @@ export const isAuthed = ref<boolean>(false)
 
 export const usePostAuthLogin = async (email: string, password: string): Promise<void> => {
   isButtonSubmitAuthLoading.value = true
+  const userAuthStore = useUserAuthStore()
   await authApi
     .login({ email, password })
     .then((response) => {
       postErrorText.value = null
       localStorage.setItem('token', response.data.token)
       isAuthed.value = true
+
+      userAuthStore.setUserAuth(true)
 
       console.log('Ответ от сервера: ', response)
     })
@@ -37,6 +42,9 @@ export const usePostAuthLogin = async (email: string, password: string): Promise
           Object.assign(serverValidateErrors, getFormatValidateErrorsServer(error.response.data))
         }
       }
+
+      userAuthStore.setUserAuth(false)
+
       console.log('Ошибка сервера: ', error.response)
     })
     .finally(() => {

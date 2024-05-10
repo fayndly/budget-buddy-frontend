@@ -49,9 +49,20 @@ export const useCategoriesStore = defineStore('categoriesApi', () => {
     }
   }
 
+  const $reset = () => {
+    categories.value = []
+  }
+
   const getCategories = (type: TTypeTransaction) => {
     return categories.value.filter((val) => val.type === type)
   }
 
-  return { categories, uploadCategories, getCategoryById, isCategoriesLoading, getCategories }
+  return {
+    categories,
+    uploadCategories,
+    getCategoryById,
+    isCategoriesLoading,
+    getCategories,
+    $reset
+  }
 })

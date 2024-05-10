@@ -34,7 +34,7 @@ export const useBarCheckStore = defineStore('BarCheck', () => {
 
   const errors = ref<string[]>([])
 
-  const setCheck = (check: ICheck) => {
+  const setCheck = (check: ICheck | null) => {
     chosedCheck.value = check
   }
 
@@ -64,5 +64,11 @@ export const useBarCheckStore = defineStore('BarCheck', () => {
     setDefaultCheck()
   }
 
-  return { chosedCheck, checks, errors, setCheck, uploadChecks, setDefaultCheck }
+  const $reset = () => {
+    chosedCheck.value = null
+    checks.value = []
+    errors.value = []
+  }
+
+  return { chosedCheck, checks, errors, setCheck, uploadChecks, setDefaultCheck, $reset }
 })
