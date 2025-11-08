@@ -1,5 +1,9 @@
 <script setup lang="ts">
-const changeRoute = {
+type IChangeRoute = 'AuthSignup' | 'AuthLogin'
+const changeRoute: {
+  AuthSignup: IChangeRoute
+  AuthLogin: IChangeRoute
+} = {
   AuthSignup: 'AuthLogin',
   AuthLogin: 'AuthSignup'
 }
@@ -18,8 +22,8 @@ const dataRoutes = {
     или
     <router-link
       class="surface-tint-text"
-      :to="{ name: changeRoute[$route.name], replace: true }"
-      >{{ dataRoutes[changeRoute[$route.name]].headerText }}</router-link
+      :to="{ name: changeRoute[$route.name as IChangeRoute], replace: true }"
+      >{{ dataRoutes[changeRoute[$route.name as IChangeRoute]].headerText }}</router-link
     >
   </h2>
 </template>

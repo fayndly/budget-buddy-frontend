@@ -21,7 +21,10 @@ function updateValueHandler(): void {
       :checked="checked"
       @change="updateValueHandler"
     />
-    <span class="radio-color__fake-input" :style="{ 'background-color': value }"></span>
+    <span
+      class="radio-color__fake-input"
+      :style="{ 'background-color': value || 'transparent' }"
+    ></span>
   </label>
 </template>
 
