@@ -1,0 +1,268 @@
+<script setup lang="ts">
+import { reactive, ref, watch, onMounted, computed } from 'vue'
+
+import { useAppErrorsStore } from '@/modules/AppErrors'
+const appErrorsStore = useAppErrorsStore()
+
+import InputWithIcon from '@/components/input/InputWithIcon/InputWithIcon.vue'
+import InputList from '@/components/input/InputList/InputList.vue'
+
+import { InputName } from '@/components/inputs/text/InputName'
+import { InputSelectType } from '@/components/inputs/select/InputSelectType'
+import { InputSelectCurrency } from '@/components/inputs/select/InputSelectCurrency'
+import { InputAmount } from '@/components/inputs/text/InputAmount'
+import { InputSelectCheck } from '@/components/inputs/select/InputSelectCheck'
+import { InputChoseCategory } from '@/modules/inputs/InputChoseCategory'
+import { InputChoseDate } from '@/modules/inputs/InputChoseDate'
+import { InputDescription } from '@/components/inputs/text/InputDescription'
+import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
+
+import type { IFormFields } from '../types/formFields.types'
+import type { TMongoObjectId, ICurrency, ICategory } from '@/utils/types/data/data.types'
+
+import useVuelidate from '@vuelidate/core'
+import { ValidationErrors } from '@/utils/validations/validationErrors'
+import { rules } from '../helpers/useValidateForm'
+
+import {
+  usePatchTransactionUpdate,
+  postErrorText,
+  serverValidateErrors
+} from '../services/useSubmitForm'
+
+import { getById } from '@/utils/helpers/getById'
+
+import {
+  useGetOneTransaction,
+  transaction,
+  isTransactionNotFound
+} from '../services/useGetOneTransaction'
+
+import { useCurrenciesStore } from '@/stores/API/currencies'
+import { useChecksStore } from '@/stores/API/checks'
+import { useCategoriesStore } from '@/stores/API/categories'
+import { storeToRefs } from 'pinia'
+
+const currencyStore = useCurrenciesStore()
+const { currencies } = storeToRefs(currencyStore)
+
+const checksStore = useChecksStore()
+const { checks } = storeToRefs(checksStore)
+
+const categoriesStore = useCategoriesStore()
+const { categories, isCategoriesLoading } = storeToRefs(categoriesStore)
+
+const typingCategories = ref<ICategory[]>([])
+
+const formData = reactive<IFormFields>({
+  name: '',
+  type: null,
+  currency: null,
+  amount: 0,
+  check: null,
+  category: null,
+  time: null,
+  description: ''
+})
+
+const validation = useVuelidate(rules, formData, { $externalResults: serverValidateErrors })
+const validationErrorsManager = new ValidationErrors(validation)
+
+const getType = computed(() => formData.type)
+watch(getType, () => {
+  if (formData.type) {
+    typingCategories.value = categoriesStore.getCategories(formData.type)
+  }
+})
+
+watch(categories, () => {
+  if (formData.type) {
+    if (isCategoriesLoading.value)
+      typingCategories.value = categoriesStore.getCategories(formData.type)
+  }
+})
+
+import { useRoute, useRouter } from 'vue-router'
+const route = useRoute()
+const router = useRouter()
+
+const submitForm = async () => {
+  validation.value.$clearExternalResults()
+  if (!(await validation.value.$validate())) return
+
+  const formatData = Object.assign({}, formData) as any
+  formatData.time = formatData.time?.toISOString()
+  await usePatchTransactionUpdate(route.params.transactionId as TMongoObjectId, formatData)
+}
+
+watch(postErrorText, () => {
+  if (postErrorText.value) appErrorsStore.addError(postErrorText.value)
+})
+
+const emits = defineEmits(['notFounded', 'isLoading'])
+watch(isTransactionNotFound, () => {
+  emits('notFounded', isTransactionNotFound.value)
+})
+
+const isLoading = ref<boolean>(false)
+watch(isLoading, () => {
+  emits('isLoading', isLoading.value)
+})
+
+const getActiveCurrency = computed(() => {
+  if (formData.currency) {
+    return getById<ICurrency>(currencies, formData.currency)
+  }
+  return null
+})
+
+const clickButtonAddCategoryHandler = () => {
+  router.push({ name: 'CategoriesAdd', query: { type: formData.type } })
+}
+
+const getSumbolFromType = computed(() => {
+  if (formData.type === 'expense') return '-'
+  if (formData.type === 'income') return '+'
+  return ''
+})
+
+onMounted(async () => {
+  isLoading.value = true
+
+  if (route.params.transactionId) {
+    await useGetOneTransaction(route.params.transactionId as TMongoObjectId)
+  } else {
+    isTransactionNotFound.value = true
+  }
+
+  if (transaction.value) {
+    formData.name = transaction.value.name
+    formData.type = transaction.value.type
+    if (transaction.value.currency) {
+      if (typeof transaction.value.currency === 'object')
+        formData.currency = transaction.value.currency.id
+      if (typeof transaction.value.currency === 'string')
+        formData.currency = transaction.value.currency
+    } else {
+      formData.currency = transaction.value.currency
+    }
+    formData.amount = transaction.value.amount
+    if (transaction.value.check) {
+      if (typeof transaction.value.check === 'object') formData.check = transaction.value.check.id
+      if (typeof transaction.value.check === 'string') formData.check = transaction.value.check
+    } else {
+      formData.check = transaction.value.check
+    }
+    // if (transaction.value.category) {
+    //   if (typeof transaction.value.category === 'object')
+    //     formData.category = transaction.value.category.id
+    //   if (typeof transaction.value.category === 'string')
+    //     formData.category = transaction.value.category
+    // } else {
+    //   formData.category = transaction.value.category
+    // }
+    formData.description = transaction.value.description
+  }
+
+  isLoading.value = false
+})
+
+const getDefaultCategory = computed(() => {
+  if (transaction.value) {
+    const category = transaction.value.category
+    return category && typeof category === 'object' ? category.id : category
+  }
+  return null
+})
+</script>
+
+<template>
+  <form class="form-update-transaction" @submit.prevent="submitForm" novalidate>
+    <InputWithIcon>
+      <template #input>
+        <InputName
+          v-model:modelValue="formData.name"
+          :hasError="validationErrorsManager.isInputHasErrors('name')"
+          :errors="validationErrorsManager.getInputErrors('name')"
+        />
+      </template>
+    </InputWithIcon>
+    <InputWithIcon icon="swap_vert">
+      <template #input>
+        <InputSelectType
+          v-model:modelValue="formData.type"
+          :hasError="validationErrorsManager.isInputHasErrors('type')"
+          :errors="validationErrorsManager.getInputErrors('type')"
+        />
+      </template>
+    </InputWithIcon>
+    <InputWithIcon icon="attach_money">
+      <template #input>
+        <InputSelectCurrency
+          v-model:modelValue="formData.currency"
+          :values="currencies"
+          :hasError="validationErrorsManager.isInputHasErrors('currency')"
+          :errors="validationErrorsManager.getInputErrors('currency')"
+        />
+      </template>
+    </InputWithIcon>
+    <InputWithIcon icon="price_change">
+      <template #input>
+        <InputAmount
+          v-model:modelValue="formData.amount"
+          :suffixText="getActiveCurrency?.symbol"
+          :prefixText="getSumbolFromType"
+          :hasError="validationErrorsManager.isInputHasErrors('amount')"
+          :errors="validationErrorsManager.getInputErrors('amount')"
+        />
+      </template>
+    </InputWithIcon>
+    <InputWithIcon icon="account_balance">
+      <template #input>
+        <InputSelectCheck
+          v-model:modelValue="formData.check"
+          :values="checks"
+          :hasError="validationErrorsManager.isInputHasErrors('check')"
+          :errors="validationErrorsManager.getInputErrors('check')"
+        />
+      </template>
+    </InputWithIcon>
+    <InputList header="Категория" :errrors="validationErrorsManager.getInputErrors('category')">
+      <template #content>
+        <InputChoseCategory
+          v-model:modelValue="formData.category"
+          :values="typingCategories"
+          @clickButtonAddCategory="clickButtonAddCategoryHandler"
+          :defaultValue="getDefaultCategory"
+        />
+      </template>
+    </InputList>
+    <InputList header="Дата" :errrors="validationErrorsManager.getInputErrors('time')">
+      <template #content>
+        <InputChoseDate v-model:modelValue="formData.time" :defaultValue="transaction?.time" />
+      </template>
+    </InputList>
+    <InputWithIcon icon="description">
+      <template #input>
+        <InputDescription
+          v-model:modelValue="formData.description"
+          :hasError="validationErrorsManager.isInputHasErrors('description')"
+          :errors="validationErrorsManager.getInputErrors('description')"
+        />
+      </template>
+    </InputWithIcon>
+    <SubmitFormButtons />
+  </form>
+</template>
+
+<style lang="scss" scoped>
+.form-update-transaction {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  justify-content: center;
+
+  gap: 16px;
+  margin-top: 32px;
+}
+</style>
