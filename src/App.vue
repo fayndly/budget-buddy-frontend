@@ -1,85 +1,84 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { onMounted } from 'vue'
+
+import 'material-icons/iconfont/material-icons.css'
+
+import AppLayout from '@/layouts/AppLayout.vue'
+import { AppErrors } from '@/modules/AppErrors'
+
+import { storeToRefs } from 'pinia'
+
+import { useChecksStore } from '@/stores/API/checks'
+import { useCurrenciesStore } from '@/stores/API/currencies'
+import { useCategoriesStore } from '@/stores/API/categories'
+
+import { useUserAuthStore } from '@/stores/UserAuthStore'
+
+import { useMainExpenseStore } from '@/modules/NestedRoutes/Main/PageMainExpense/stores/MainExpenseStore'
+import { useMainIncomeStore } from '@/modules/NestedRoutes/Main/PageMainIncome/stores/MainIncomeStore'
+
+const checksStore = useChecksStore()
+const currenciesStore = useCurrenciesStore()
+const categoriesStore = useCategoriesStore()
+
+const userAuthStore = useUserAuthStore()
+const { isUserAuth, isLoading } = storeToRefs(userAuthStore)
+
+useMainExpenseStore()
+useMainIncomeStore()
+
+onMounted(async () => {
+  await userAuthStore.checkUserAuth()
+
+  if (isUserAuth.value) {
+    await checksStore.uploadChecks()
+    await currenciesStore.uploadCurrencies()
+    await categoriesStore.uploadCategories()
+  }
+})
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+  <Teleport to="#app">
+    <AppErrors />
+  </Teleport>
+  <section class="app-loader" v-if="isLoading">
+    <md-circular-progress indeterminate></md-circular-progress>
+  </section>
+  <AppLayout v-else>
+    <router-view />
+  </AppLayout>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+<style lang="scss">
+@import '@/assets/styles/index';
+
+body {
+  transition: background-color 0.2s ease-in-out;
+  overflow: hidden;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.button-theme {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 100;
 }
 
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+#app {
+  display: flex;
+  flex-direction: column;
+
+  height: 100svh;
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
+.app-loader {
+  width: 100vw;
+  height: 100vh;
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 </style>

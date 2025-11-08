@@ -1,0 +1,150 @@
+<script setup lang="ts">
+import { reactive, ref, watch, onMounted, computed } from 'vue'
+
+import { useAppErrorsStore } from '@/modules/AppErrors'
+const appErrorsStore = useAppErrorsStore()
+
+import InputWithIcon from '@/components/input/InputWithIcon/InputWithIcon.vue'
+
+import { InputName } from '@/components/inputs/text/InputName'
+import { InputAmount } from '@/components/inputs/text/InputAmount'
+import { InputSelectCurrency } from '@/components/inputs/select/InputSelectCurrency'
+import SubmitFormButtons from '@/components/submit/SubmitFormButtons/SubmitFormButtons.vue'
+
+import type { IFormFields } from '../types/formFields.types'
+import type { TMongoObjectId, ICurrency, ICheck } from '@/utils/types/data/data.types'
+
+import useVuelidate from '@vuelidate/core'
+import { ValidationErrors } from '@/utils/validations/validationErrors'
+import { rules } from '../helpers/useValidateForm'
+
+import { usePatchCheckUpdate, postErrorText, serverValidateErrors } from '../services/useSubmitForm'
+
+import { getById } from '@/utils/helpers/getById'
+
+import { useCurrenciesStore } from '@/stores/API/currencies'
+import { storeToRefs } from 'pinia'
+
+const currencyStore = useCurrenciesStore()
+const { currencies } = storeToRefs(currencyStore)
+
+import { useChecksStore } from '@/stores/API/checks'
+const { getCheckById } = useChecksStore()
+
+const check = ref<ICheck | null | undefined>(null)
+
+const formData = reactive<IFormFields>({
+  name: '',
+  currency: null,
+  amount: 0
+})
+
+const validation = useVuelidate(rules, formData, { $externalResults: serverValidateErrors })
+const validationErrorsManager = new ValidationErrors(validation)
+
+import { useRoute } from 'vue-router'
+const route = useRoute()
+
+const submitForm = async () => {
+  validation.value.$clearExternalResults()
+  if (!(await validation.value.$validate())) return
+  await usePatchCheckUpdate(route.params.checkId as TMongoObjectId, formData)
+}
+
+const isCheckNotFound = ref<boolean>(false)
+
+watch(postErrorText, () => {
+  if (postErrorText.value) appErrorsStore.addError(postErrorText.value)
+})
+
+const emits = defineEmits(['notFounded', 'isLoading'])
+watch(isCheckNotFound, () => {
+  emits('notFounded', isCheckNotFound.value)
+})
+
+const isLoading = ref<boolean>(false)
+watch(isLoading, () => {
+  emits('isLoading', isLoading.value)
+})
+
+const getActiveCurrency = computed(() => {
+  if (formData.currency) {
+    return getById<ICurrency>(currencies, formData.currency)
+  }
+  return null
+})
+
+onMounted(async () => {
+  isLoading.value = true
+  isCheckNotFound.value = false
+
+  if (route.params.checkId) {
+    check.value = await getCheckById(route.params.checkId as TMongoObjectId)
+    if (check.value === undefined) isCheckNotFound.value = true
+  } else {
+    isCheckNotFound.value = true
+  }
+
+  if (check.value) {
+    formData.name = check.value.name
+    if (check.value.currency) {
+      if (typeof check.value.currency === 'object') formData.currency = check.value.currency.id
+      if (typeof check.value.currency === 'string') formData.currency = check.value.currency
+    } else {
+      formData.currency = check.value.currency
+    }
+    formData.amount = check.value.amount
+  }
+
+  isLoading.value = false
+})
+</script>
+
+<template>
+  <form class="form-update-check" @submit.prevent="submitForm" novalidate>
+    <InputWithIcon>
+      <template #input>
+        <InputName
+          v-model:modelValue="formData.name"
+          :hasError="validationErrorsManager.isInputHasErrors('name')"
+          :errors="validationErrorsManager.getInputErrors('name')"
+        />
+      </template>
+    </InputWithIcon>
+    <InputWithIcon icon="money">
+      <template #input>
+        <InputSelectCurrency
+          v-model:modelValue="formData.currency"
+          :values="currencies"
+          :hasError="validationErrorsManager.isInputHasErrors('currency')"
+          :errors="validationErrorsManager.getInputErrors('currency')"
+        />
+      </template>
+    </InputWithIcon>
+    <InputWithIcon icon="account_balance">
+      <template #input>
+        <InputAmount
+          label="Сумма"
+          :isDisabled="true"
+          v-model:modelValue="formData.amount"
+          :suffixText="getActiveCurrency?.symbol"
+          :hasError="validationErrorsManager.isInputHasErrors('amount')"
+          :errors="validationErrorsManager.getInputErrors('amount')"
+        />
+      </template>
+    </InputWithIcon>
+    <SubmitFormButtons />
+  </form>
+</template>
+
+<style lang="scss" scoped>
+.form-update-check {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  justify-content: center;
+
+  gap: 16px;
+  margin-top: 32px;
+}
+</style>
